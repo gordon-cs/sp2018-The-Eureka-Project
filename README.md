@@ -9,6 +9,6 @@ https://docs.google.com/presentation/d/1l_h5mRnEz1XtMrfsj9twyKiOJLdD2Y89V-LK6Khe
 
 
 Tool Proposal:
-• We are going to use ReactJS/React Native for our UI.
-• We will run a Linux VM to house our SQL database.
-• We will use a Web API written in Java.
+- We are going to use ReactJS/React Native for our UI.
+- We will run a Linux VM to house our SQL database.
+- We will use a Web API written in Java.
