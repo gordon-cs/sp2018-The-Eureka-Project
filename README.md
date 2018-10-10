@@ -13,6 +13,8 @@ https://docs.google.com/presentation/d/1l_h5mRnEz1XtMrfsj9twyKiOJLdD2Y89V-LK6Khe
 * We will run a Linux VM to house our SQL database.
 * We will use a Web API written in Java.
 
+
+
 **End-To-End “Hello World” Definition:**
 
 Our Hello World Program will be as basic as clicking a button to say “hello” to the database, and then getting a response back from the DB that says “hello user!”
