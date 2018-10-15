@@ -24,4 +24,5 @@ The entities involved in this:
 * The user clicks the button, which sends a get request to the API
 * The API then retrieves the message (“hello user”) from the DB and sends its back to the user (client)
 * The UI displays “hello user” to the user
+
 Thus, the UI, API, and DB all work together to make this happen. 
