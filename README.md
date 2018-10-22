@@ -7,15 +7,6 @@ https://docs.google.com/document/d/1UlvIg8OBKPYOV53w5qU_N7w8MA0mgIGG96oEihguxyA/
 A link to our presentation about our problem statement can be found here:
 https://docs.google.com/presentation/d/1l_h5mRnEz1XtMrfsj9twyKiOJLdD2Y89V-LK6KheuGg/edit?usp=sharing
 
-
-**Tool Proposal:**
-* We are going to use ReactJS/React Native for our UI.
-* We will run a Linux VM to house our SQL database.
-* We will use a Web API written in Java.
-* We will use firebase for our authentication.
-
-
-
 **End-To-End “Hello World” Definition:**
 
 Our Hello World Program will be as basic as clicking a button to say “hello” to the database, and then getting a response back from the DB that says “hello user!”
