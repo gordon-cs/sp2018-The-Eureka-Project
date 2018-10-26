@@ -10,3 +10,8 @@ Notes about what we picked/why/how to set it up/how to use it.
 * We will use a Web API written in Java.
 * We will use firebase for our authentication.
 
+**VM Specifications:**
+* OS: Ubuntu 18.04 would be great, with a workstation setup
+* 1 core
+* 8GB of RAM
+* ~100GB on disk
