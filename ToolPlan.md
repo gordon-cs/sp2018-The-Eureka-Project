@@ -11,7 +11,7 @@ Notes about what we picked/why/how to set it up/how to use it.
 * We will use firebase for our authentication.
 
 **VM Specifications:**
-* OS: Ubuntu 18.04 would be great, with a workstation setup
+* OS: Ubuntu 18.04
 * 1 core
 * 8GB of RAM
 * ~100GB on disk
