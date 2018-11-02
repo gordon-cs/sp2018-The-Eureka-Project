@@ -125,4 +125,8 @@ How to make MySQL accessible without sudo privileges:
 P.S. This site (https://www.w3schools.com/sql/default.asp) is really useful for learning SQL commands. The handy sidebar on the left is your friend! :)
 
 
+# 7. Visual Studio
+To install the code editor:
+https://www.w3schools.com/sql/default.asp
+
 
