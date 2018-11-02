@@ -99,7 +99,7 @@ To create a new app:
 
 > expo start
 
-# 5. Express
+# 4. Express
 Express is a web application framework for web/mobile applications (https://expressjs.com/en/starter/installing.html)
 
 > npm install express --save
@@ -115,7 +115,7 @@ Once Node is installed, we can build our first webserver with Node.js (https://n
 How does Node.js work?
 https://medium.freecodecamp.org/what-exactly-is-node-js-ae36e97449f5
 
-# 6. SQL
+# 5. SQL
 > This was all written by Stephen Macomber, THANKS STEPHEN!
 To install MySQL:
 > sudo apt update
