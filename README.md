@@ -25,6 +25,7 @@ On this VM, we will install
 * Node.js, 
 * SQL, and 
 * React Native;
+
 As for applications, we will install
 * Visual Studio Code and 
 * some kind of SQL server manager.
