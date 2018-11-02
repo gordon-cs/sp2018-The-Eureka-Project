@@ -55,7 +55,7 @@ Test that it works by:
 Add the ability to execute the CRNA command:
 
 > yarn global add create-react-native-app@1.0.0
-  (the @1.0.0 is the version of CRNA to install, we could potentially do a newer version)
+(the @1.0.0 is the version of CRNA to install, we could potentially do a newer version)
 
 # 3. Expo CLI
 (Expo is a platform that helps build fully functional React Native apps without having to write native code; AKA no XCode for iOS or Android Studio for Android.)
