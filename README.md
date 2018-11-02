@@ -28,7 +28,10 @@ On this VM, we will install
 
 As for applications, we will install
 * Visual Studio Code and 
-* some kind of SQL server manager.
+* some kind of SQL server manager
+
+For authentication, we will use Firebase:
+* https://firebase.googleblog.com/2016/01/the-beginners-guide-to-react-native-and_84.html
 
 We will use 'create-react-native-app' as opposed to 'react-native init' because of the following reasons expressed on the CRNA's github page:
 * "**Minimal "Time to Hello World"**: Create React Native App should reduce the setup time it takes to try building a mobile app to the absolute minimum, ideally on par with React web development (especially as seen with Create React App).
