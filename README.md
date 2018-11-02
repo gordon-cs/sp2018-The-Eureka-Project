@@ -40,7 +40,19 @@ We will use 'create-react-native-app' as opposed to 'react-native init' because 
 * **No Lock-In**: You can always "eject" to your own build setup if you need to write custom native code or modify how your app is built."
 (source: https://github.com/react-community/create-react-native-app)
 
-# 1. Node.j
+
+## Applications
+# 1. Visual Studio
+To install the code editor:
+https://www.w3schools.com/sql/default.asp
+
+There were some issues here, make sure that you check out this link if you have trouble (https://firebase.googleblog.com/2016/01/the-beginners-guide-to-react-native-and_84.html)
+
+Extensions:
+
+
+## Tools/Libraries/Stuff
+# 1. Node.js
 First, we must install the latest version of Node.js.
   https://nodejs.org/en/
 > sudo apt install nodejs
@@ -122,14 +134,6 @@ How to make MySQL accessible without sudo privileges:
 
 P.S. This site (https://www.w3schools.com/sql/default.asp) is really useful for learning SQL commands. The handy sidebar on the left is your friend! :)
 
-
-# 7. Visual Studio
-To install the code editor:
-https://www.w3schools.com/sql/default.asp
-
-There were some issues here, make sure that you check out this link if you have trouble (https://firebase.googleblog.com/2016/01/the-beginners-guide-to-react-native-and_84.html)
-
-Extensions:
 
 
 
