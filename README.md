@@ -90,6 +90,9 @@ In the forwords directory,
 
 Once Node is installed, we can build our first webserver with Node.js (https://nodejs.org/en/docs/guides/getting-started-guide/)
 * After that, run your web server using `node app.js`, visit http://localhost:3000, and you will see a message 'Hello World'
+
+How does Node.js work?
+https://medium.freecodecamp.org/what-exactly-is-node-js-ae36e97449f5
   
 
 
