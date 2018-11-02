@@ -77,7 +77,19 @@ Then, to create a new app, we will this command in our project directory (https:
   (This is purely JavaScript, with no ios or android directories.)
   
 > npm start
-  
+
+# 5. Express
+Express is a web application framework for web/mobile applications (https://expressjs.com/en/starter/installing.html)
+
+> npm install express --save
+
+In the forwords directory,
+
+> npm init
+> npm install express --save
+
+Once Node is installed, we can build our first webserver with Node.js (https://nodejs.org/en/docs/guides/getting-started-guide/)
+* After that, run your web server using `node app.js`, visit http://localhost:3000, and you will see a message 'Hello World'
   
 
 
