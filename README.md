@@ -79,19 +79,14 @@ We will install Expo CLI. (https://docs.expo.io/versions/latest/introduction/ins
   
 # 4. Create-React-Native-App
 Then, to create a new app, we will this command in our project directory (https://github.com/react-community/create-react-native-app):
-> create-react-native-app forwords --scripts-version 1.14.0
+> expo init forwords
+(This is purely JavaScript, with no ios or android directories.)
 
-(1.14.10 is the version of the package "react-native-scripts" that is the engine that runs out RN app while in development.   You can find this package in the package.json file)
+> cd forwords/
 
-> cd forwords
+> npm start
 
 > yarn start
-  
-> expo init 
-
-  (This is purely JavaScript, with no ios or android directories.)
-  
-> npm start
 
 # 5. Express
 Express is a web application framework for web/mobile applications (https://expressjs.com/en/starter/installing.html)
