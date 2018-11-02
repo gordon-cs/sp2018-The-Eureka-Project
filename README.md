@@ -74,7 +74,7 @@ Add the ability to execute the CRNA command:
 (Make sure npm command is installed first): 
 > sudo apt install npm
 
-We will install Expo CLI. (reactnativeexpress.com)
+We will install Expo CLI. (expo.io/learn)
 > sudo npm install expo-cli --global
 
 To create a new app:
