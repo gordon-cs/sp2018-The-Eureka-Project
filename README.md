@@ -74,19 +74,18 @@ Add the ability to execute the CRNA command:
 (Make sure npm command is installed first): 
 > sudo apt install npm
 
-We will install Expo CLI. (https://docs.expo.io/versions/latest/introduction/installation)
-> npm install -g expo-cli
-  
-# 4. Create-React-Native-App
-Then, to create a new app, we will this command in our project directory (https://github.com/react-community/create-react-native-app):
+We will install Expo CLI. (reactnativeexpress.com)
+> sudo npm install expo-cli --global
+
+To create a new app:
+
 > expo init forwords
+
 (This is purely JavaScript, with no ios or android directories.)
 
-> cd forwords/
+> cd forwords
 
-> npm start
-
-> yarn start
+> expo start
 
 # 5. Express
 Express is a web application framework for web/mobile applications (https://expressjs.com/en/starter/installing.html)
