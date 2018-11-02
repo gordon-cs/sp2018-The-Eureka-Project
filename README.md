@@ -18,3 +18,13 @@ The entities involved in this:
 * The UI displays “hello user” to the user
 
 Thus, the UI, API, and DB all work together to make this happen. 
+
+
+We need to have a VM in order for us to have admin privileges. 
+On this VM, we will install
+* Node.js, 
+* SQL, and 
+* React Native;
+As for applications, we will install
+* Visual Studio Code and 
+* some kind of SQL server manager.
