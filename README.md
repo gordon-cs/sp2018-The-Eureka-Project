@@ -39,9 +39,17 @@ We will use 'create-react-native-app' as opposed to 'react-native init' because 
 # 1. Node.j
 First, we must install the latest version of Node.js.
   https://nodejs.org/en/
+> sudo apt install nodejs
+
+To check that it was installed:
+> node -v
   
 # 2. Yarn
 Next, we will install yarn (a package manager) (https://yarnpkg.com/en/docs/install#debian-stable)
+
+(Make sure curl is installed first): 
+> sudo apt install curl
+
 > curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 
 > echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
@@ -59,6 +67,9 @@ Add the ability to execute the CRNA command:
 
 # 3. Expo CLI
 (Expo is a platform that helps build fully functional React Native apps without having to write native code; AKA no XCode for iOS or Android Studio for Android.)
+(Make sure npm command is installed first): 
+> sudo apt install npm
+
 We will install Expo CLI. (https://docs.expo.io/versions/latest/introduction/installation)
 > npm install -g expo-cli
   
