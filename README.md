@@ -133,4 +133,9 @@ P.S. This site (https://www.w3schools.com/sql/default.asp) is really useful for 
 To install the code editor:
 https://www.w3schools.com/sql/default.asp
 
+There were some issues here, make sure that you check out this link if you have trouble (https://firebase.googleblog.com/2016/01/the-beginners-guide-to-react-native-and_84.html)
+
+Extensions:
+
+
 
