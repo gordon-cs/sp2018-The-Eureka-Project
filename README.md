@@ -150,4 +150,4 @@ ssh offcampus to @nabi.cs.gordon.edu and then ssh into anything on campus that h
 
 We can upgrade to a workstation (have UI), there should be documentation somewhere for that. 
 
-
+As of 11/3/18 1:05pm, it does not have a network connection yet so we cannot access it.
