@@ -138,15 +138,16 @@ P.S. This site (https://www.w3schools.com/sql/default.asp) is really useful for 
 
 
 # Our Linux VM: EurekaProjectVM on HyperV-Lab1
-(Created through Hyper V Lab)
+(Created through Hyper V Lab) It is a server VM, not a workstation VM. (AKA there is no UI.)
 
-Not root, but it is the main user:
+Root/Sudoer Privileges:
 
 > first name: Eureka Project
 
 > password: 4words!
 
+ssh offcampus to @nabi.cs.gordon.edu and then ssh into anything on campus that has an ssh server, which means we would just need to put in the local IP of our server (10.100.150.128) to get in. 
 
-
+We can upgrade to a workstation (have UI), there should be documentation somewhere for that. 
 
 
