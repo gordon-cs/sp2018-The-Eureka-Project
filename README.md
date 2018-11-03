@@ -41,8 +41,8 @@ We will use 'create-react-native-app' as opposed to 'react-native init' because 
 (source: https://github.com/react-community/create-react-native-app)
 
 
-## Applications
-# 1. Visual Studio
+# Applications
+### 1. Visual Studio
 To install the code editor:
 https://www.w3schools.com/sql/default.asp
 
@@ -51,8 +51,8 @@ There were some issues here, make sure that you check out this link if you have 
 Extensions:
 
 
-## Tools/Libraries/Stuff
-# 1. Node.js
+# Tools/Libraries/Stuff
+## 1. Node.js
 First, we must install the latest version of Node.js.
   https://nodejs.org/en/
 > sudo apt install nodejs
@@ -60,7 +60,7 @@ First, we must install the latest version of Node.js.
 To check that it was installed:
 > node -v
   
-# 2. Yarn
+## 2. Yarn
 Next, we will install yarn (a package manager) (https://yarnpkg.com/en/docs/install#debian-stable)
 
 (Make sure curl is installed first): 
@@ -81,7 +81,7 @@ Add the ability to execute the CRNA command:
 > yarn global add create-react-native-app@1.0.0
 (the @1.0.0 is the version of CRNA to install, we could potentially do a newer version)
 
-# 3. Expo CLI
+## 3. Expo CLI
 (Expo is a platform that helps build fully functional React Native apps without having to write native code; AKA no XCode for iOS or Android Studio for Android.)
 (Make sure npm command is installed first): 
 > sudo apt install npm
@@ -99,7 +99,7 @@ To create a new app:
 
 > expo start
 
-# 4. Express
+## 4. Express
 Express is a web application framework for web/mobile applications (https://expressjs.com/en/starter/installing.html)
 
 > npm install express --save
@@ -116,7 +116,7 @@ Once Node is installed, we can build our first webserver with Node.js (https://n
 How does Node.js work?
 https://medium.freecodecamp.org/what-exactly-is-node-js-ae36e97449f5
 
-# 5. SQL
+## 5. SQL
 > This was all written by Stephen Macomber, THANKS STEPHEN!
 To install MySQL:
 > sudo apt update
@@ -139,9 +139,12 @@ P.S. This site (https://www.w3schools.com/sql/default.asp) is really useful for 
 
 # Our Linux VM: EurekaProjectVM on HyperV-Lab1
 (Created through Hyper V Lab)
+
 Not root, but it is the main user:
-  first name: Eureka Project
-  password: 4words!
+
+> first name: Eureka Project
+
+> password: 4words!
 
 
 
