@@ -137,4 +137,13 @@ P.S. This site (https://www.w3schools.com/sql/default.asp) is really useful for 
 
 
 
+# Our Linux VM: EurekaProjectVM on HyperV-Lab1
+(Created through Hyper V Lab)
+Not root, but it is the main user:
+  first name: Eureka Project
+  password: 4words!
+
+
+
+
 
