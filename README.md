@@ -95,6 +95,8 @@ To create a new app:
 
 (This is purely JavaScript, with no ios or android directories.)
 
+To run the app: 
+
 > cd forwords
 
 > expo start
@@ -118,7 +120,9 @@ https://medium.freecodecamp.org/what-exactly-is-node-js-ae36e97449f5
 
 ### 5. SQL
 > This was all written by Stephen Macomber, THANKS STEPHEN!
+
 To install MySQL:
+
 > sudo apt update
 
 > sudo apt install mysql-server
@@ -128,9 +132,13 @@ How to make MySQL accessible without sudo privileges:
 > sudo mysql -u root
 
 > mysql> USE mysql;
+
 > mysql> UPDATE user SET plugin='mysql_native_password' WHERE User='root';
+
 > mysql> FLUSH PRIVILEGES;
+
 > mysql> exit;
+
 (https://stackoverflow.com/questions/39281594/error-1698-28000-access-denied-for-user-rootlocalhost)
 
 P.S. This site (https://www.w3schools.com/sql/default.asp) is really useful for learning SQL commands. The handy sidebar on the left is your friend! :)
