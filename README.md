@@ -159,3 +159,12 @@ ssh offcampus to @nabi.cs.gordon.edu and then ssh into anything on campus that h
 We can upgrade to a workstation (have UI), there should be documentation somewhere for that. 
 
 As of 11/3/18 1:05pm, it does not have a network connection yet so we cannot access it.
+
+
+
+# Misc
+
+** If Expo won't connect to VM **
+The build on our VM was not accessible to my phone (even though we were both connected to GordonNET). So, what we did to fix this was the following:
+
+Shutdown the VM, then cahgned the NEtowrk settings: we clicked "Attached to" and changed it from NAT to "Bridged Adapter".
