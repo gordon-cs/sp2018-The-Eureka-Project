@@ -40,6 +40,8 @@ We will use 'create-react-native-app' as opposed to 'react-native init' because 
 * **No Lock-In**: You can always "eject" to your own build setup if you need to write custom native code or modify how your app is built."
 (source: https://github.com/react-community/create-react-native-app)
 
+React Native Documentation: https://github.com/facebook/react-native
+
 
 # Applications
 ### 1. Visual Studio
