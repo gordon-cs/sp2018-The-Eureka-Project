@@ -160,6 +160,7 @@ How to make MySQL accessible without sudo privileges:
 
 P.S. This site (https://www.w3schools.com/sql/default.asp) is really useful for learning SQL commands. The handy sidebar on the left is your friend! :)
 
+P.S.2 This site (https://www.terlici.com/2015/08/13/mysql-node-express.html) shows codes on how to connect mysql with node and express
 
 
 # Our Linux VM: EurekaProjectVM on HyperV-Lab1
