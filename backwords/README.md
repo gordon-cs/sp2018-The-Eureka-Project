@@ -43,3 +43,6 @@ https://medium.freecodecamp.org/what-exactly-is-node-js-ae36e97449f5
 
 > bower install axios
 
+
+### 6. MySQL
+>npm install mysql
