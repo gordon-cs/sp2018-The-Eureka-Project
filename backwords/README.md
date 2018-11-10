@@ -25,7 +25,7 @@ In the terminal, in the expressBackwords directory, run the following command
 
 > DEBUG=expressBackwords:* npm start
 
-Now go to the web server and test your app by visiting `http://your.server.ip.address:3000`
+Now go to the web server and test your app by visiting `http://172.27.43.141:3000`
 
 Once Node is installed, we can build our first webserver with Node.js (https://nodejs.org/en/docs/guides/getting-started-guide/)
 * After that, run your web server using `node app.js`, visit http://localhost:3000, and you will see a message 'Hello World'
