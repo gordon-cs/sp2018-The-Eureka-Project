@@ -5,13 +5,15 @@ The backend for The-Eureka-Project-forwords repo. :)
 Express is a web application framework for web/mobile applications (https://expressjs.com/en/starter/installing.html)
 https://thishosting.rocks/getting-started-with-express-js-server-setup/
 
+**Getting Started**
+
 > npm install express-generator -g
 
 > npm install express-dot-engine
 
-> express expressBackwords
+> express backwords
 
-> cd expressBackwords
+> cd backwords
 
 > npm install
 
@@ -21,9 +23,11 @@ Then open up `www` file in VS and modify the following:
 
 server.listen(port, 'your.server.ip.address')
 
+**How to Run The Server**
+
 In the terminal, in the expressBackwords directory, run the following command
 
-> DEBUG=expressBackwords:* npm start
+> DEBUG=backwords:* npm start
 
 Now go to the web server and test your app by visiting `http://172.27.43.141:3000`
 
