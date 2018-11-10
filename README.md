@@ -17,17 +17,17 @@ The entities involved in this:
 * The API then retrieves the message (“hello user”) from the DB and sends its back to the user (client)
 * The UI displays “hello user” to the user
 
-Thus, the UI, API, and DB all work together to make this happen. 
+Thus, the UI, API, and DB all work together to make this happen.
 
 
-We need to have a VM in order for us to have admin privileges. 
+We need to have a VM in order for us to have admin privileges.
 On this VM, we will install
-* Node.js, 
-* SQL, and 
+* Node.js,
+* SQL, and
 * React Native;
 
 As for applications, we will install
-* Visual Studio Code and 
+* Visual Studio Code and
 * some kind of SQL server manager
 
 For authentication, we will use Firebase:
@@ -61,11 +61,11 @@ First, we must install the latest version of Node.js.
 
 To check that it was installed:
 > node -v
-  
+
 ### 2. Yarn
 Next, we will install yarn (a package manager) (https://yarnpkg.com/en/docs/install#debian-stable)
 
-(Make sure curl is installed first): 
+(Make sure curl is installed first):
 > sudo apt install curl
 
 > curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
@@ -73,11 +73,11 @@ Next, we will install yarn (a package manager) (https://yarnpkg.com/en/docs/inst
 > echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 
 > sudo apt-get update && sudo apt-get install yarn
-  
+
 Test that it works by:
 
 > yarn --version
-  
+
 Add the ability to execute the CRNA command:
 
 > yarn global add create-react-native-app@1.0.0
@@ -85,7 +85,7 @@ Add the ability to execute the CRNA command:
 
 ### 3. Expo CLI
 (Expo is a platform that helps build fully functional React Native apps without having to write native code; AKA no XCode for iOS or Android Studio for Android.)
-(Make sure npm command is installed first): 
+(Make sure npm command is installed first):
 > sudo apt install npm
 
 We will install Expo CLI. (expo.io/learn)
@@ -97,7 +97,7 @@ To create a new app:
 
 (This is purely JavaScript, with no ios or android directories.)
 
-To run the app: 
+To run the app:
 
 > cd forwords
 
@@ -111,9 +111,9 @@ https://thishosting.rocks/getting-started-with-express-js-server-setup/
 
 > npm install express-dot-engine
 
-> express expressBackwords
+> express backwords
 
-> cd expressBackwords
+> cd backwords
 
 > npm install
 
@@ -172,9 +172,9 @@ Root/Sudoer Privileges:
 
 > password: 4words!
 
-ssh offcampus to @nabi.cs.gordon.edu and then ssh into anything on campus that has an ssh server, which means we would just need to put in the local IP of our server (10.100.150.128) to get in. 
+ssh offcampus to @nabi.cs.gordon.edu and then ssh into anything on campus that has an ssh server, which means we would just need to put in the local IP of our server (10.100.150.128) to get in.
 
-We can upgrade to a workstation (have UI), there should be documentation somewhere for that. 
+We can upgrade to a workstation (have UI), there should be documentation somewhere for that.
 
 As of 11/3/18 1:05pm, it does not have a network connection yet so we cannot access it.
 
