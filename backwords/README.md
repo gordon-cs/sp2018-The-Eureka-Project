@@ -21,7 +21,7 @@ https://thishosting.rocks/getting-started-with-express-js-server-setup/
 
 Then open up `www` file in VS and modify the following:
 
-server.listen(port, 'your.server.ip.address')
+server.listen(port, '171.27.43.141')
 
 **How to Run The Server**
 
