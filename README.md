@@ -128,7 +128,7 @@ Then open up `www` file in VS and modify the following:
 
 In the terminal, in the backwords directory, run the following command
 
-> SET DEBUG=backwords:* npm start
+> DEBUG=backwords:* npm start
 
 Now go to the web server and test your app by visiting `http://172.27.43.141:3000`
 
