@@ -25,7 +25,7 @@ server.listen(port, 'your.server.ip.address')
 
 **How to Run The Server**
 
-In the terminal, in the expressBackwords directory, run the following command
+In the terminal, in the backwords directory, run the following command
 
 > DEBUG=backwords:* npm start
 
