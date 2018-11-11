@@ -1,13 +1,90 @@
 var createError = require('http-errors');
 var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
+var bodyparser = require('body-parser');
+var mysql = require('mysql');
 var app = express();
+// var path = require('path');
+// var cookieParser = require('cookie-parser');
+// var logger = require('morgan');
+
+// Body Parser Middleware
+app.use(bodyParser.json()); 
+
+// var indexRouter = require('./routes/index');
+// var usersRouter = require('./routes/users');
+
+//CORS Middleware
+app.use(function (req, res, next) {
+    //Enabling CORS 
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, contentType,Content-Type, Accept, Authorization");
+     next();
+   });
+   
+//Setting up server
+var server = app.listen(process.env.PORT || 8080, function () {
+  var port = server.address().port;
+  console.log("App now running on port", port);
+});
+
+var connection = mysql.createConnection({
+  host : 'localhost',
+  user : 'root',
+  password : '',
+  database : 'forwords'
+});
+   
+var  executeQuery = function(res, query){             
+  sql.connect(dbConfig, function (err) {
+    if (err) {   
+      console.log("Error while connecting database :- " + err);
+      res.send(err);
+    }
+    else {
+      // create Request object
+      var request = new sql.Request();
+      // query to the database
+      request.query(query, function (err, res) {
+        if (err) {
+          console.log("Error while querying database :- " + err);
+          res.send(err);
+        }
+        else {
+          res.send(res);
+        }
+      });
+    }
+  });
+}
+
+//GET API
+app.get("/api/user", function(req , res){
+  var query = "SELECT * FROM users";
+  executeQuery (res, query);
+});
+
+//POST API
+app.post("/api/user", function(req , res){
+  var query = "INSERT INTO users (FirstName,LastName) VALUES ('Russ','Tuck');" 
+  executeQuery (res, query);
+});
+
+//PUT API
+app.put("/api/user/:id", function(req , res){
+  var query = "UPDATE users SET LastName = Bjork WHERE FirstName = Russ;"
+  executeQuery (res, query);
+});
+
+// DELETE API
+app.delete("/api/user /:id", function(req , res){
+  var query = "DELETE FROM users WHERE FirstName=Russ;"
+  executeQuery (res, query);
+});
+
+// app.get("/url", (req, res, next) => {
+//   res.json(["Tony","Lisa","Michael","Ginger","Food"]);
+// });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
