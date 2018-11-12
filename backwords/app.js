@@ -1,17 +1,17 @@
 var createError = require('http-errors');
 var express = require('express');
-var bodyparser = require('body-parser');
+var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var app = express();
-// var path = require('path');
-// var cookieParser = require('cookie-parser');
-// var logger = require('morgan');
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
 
 // Body Parser Middleware
 app.use(bodyParser.json()); 
 
-// var indexRouter = require('./routes/index');
-// var usersRouter = require('./routes/users');
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
 
 //CORS Middleware
 app.use(function (req, res, next) {
@@ -34,52 +34,69 @@ var connection = mysql.createConnection({
   password : '',
   database : 'forwords'
 });
-   
-var  executeQuery = function(res, query){             
-  sql.connect(dbConfig, function (err) {
-    if (err) {   
-      console.log("Error while connecting database :- " + err);
-      res.send(err);
-    }
-    else {
+
+connection.connect(function(err) {
+	if (err) {
+		console.error('Error connecting: ' + err.stack);
+		return;
+	}
+	console.log ('Connected as id ' + connection.threadId);
+});
+
+connection.query('SELECT * FROM users', function (error, results, fields) {
+	if (error)
+		throw error;
+	results.forEach(result => {
+		console.log(result);
+	});
+});
+
+connection.end();
+// var  executeQuery = function(res, query){             
+//   connection.connect(dbConfig, function (err) {
+//     if (err) {   
+//       console.log("Error while connecting database :- " + err);
+//       res.send(err);
+//     }
+//     else {
       // create Request object
-      var request = new sql.Request();
+//       var request = new sql.Request();
       // query to the database
-      request.query(query, function (err, res) {
-        if (err) {
-          console.log("Error while querying database :- " + err);
-          res.send(err);
-        }
-        else {
-          res.send(res);
-        }
-      });
-    }
-  });
-}
+//       request.query(query, function (err, res) {
+//         if (err) {
+//           console.log("Error while querying database :- " + err);
+//           res.send(err);
+//         }
+//         else {
+//           res.send(res);
+//         }
+//       });
+//     }
+//   });
+// }
 
 //GET API
-app.get("/api/user", function(req , res){
-  var query = "SELECT * FROM users";
-  executeQuery (res, query);
-});
+// app.get("/api/user", function(req , res){
+//   var query = "SELECT * FROM users;";
+//   executeQuery (res, query);
+// });
 
 //POST API
 app.post("/api/user", function(req , res){
   var query = "INSERT INTO users (FirstName,LastName) VALUES ('Russ','Tuck');" 
-  executeQuery (res, query);
+//   executeQuery (res, query);
 });
 
 //PUT API
 app.put("/api/user/:id", function(req , res){
   var query = "UPDATE users SET LastName = Bjork WHERE FirstName = Russ;"
-  executeQuery (res, query);
+//   executeQuery (res, query);
 });
 
 // DELETE API
 app.delete("/api/user /:id", function(req , res){
   var query = "DELETE FROM users WHERE FirstName=Russ;"
-  executeQuery (res, query);
+//   executeQuery (res, query);
 });
 
 // app.get("/url", (req, res, next) => {
