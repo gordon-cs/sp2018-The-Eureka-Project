@@ -51,7 +51,7 @@ export default class HomeScreen extends React.Component {
             </View>
 
             <Text style={styles.getStartedText}>
-              Change this text and your app will LIT.
+              Welcome to forwords! 2PM 11/13/18
             </Text>
           </View>
 
