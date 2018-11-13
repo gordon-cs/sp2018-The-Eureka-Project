@@ -20,7 +20,7 @@ export default class HomeScreen extends React.Component {
 
   async componentDidMount() {
     console.log("Got into componentDidMount");
-    axios.get(`/users`).then(res => {
+    axios.get('/people').then(res => {
         const users = res.data;
         console.log(users);
     });
