@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import {
   Image,
   Platform,
@@ -17,6 +18,14 @@ export default class HomeScreen extends React.Component {
     header: null,
   };
 
+  async componentDidMount() {
+    console.log("Got into componentDidMount");
+    axios.get(`/users`).then(res => {
+        const users = res.data;
+        console.log(users);
+    });
+  }
+  
   render() {
     return (
       <View style={styles.container}>
