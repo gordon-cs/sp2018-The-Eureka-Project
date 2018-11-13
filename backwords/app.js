@@ -51,6 +51,10 @@ connection.query('SELECT * FROM users', function (error, results, fields) {
 	});
 });
 
+app.get('/people', function (req, res) {
+  res.send("your get for '/people' worked!")
+})
+
 connection.end();
 // var  executeQuery = function(res, query){             
 //   connection.connect(dbConfig, function (err) {
@@ -75,10 +79,11 @@ connection.end();
 //   });
 // }
 
-//GET API
-// app.get("/api/user", function(req , res){
+// GET API
+// app.get("/api/people", function(req , res){
 //   var query = "SELECT * FROM users;";
 //   executeQuery (res, query);
+
 // });
 
 //POST API
@@ -113,8 +118,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/people', peopleRouter);
+// app.use('/', indexRouter);
+// app.use('/people', peopleRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
