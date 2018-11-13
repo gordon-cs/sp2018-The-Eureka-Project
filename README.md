@@ -186,10 +186,12 @@ As of 11/3/18 1:05pm, it does not have a network connection yet so we cannot acc
 
 # Misc
 
-** If Expo won't connect to VM **
+**If Expo won't connect to VM**
+
 The build on our VM was not accessible to my phone (even though we were both connected to GordonNET). So, what we did to fix this was the following:
 
 Shutdown the VM, then changed the Network settings: we clicked "Attached to" and changed it from NAT to "Bridged Adapter".
 
-** If Expo won't build on your iPhone **
+**If Expo won't build on your iPhone**
+
 On MetroBuilder, where it says "Connection" change it to `Tunnel`, and that should fix it.
