@@ -43,19 +43,24 @@ connection.connect(function(err) {
 	console.log ('Connected as id ' + connection.threadId);
 });
 
-connection.query('SELECT * FROM users', function (error, results, fields) {
-	if (error)
-		throw error;
-	results.forEach(result => {
-		console.log(result);
-	});
-});
-
-app.get('/people', function (req, res) {
-  res.send("your get for '/people' worked!")
+app.get('/', function(req, res) {
+	res.send("Welcome to forwords");
 })
 
-connection.end();
+app.get('/people', function (req, res) {
+	connection.query('SELECT * FROM users', function (error, results, fields) {
+		if (error)
+			throw error;
+		res.json(results);
+
+// 		results.forEach(result => {
+// 			console.log(result);
+// 		});
+	});
+
+// 	res.send("your get for '/people' worked!")
+})
+
 // var  executeQuery = function(res, query){             
 //   connection.connect(dbConfig, function (err) {
 //     if (err) {   
@@ -134,7 +139,8 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+	res.send(err.status);
+//  res.render('error');
 });
 
 module.exports = app;
