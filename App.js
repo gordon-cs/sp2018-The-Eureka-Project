@@ -1,15 +1,13 @@
-import React, {Component} from 'react';
-import { Alert, AppRegistry, Button, Content, Header, Platform, StatusBar, StyleSheet, Text, View } from 'react-native';
-import { AppLoading, Asset, Constants, Font, Icon } from 'expo';
+import React from 'react';
+import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { AppLoading, Asset, Font, Icon } from 'expo';
+import AppNavigator from './navigation/AppNavigator';
 
-export default class App extends Component {
+export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
   };
-  _onPressButton() {
-  Alert.alert('Hello World!');
 
-}
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
@@ -22,14 +20,8 @@ export default class App extends Component {
     } else {
       return (
         <View style={styles.container}>
-          <View style={styles.button}>
-            <Button // Display Demo Button
-              onPress={this._onPressButton}
-              title="forwords!"
-              color='white'
-              style={styles.button}
-            />
-          </View>
+          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+          <AppNavigator />
         </View>
       );
     }
@@ -65,16 +57,6 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
-  },
-  button: {
-   marginBottom: 30,
-   width: 100,
-   // Trying to make the button centerd in the middle of the screen.
-   flexDirection: 'center',
-   justifyContent: 'center',
-   alignItems: 'center',
-   backgroundColor: 'purple',
-   borderRadius: 50,
+    backgroundColor: '#fff',
   },
 });
