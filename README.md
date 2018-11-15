@@ -160,6 +160,7 @@ How to make MySQL accessible without sudo privileges:
 
 P.S. This site (https://www.w3schools.com/sql/default.asp) is really useful for learning SQL commands. The handy sidebar on the left is your friend! :)
 
+P.S.2 This site (https://www.terlici.com/2015/08/13/mysql-node-express.html) shows codes on how to connect mysql with node and express
 
 
 # Our Linux VM: EurekaProjectVM on HyperV-Lab1
@@ -184,4 +185,4 @@ As of 11/3/18 1:05pm, it does not have a network connection yet so we cannot acc
 ** If Expo won't connect to VM **
 The build on our VM was not accessible to my phone (even though we were both connected to GordonNET). So, what we did to fix this was the following:
 
-Shutdown the VM, then cahgned the NEtowrk settings: we clicked "Attached to" and changed it from NAT to "Bridged Adapter".
+Shutdown the VM, then changed the Network settings: we clicked "Attached to" and changed it from NAT to "Bridged Adapter".
