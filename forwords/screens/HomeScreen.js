@@ -21,38 +21,62 @@ export default class HomeScreen extends React.Component {
   _onPressButton() {
     Alert.alert('LIT!');
   }
+  async componentDidMount() {
+    console.log("Got into componentDidMount");
+    axios.get('/people').then(res => {
+        const users = res.data;
+        console.log(users);
+    });
+  }
   render() {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
+         <View style={styles.pictureContainer}>
             <Image
               source={
                 __DEV__
-                  ? require('../assets/images/Fore.png')
-                  : require('../assets/images/wurd.png')
+                  ? require('../forwords_pictures_/fruits_and_vegetables_/fruit_apple_.png')
+                  : require('../forwords_pictures_/fruits_and_vegetables_/fruit_cherry_.png')
+              }
+              style={styles.welcomeImage}
+            />
+            <Image
+              source={
+                __DEV__
+                  ? require('../forwords_pictures_/fruits_and_vegetables_/fruit_cherry_.png')
+                  : require('../forwords_pictures_/fruits_and_vegetables_/fruit_apple_.png')
               }
               style={styles.welcomeImage}
             />
           </View>
-          <View style={styles.welcomeContainer}>
-            <Image
-              source={
-                __DEV__
-                  ? require('../assets/images/wurd.png')
-                  : require('../assets/images/Fore.png')
-              }
-              style={styles.welcomeImage}
-            />
-          </View>
-
           <View style={styles.getStartedContainer}>
-
-
-            <Button style={styles.button}
-              title = 'forwards!'
-              onPress = {this._onPressButton}
-              color = 'purple'
+            <Text style={styles.forwordsText}>
+              Welcome
+            </Text>
+            <Text style={styles.forwordsText}>
+              to
+            </Text>
+            <Text style={styles.forwordsText}>
+              forwords!
+            </Text>
+          </View>
+          <View style={styles.pictureContainer}>
+            <Image
+              source={
+                __DEV__
+                  ? require('../assets/images/for.png')
+                  : require('../assets/images/words.png')
+              }
+              style={styles.welcomeImage}
+            />
+            <Image
+              source={
+                __DEV__
+                  ? require('../assets/images/words.png')
+                  : require('../assets/images/for.png')
+              }
+              style={styles.welcomeImage}
             />
           </View>
         </ScrollView>
@@ -124,6 +148,7 @@ const styles = StyleSheet.create({
   getStartedContainer: {
     alignItems: 'center',
     marginHorizontal: 50,
+    marginVertical: 150,
   },
   homeScreenFilename: {
     marginVertical: 7,
@@ -186,5 +211,18 @@ const styles = StyleSheet.create({
     color: '#800080',
     borderRadius: 50,
     width: 160,
+  },
+  forwordsText: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#800080',
+    marginVertical: 10,
+    fontSize: 30,
+  },
+  pictureContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 });
