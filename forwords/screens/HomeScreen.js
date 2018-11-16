@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import {
   Alert,
   Button,
@@ -18,9 +19,6 @@ export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
-  _onPressButton() {
-    Alert.alert('LIT!');
-  }
   async componentDidMount() {
     console.log("Got into componentDidMount");
     axios.get('/people').then(res => {
@@ -28,6 +26,7 @@ export default class HomeScreen extends React.Component {
         console.log(users);
     });
   }
+  
   render() {
     return (
       <View style={styles.container}>
@@ -51,14 +50,16 @@ export default class HomeScreen extends React.Component {
             />
           </View>
           <View style={styles.getStartedContainer}>
-            <Text style={styles.forwordsText}>
-              Welcome
-            </Text>
-            <Text style={styles.forwordsText}>
-              to
-            </Text>
-            <Text style={styles.forwordsText}>
-              forwords!
+            {this._maybeRenderDevelopmentModeWarning()}
+
+            <Text style={styles.getStartedText}>Get started by opening</Text>
+
+            <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
+              <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
+            </View>
+
+            <Text style={styles.getStartedText}>
+              Welcome to forwords! 2PM 11/13/18
             </Text>
           </View>
           <View style={styles.pictureContainer}>

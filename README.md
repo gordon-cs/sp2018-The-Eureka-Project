@@ -17,17 +17,17 @@ The entities involved in this:
 * The API then retrieves the message (“hello user”) from the DB and sends its back to the user (client)
 * The UI displays “hello user” to the user
 
-Thus, the UI, API, and DB all work together to make this happen. 
+Thus, the UI, API, and DB all work together to make this happen.
 
 
-We need to have a VM in order for us to have admin privileges. 
+We need to have a VM in order for us to have admin privileges.
 On this VM, we will install
-* Node.js, 
-* SQL, and 
+* Node.js,
+* SQL, and
 * React Native;
 
 As for applications, we will install
-* Visual Studio Code and 
+* Visual Studio Code and
 * some kind of SQL server manager
 
 For authentication, we will use Firebase:
@@ -61,11 +61,11 @@ First, we must install the latest version of Node.js.
 
 To check that it was installed:
 > node -v
-  
+
 ### 2. Yarn
 Next, we will install yarn (a package manager) (https://yarnpkg.com/en/docs/install#debian-stable)
 
-(Make sure curl is installed first): 
+(Make sure curl is installed first):
 > sudo apt install curl
 
 > curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
@@ -73,11 +73,11 @@ Next, we will install yarn (a package manager) (https://yarnpkg.com/en/docs/inst
 > echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 
 > sudo apt-get update && sudo apt-get install yarn
-  
+
 Test that it works by:
 
 > yarn --version
-  
+
 Add the ability to execute the CRNA command:
 
 > yarn global add create-react-native-app@1.0.0
@@ -85,7 +85,7 @@ Add the ability to execute the CRNA command:
 
 ### 3. Expo CLI
 (Expo is a platform that helps build fully functional React Native apps without having to write native code; AKA no XCode for iOS or Android Studio for Android.)
-(Make sure npm command is installed first): 
+(Make sure npm command is installed first):
 > sudo apt install npm
 
 We will install Expo CLI. (expo.io/learn)
@@ -97,23 +97,24 @@ To create a new app:
 
 (This is purely JavaScript, with no ios or android directories.)
 
-To run the app: 
+To run the app:
 
 > cd forwords
 
 > expo start
-
 ### 4. Express
 Express is a web application framework for web/mobile applications (https://expressjs.com/en/starter/installing.html)
 https://thishosting.rocks/getting-started-with-express-js-server-setup/
+
+**Getting Started**
 
 > npm install express-generator -g
 
 > npm install express-dot-engine
 
-> express expressBackwords
+> express backwords
 
-> cd expressBackwords
+> cd backwords
 
 > npm install
 
@@ -121,19 +122,22 @@ https://thishosting.rocks/getting-started-with-express-js-server-setup/
 
 Then open up `www` file in VS and modify the following:
 
-server.listen(port, 'your.server.ip.address')
+`server.listen(port, '171.27.43.141')`
 
-In the terminal, in the expressBackwords directory, run the following command
+# **How to Run The Express Server**
 
-> DEBUG=expressBackwords:* npm start
+In the terminal, in the backwords directory, run the following command
 
-Now go to the web server and test your app by visiting `http://your.server.ip.address:3000`
+> DEBUG=backwords:* npm start
+
+Now go to the web server and test your app by visiting `http://172.27.43.141:3000`
 
 Once Node is installed, we can build our first webserver with Node.js (https://nodejs.org/en/docs/guides/getting-started-guide/)
 * After that, run your web server using `node app.js`, visit http://localhost:3000, and you will see a message 'Hello World'
 
 How does Node.js work?
 https://medium.freecodecamp.org/what-exactly-is-node-js-ae36e97449f5
+
 
 ### 5. SQL
 > This was all written by Stephen Macomber, THANKS STEPHEN!
@@ -172,9 +176,9 @@ Root/Sudoer Privileges:
 
 > password: 4words!
 
-ssh offcampus to @nabi.cs.gordon.edu and then ssh into anything on campus that has an ssh server, which means we would just need to put in the local IP of our server (10.100.150.128) to get in. 
+ssh offcampus to @nabi.cs.gordon.edu and then ssh into anything on campus that has an ssh server, which means we would just need to put in the local IP of our server (10.100.150.128) to get in.
 
-We can upgrade to a workstation (have UI), there should be documentation somewhere for that. 
+We can upgrade to a workstation (have UI), there should be documentation somewhere for that.
 
 As of 11/3/18 1:05pm, it does not have a network connection yet so we cannot access it.
 
@@ -182,7 +186,12 @@ As of 11/3/18 1:05pm, it does not have a network connection yet so we cannot acc
 
 # Misc
 
-** If Expo won't connect to VM **
+**If Expo won't connect to VM**
+
 The build on our VM was not accessible to my phone (even though we were both connected to GordonNET). So, what we did to fix this was the following:
 
 Shutdown the VM, then changed the Network settings: we clicked "Attached to" and changed it from NAT to "Bridged Adapter".
+
+**If Expo won't build on your iPhone**
+
+On MetroBuilder, where it says "Connection" change it to `Tunnel`, and that should fix it.

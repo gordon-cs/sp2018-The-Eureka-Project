@@ -25,7 +25,8 @@ var server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+// This is the IP for the EurekaProjectVM
+server.listen(port, "172.27.43.141");
 server.on('error', onError);
 server.on('listening', onListening);
 
