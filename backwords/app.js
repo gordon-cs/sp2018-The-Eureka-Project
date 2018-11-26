@@ -10,9 +10,6 @@ var logger = require('morgan');
 // Body Parser Middleware
 app.use(bodyParser.json()); 
 
-var indexRouter = require('./routes/index');
-var peopleRouter = require('./routes/people');
-
 //CORS Middleware
 app.use(function (req, res, next) {
     //Enabling CORS 
@@ -48,7 +45,15 @@ app.get('/', function(req, res) {
 })
 
 app.get('/people', function (req, res) {
-	connection.query('SELECT * FROM users', function (error, results, fields) {
+	connection.query('SELECT * FROM Users', function (error, results, fields) {
+		if (error)
+			throw error;
+		res.json(results);
+	});
+})
+
+app.get('/targetLanguage', function (req, res) {
+	connection.query('SELECT TargetLanguage FROM Users WHERE FirstName = "Nikki"', function (error, results, fields) {
 		if (error)
 			throw error;
 		res.json(results);
@@ -57,19 +62,19 @@ app.get('/people', function (req, res) {
 
 //POST API
 app.post("/api/user", function(req , res){
-  var query = "INSERT INTO users (FirstName,LastName) VALUES ('Russ','Tuck');" 
+  var query = "INSERT INTO Users (FirstName,LastName) VALUES ('Russ','Tuck');" 
 //   executeQuery (res, query);
 });
 
 //PUT API
 app.put("/api/user/:id", function(req , res){
-  var query = "UPDATE users SET LastName = Bjork WHERE FirstName = Russ;"
+  var query = "UPDATE Users SET LastName = Bjork WHERE FirstName = Russ;"
 //   executeQuery (res, query);
 });
 
 // DELETE API
 app.delete("/api/user /:id", function(req , res){
-  var query = "DELETE FROM users WHERE FirstName=Russ;"
+  var query = "DELETE FROM Users WHERE FirstName=Russ;"
 //   executeQuery (res, query);
 });
 
