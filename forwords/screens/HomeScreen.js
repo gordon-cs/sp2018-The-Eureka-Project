@@ -1,13 +1,15 @@
 import React from 'react';
 import axios from 'axios';
 import {
+  Alert,
+  Button,
   Image,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 import { WebBrowser } from 'expo';
 
@@ -17,7 +19,6 @@ export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
-
   async componentDidMount() {
     console.log("Got into componentDidMount");
     axios.get('/people').then(res => {
@@ -30,7 +31,15 @@ export default class HomeScreen extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
+         <View style={styles.pictureContainer}>
+            <Image
+              source={
+                __DEV__
+                  ? require('../forwords_pictures_/fruits_and_vegetables_/fruit_apple_.png')
+                  : require('../forwords_pictures_/fruits_and_vegetables_/fruit_cherry_.png')
+              }
+              style={styles.welcomeImage}
+            />
             <Image
               source={
                 __DEV__
@@ -40,7 +49,6 @@ export default class HomeScreen extends React.Component {
               style={styles.welcomeImage}
             />
           </View>
-
           <View style={styles.getStartedContainer}>
             {this._maybeRenderDevelopmentModeWarning()}
 
@@ -54,21 +62,25 @@ export default class HomeScreen extends React.Component {
               Welcome to forwords! 2PM 11/13/18
             </Text>
           </View>
-
-          <View style={styles.helpContainer}>
-            <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-            </TouchableOpacity>
+          <View style={styles.pictureContainer}>
+            <Image
+              source={
+                __DEV__
+                  ? require('../assets/images/for.png')
+                  : require('../assets/images/words.png')
+              }
+              style={styles.welcomeImage}
+            />
+            <Image
+              source={
+                __DEV__
+                  ? require('../assets/images/words.png')
+                  : require('../assets/images/for.png')
+              }
+              style={styles.welcomeImage}
+            />
           </View>
         </ScrollView>
-
-        <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-            <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
-          </View>
-        </View>
       </View>
     );
   }
@@ -137,6 +149,7 @@ const styles = StyleSheet.create({
   getStartedContainer: {
     alignItems: 'center',
     marginHorizontal: 50,
+    marginVertical: 150,
   },
   homeScreenFilename: {
     marginVertical: 7,
@@ -194,4 +207,23 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#2e78b7',
   },
+  button: {
+    alignItems: 'center',
+    color: '#800080',
+    borderRadius: 50,
+    width: 160,
+  },
+  forwordsText: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#800080',
+    marginVertical: 10,
+    fontSize: 30,
+  },
+  pictureContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 });
