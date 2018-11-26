@@ -10,22 +10,30 @@ import {
   View,
 } from 'react-native';
 import { WebBrowser } from 'expo';
-
 import { MonoText } from '../components/StyledText';
+
+var backwordsIP = '172.27.43.141';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
 
-  async componentDidMount() {
+  async componentWillMount() {
     console.log("Got into componentDidMount");
-    axios.get('/people').then(res => {
+    try {
+      axios.get('http://' + backwordsIP + ':8080' + '/people').then(res => {
         const users = res.data;
-        console.log(users);
-    });
+        console.log("res: ", res);
+        console.log("users: ", users);
+        this.setState({ users });
+      });
+    } catch (err) {
+      throw new Error('/people did not work');
+    }
   }
-  
+
+
   render() {
     return (
       <View style={styles.container}>
