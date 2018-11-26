@@ -24,6 +24,11 @@ export default class HomeScreen extends React.Component {
         const users = res.data;
         console.log(users);
     });
+
+    axios.get('/targetLanguage').then(res => {
+      const targetLanguage = res.data;
+      console.log("targetLanguage", targetLanguage);
+  });
   }
   
   render() {
