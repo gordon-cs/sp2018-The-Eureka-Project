@@ -52,44 +52,8 @@ app.get('/people', function (req, res) {
 		if (error)
 			throw error;
 		res.json(results);
-
-// 		results.forEach(result => {
-// 			console.log(result);
-// 		});
 	});
-
-// 	res.send("your get for '/people' worked!")
 })
-
-// var  executeQuery = function(res, query){             
-//   connection.connect(dbConfig, function (err) {
-//     if (err) {   
-//       console.log("Error while connecting database :- " + err);
-//       res.send(err);
-//     }
-//     else {
-      // create Request object
-//       var request = new sql.Request();
-      // query to the database
-//       request.query(query, function (err, res) {
-//         if (err) {
-//           console.log("Error while querying database :- " + err);
-//           res.send(err);
-//         }
-//         else {
-//           res.send(res);
-//         }
-//       });
-//     }
-//   });
-// }
-
-// GET API
-// app.get("/api/people", function(req , res){
-//   var query = "SELECT * FROM users;";
-//   executeQuery (res, query);
-
-// });
 
 //POST API
 app.post("/api/user", function(req , res){
@@ -109,10 +73,6 @@ app.delete("/api/user /:id", function(req , res){
 //   executeQuery (res, query);
 });
 
-// app.get("/url", (req, res, next) => {
-//   res.json(["Tony","Lisa","Michael","Ginger","Food"]);
-// });
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -122,9 +82,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-// app.use('/', indexRouter);
-// app.use('/people', peopleRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
