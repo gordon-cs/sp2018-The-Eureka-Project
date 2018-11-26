@@ -167,6 +167,13 @@ P.S. This site (https://www.w3schools.com/sql/default.asp) is really useful for 
 P.S.2 This site (https://www.terlici.com/2015/08/13/mysql-node-express.html) shows codes on how to connect mysql with node and express
 
 
+To access MySQL:
+> mysql -u root
+
+Our DB is called "forwords."
+
+> USE forwords; 
+
 # Our Linux VM: EurekaProjectVM on HyperV-Lab1
 (Created through Hyper V Lab) It is a server VM, not a workstation VM. (AKA there is no UI.)
 
