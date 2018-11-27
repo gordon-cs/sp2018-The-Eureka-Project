@@ -12,25 +12,35 @@ import {
   View
 } from 'react-native';
 import { WebBrowser } from 'expo';
-
 import { MonoText } from '../components/StyledText';
+
+var backwordsIP = '172.27.43.141';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
-  async componentDidMount() {
+
+  async componentWillMount() {
     console.log("Got into componentDidMount");
-    axios.get('/people').then(res => {
+    try {
+      axios.get('http://' + backwordsIP + ':8080' + '/people').then(res => {
         const users = res.data;
-        console.log(users);
-    });
+        console.log("res: ", res);
+        console.log("users: ", users);
+        this.setState({ users });
+      });
+    } catch (err) {
+      throw new Error('/people did not work');
+    }
   }
-  
+
+
   render() {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+
          <View style={styles.pictureContainer}>
             <Image
               source={
@@ -51,15 +61,8 @@ export default class HomeScreen extends React.Component {
           </View>
           <View style={styles.getStartedContainer}>
             {this._maybeRenderDevelopmentModeWarning()}
-
-            <Text style={styles.getStartedText}>Get started by opening</Text>
-
-            <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-              <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
-            </View>
-
             <Text style={styles.getStartedText}>
-              Welcome to forwords! 2PM 11/13/18
+              EXPO baby 6:30pm Monday, November 26th, 2018
             </Text>
           </View>
           <View style={styles.pictureContainer}>
