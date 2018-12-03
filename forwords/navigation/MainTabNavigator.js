@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/LoginScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import SinglePlayerModeSelectionScreen from '../screens/SinglePlayerModeSelectionScreen';
 
 
 const HomeStack = createStackNavigator({
@@ -69,9 +70,14 @@ SettingsStack.navigationOptions = {
   ),
 };
 
+const SinglePlayerModeSelectionStack = createStackNavigator({
+  SinglePlayerModeSelection: SinglePlayerModeSelectionScreen,
+});
+
 export default createStackNavigator({
   LoginStack,
   HomeStack,
   LinksStack,
   SettingsStack,
+  SinglePlayerModeSelectionStack,
 });
