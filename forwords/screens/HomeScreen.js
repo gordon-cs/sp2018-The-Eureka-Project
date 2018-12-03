@@ -34,7 +34,7 @@ export default class HomeScreen extends React.Component {
     }
     try {
       console.log("Got into try for /targetLanguage")
-      axios.get('http://' + backwordsIP + ':8080' + '/targetLanguage').then(res => {
+      axios.get(fullRoutePrefix + '/targetLanguage').then(res => {
         const targetLanguage = res.data;
         console.log("targetLanguage", targetLanguage);
       });
