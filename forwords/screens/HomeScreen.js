@@ -14,16 +14,22 @@ import {
 import { WebBrowser } from 'expo';
 import {fullRoutePrefix} from '../constants/API';
 
+var backwordsIP = '172.27.43.141';
+
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
 
+  constructor(props) {
+    super(props);
+  }
+
   async componentWillMount() {
     console.log("Got into componentDidMount");
     try {
       console.log("Got into try for /people")
-      axios.get('http://' + '172.27.43.141' + ':8080' + '/people').then(res => {
+      axios.get('http://' + backwordsIP + ':8080' + '/people').then(res => {
         const users = res.data;
         console.log("res: ", res);
         console.log("users: ", users);
@@ -44,6 +50,7 @@ export default class HomeScreen extends React.Component {
   }
 
   render() {
+    const {navigate} = this.props.navigation;
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -69,9 +76,15 @@ export default class HomeScreen extends React.Component {
           <View style={styles.getStartedContainer}>
             {this._maybeRenderDevelopmentModeWarning()}
             <Text style={styles.getStartedText}>
-              EXPO baby 6:30pm Monday, November 26th, 2018
+              EXPO baby 4pm Monday, December 3rd, 2018
             </Text>
           </View>
+          
+          <Button style={styles.button}
+          title = 'Single Player Mode!'
+          onPress={() => navigate('SinglePlayerModeSelection')}
+          color = 'purple'
+        />
           <View style={styles.pictureContainer}>
             {/* <Image
               source={
