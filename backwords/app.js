@@ -56,19 +56,21 @@ app.get('/people', function (req, res) {
 })
 
 //POST API
-app.post("/api/user", function(req , res){
+app.get('/user', function(req , res){
+  console.log(req);
+  res.send("Post request successful");
   var query = "INSERT INTO Users (FirstName,LastName) VALUES ('Russ','Tuck');" 
 //   executeQuery (res, query);
 });
 
 //PUT API
-app.put("/api/user/:id", function(req , res){
+app.put('/api/user/:id', function(req , res){
   var query = "UPDATE Users SET LastName = Bjork WHERE FirstName = Russ;"
 //   executeQuery (res, query);
 });
 
 // DELETE API
-app.delete("/api/user /:id", function(req , res){
+app.delete('/user /:id', function(req , res){
   var query = "DELETE FROM Users WHERE FirstName=Russ;"
 //   executeQuery (res, query);
 });
@@ -97,7 +99,7 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
+  res.sendStatus(err.status || 500);
 	res.send(err.status);
 //  res.render('error');
 });

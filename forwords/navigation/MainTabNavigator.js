@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/LoginScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import RegisterScreen from '../screens/RegisterScreen';
 
 
 const HomeStack = createStackNavigator({
@@ -55,6 +56,20 @@ LinksStack.navigationOptions = {
   ),
 };
 
+const RegisterStack = createStackNavigator({
+  Register: RegisterScreen,
+});
+
+RegisterStack.navigationOptions = {
+  tabBarLabel: 'Register',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? `ios-link${focused ? '' : '-outline'}` : 'md-link'}
+    />
+  ),
+}
+
 const SettingsStack = createStackNavigator({
   Settings: SettingsScreen,
 });
@@ -73,5 +88,6 @@ export default createStackNavigator({
   LoginStack,
   HomeStack,
   LinksStack,
+  RegisterStack,
   SettingsStack,
 });
