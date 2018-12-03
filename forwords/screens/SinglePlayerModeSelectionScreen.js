@@ -4,7 +4,7 @@ import {fullRoutePrefix} from '../constants/API';
 
 export default class FlatListBasics extends Component {
   state = {
-    lessonList = [],
+    lessonList: [],
   };
   
 async componentWillMount() {

@@ -41,6 +41,16 @@ export default class HomeScreen extends React.Component {
     } catch (err) { 
       throw new Error('/targetLanguage did not work');
     }    
+    try {
+      console.log("IN try for /lessonList")
+      axios.get(fullRoutePrefix + '/lessonList').then(res => {
+        const lessonList = res.data;
+        console.log("lessonList", lessonList);
+      });
+    } catch (err) { 
+      throw new Error('/lessonList did not work');
+    }    
+    this.setState({ lessonList });
   }
 
   render() {

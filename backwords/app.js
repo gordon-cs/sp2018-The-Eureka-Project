@@ -61,7 +61,7 @@ app.get('/targetLanguage', function (req, res) {
 })
 
 app.get('/lessonList', function (req, res) {
-	connection.query('SELECT * FROM Lessons', function (error, results, fields) {
+	connection.query('SELECT * FROM Lessons;', function (error, results, fields) {
 		if (error)
 			throw error;
 		res.json(results);
