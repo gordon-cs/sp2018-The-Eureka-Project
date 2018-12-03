@@ -4,5 +4,5 @@ var port = ':8080';
 var fullRoutePrefix = 'http://' + backwordsIP + port;
 
 export default {
-    fullRoutePrefix
+    fullRoutePrefix,
 };

@@ -21,36 +21,36 @@ export default class HomeScreen extends React.Component {
 
   async componentWillMount() {
     console.log("Got into componentDidMount");
-    try {
-      console.log("Got into try for /people")
-      axios.get(fullRoutePrefix + '/people').then(res => {
-        const users = res.data;
-        console.log("res: ", res);
-        console.log("users: ", users);
-        this.setState({ users });
-      });
-    } catch (err) {
-      throw new Error('/people did not work');
-    }
-    try {
-      console.log("Got into try for /targetLanguage")
-      axios.get(fullRoutePrefix + '/targetLanguage').then(res => {
-        const targetLanguage = res.data;
-        console.log("targetLanguage", targetLanguage);
-      });
-    } catch (err) { 
-      throw new Error('/targetLanguage did not work');
-    }    
+    // try {
+    //   console.log("Got into try for /people")
+    //   axios.get('http://' + '172.27.43.141' + ':8080' + '/people').then(res => {
+    //     const users = res.data;
+    //     console.log("res: ", res);
+    //     console.log("users: ", users);
+    //     // this.setState({ users });
+    //   });
+    // } catch (err) {
+    //   throw new Error('/people did not work');
+    // }
+    // try {
+    //   console.log("Got into try for /targetLanguage")
+    //   axios.get(fullRoutePrefix + '/targetLanguage').then(res => {
+    //     const targetLanguage = res.data;
+    //     console.log("targetLanguage", targetLanguage);
+    //   });
+    // } catch (err) { 
+    //   throw new Error('/targetLanguage did not work');
+    // }    
     try {
       console.log("IN try for /lessonList")
-      axios.get(fullRoutePrefix + '/lessonList').then(res => {
+      axios.get('http://' + '172.27.43.141' + ':8080' + '/lessonList').then(res => {
         const lessonList = res.data;
         console.log("lessonList", lessonList);
       });
     } catch (err) { 
       throw new Error('/lessonList did not work');
     }    
-    this.setState({ lessonList });
+    // this.setState({ lessonList });
   }
 
   render() {
