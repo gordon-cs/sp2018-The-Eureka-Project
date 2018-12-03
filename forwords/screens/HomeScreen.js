@@ -49,7 +49,7 @@ export default class HomeScreen extends React.Component {
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
 
          <View style={styles.pictureContainer}>
-            <Image
+            {/* <Image
               source={
                 __DEV__
                   ? require('../forwords_pictures_/fruits_and_vegetables_/fruit_apple_.png')
@@ -64,7 +64,7 @@ export default class HomeScreen extends React.Component {
                   : require('../forwords_pictures_/fruits_and_vegetables_/fruit_cherry_.png')
               }
               style={styles.welcomeImage}
-            />
+            /> */}
           </View>
           <View style={styles.getStartedContainer}>
             {this._maybeRenderDevelopmentModeWarning()}
@@ -73,7 +73,7 @@ export default class HomeScreen extends React.Component {
             </Text>
           </View>
           <View style={styles.pictureContainer}>
-            <Image
+            {/* <Image
               source={
                 __DEV__
                   ? require('../assets/images/for.png')
@@ -88,7 +88,7 @@ export default class HomeScreen extends React.Component {
                   : require('../assets/images/for.png')
               }
               style={styles.welcomeImage}
-            />
+            /> */}
           </View>
         </ScrollView>
       </View>
