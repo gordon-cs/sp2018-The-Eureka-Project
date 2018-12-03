@@ -3,7 +3,9 @@ import { AppRegistry, FlatList, StyleSheet, Text, View } from 'react-native';
 import {fullRoutePrefix} from '../constants/API';
 
 export default class FlatListBasics extends Component {
-  
+  state = {
+    lessonList = [],
+  };
   
 async componentWillMount() {
     try {
@@ -15,6 +17,7 @@ async componentWillMount() {
     } catch (err) { 
       throw new Error('/lessonList did not work');
     }    
+    this.setState({ lessonList });
   }
   
     render() {
