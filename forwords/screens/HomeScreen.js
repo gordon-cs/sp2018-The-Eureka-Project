@@ -12,9 +12,7 @@ import {
   View
 } from 'react-native';
 import { WebBrowser } from 'expo';
-import { MonoText } from '../components/StyledText';
-
-var backwordsIP = '172.27.43.141';
+import {fullRoutePrefix} from '../constants/API';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -25,7 +23,7 @@ export default class HomeScreen extends React.Component {
     console.log("Got into componentDidMount");
     try {
       console.log("Got into try for /people")
-      axios.get('http://' + backwordsIP + ':8080' + '/people').then(res => {
+      axios.get(fullRoutePrefix + '/people').then(res => {
         const users = res.data;
         console.log("res: ", res);
         console.log("users: ", users);
