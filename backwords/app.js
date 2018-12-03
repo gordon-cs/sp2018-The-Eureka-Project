@@ -60,6 +60,14 @@ app.get('/targetLanguage', function (req, res) {
 	});
 })
 
+app.get('/lessonList', function (req, res) {
+	connection.query('SELECT * FROM Lessons', function (error, results, fields) {
+		if (error)
+			throw error;
+		res.json(results);
+	});
+})
+
 //POST API
 app.post("/api/user", function(req , res){
   var query = "INSERT INTO Users (FirstName,LastName) VALUES ('Russ','Tuck');" 
