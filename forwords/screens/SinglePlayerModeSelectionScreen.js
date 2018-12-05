@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { AppRegistry, FlatList, StyleSheet, Text, View, ActivityIndicator, Platform } from 'react-native';
+import { AppRegistry, Button, FlatList, StyleSheet, Text, View, ActivityIndicator, Platform } from 'react-native';
 import { fullRoutePrefix } from '../constants/API';
 
 var backwordsIP = '172.27.43.141';
@@ -39,7 +39,7 @@ export default class SinglePlayerModeSelectionScreen extends Component {
   }
 
   render() {
-
+    const {navigate} = this.props.navigation;
     if (this.state.isLoading) {
       return (
         <View style={styles.headingView}>
@@ -73,6 +73,12 @@ export default class SinglePlayerModeSelectionScreen extends Component {
             <Text>{item.Title}</Text>}
           keyExtractor={item => item.Number}
         />
+
+        <Button style={styles.button}
+          title = '▶️'
+          onPress={() => navigate('GamePlay')}
+        />
+
       </View>
     );
   }
