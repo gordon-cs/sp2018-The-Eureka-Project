@@ -39,6 +39,7 @@ export default class RegisterScreen extends Component {
         try {
             console.log('entered try block')
             axios.post('http://' + backwordsIP + ':8080' + '/user', data);
+            // console.log(res);
             console.log("Student registered");
         } catch (err) {
             throw new Error('Post /users did not work');

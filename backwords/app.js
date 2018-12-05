@@ -59,13 +59,13 @@ app.get('/people', function (req, res) {
 // app.post('/user', data);
 app.post('/user', function(req , res){
   // res.sendStatus(200);
-  res.send('Post request sent');
+  // res.send('Post request sent');
   // console.log(res.data);
-  // var query = "INSERT INTO Users (FirstName,LastName, TargetLanguage) VALUES ('Russ','Tuck','CN'); SELECT * FROM Users;" 
-  // connection.query (query, function (error, results) {
-  //   if (error)
-	// 		throw error;
-	// 	res.stat.json(results);
+  var query = "INSERT INTO Users (FirstName,LastName, TargetLanguage) VALUES ('Russ','Tuck','CN'); SELECT * FROM Users;" 
+  connection.query (query, function (error, results) {
+    if (error)
+			throw error;
+		res.json(results);
   // });
 });
 
