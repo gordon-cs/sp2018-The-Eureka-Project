@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import { AppRegistry, FlatList, StyleSheet, Text, View, ActivityIndicator, Platform } from 'react-native';
 import { fullRoutePrefix } from '../constants/API';
 
+var backwordsIP = '172.27.43.141';
 
-export default class FlatListBasics extends Component {
+
+export default class SinglePlayerModeSelectionScreen extends Component {
   static navigationOptions = {
     header: null,
   };
@@ -18,7 +21,7 @@ export default class FlatListBasics extends Component {
 
 
   async componentWillMount() {
-    console.log("Got into componentDidMount");
+    console.log("SINGLEPLAYERMODESELECTIONSCREEN: Got into componentDidMount");
     try {
       console.log("Got into try for /lesson-list")
       axios.get('http://' + backwordsIP + ':8080' + '/lesson-list').then(res => {
@@ -27,69 +30,13 @@ export default class FlatListBasics extends Component {
         console.log("lessons: ", lessons);
         this.setState({
           isLoading: false,
-          lessonList: responseJson
+          lessonList: lessons
         });
       });
     } catch (err) {
       throw new Error('/lesson-list did not work');
     }
   }
-
-  // async componentWillMount() {
-  //   try {
-  //     console.log("IN try for /lessonList")
-  //     axios.get('http://' + '172.27.43.141' + ':8080' + '/lessonList').then(res => 
-  //       res.json())
-  //         this.setState({
-  //           isLoading: false,
-  //           lessonList: responseJson
-  //         });
-  //         // const lessonList = res.data;
-  //         console.log("lessonList", lessonList);
-  //   } catch (err) {
-  //     throw new Error('/lessonList Route did NOT work');
-  //   }
-  // }
-
-  FlatListItemSeparator = () => {
-    return (
-      <View
-        style={{
-          height: 1,
-          width: "100%",
-          backgroundColor: "#607D8B",
-        }}
-      />
-    );
-  }
-
-
-  // Need it to eventually work like this file – using a separate service file where in *that* file, we hardcore axios functions
-  // async componentWillMount() {
-  //   try {
-  //     const profile = await user.getProfileInfo();
-  //     const personType = profile.PersonType;
-  //     const [majors, minors, states, countries, departments, buildings] = await Promise.all([
-  //       goStalk.getMajors(),
-  //       goStalk.getMinors(),
-  //       goStalk.getStates(),
-  //       goStalk.getCountries(),
-  //       goStalk.getDepartments(),
-  //       goStalk.getBuildings(),
-  //     ]);
-  //     this.setState({
-  //       majors,
-  //       minors,
-  //       states,
-  //       countries,
-  //       departments,
-  //       buildings,
-  //       personType,
-  //     });
-  //   } catch (error) {
-  //     // error
-  //   }
-  // }
 
   render() {
 
@@ -123,10 +70,9 @@ export default class FlatListBasics extends Component {
         <FlatList
           data={this.state.lessonList}
           renderItem={({ item }) => 
-          <Text>{item.Title}</Text>}
+            <Text>{item.Title}</Text>}
+          keyExtractor={item => item.Number}
         />
-        {/* renderItem={({ item }) => <Text style={styles.item}>{this.state.lessonList[1]}</Text>}
-        /> */}
       </View>
     );
   }
@@ -159,14 +105,3 @@ const styles = StyleSheet.create({
     fontSize: 80,
   }
 });
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     paddingTop: 22
-//   },
-//   item: {
-//     padding: 10,
-//     fontSize: 18,
-//     height: 44,
-//   },
-// })

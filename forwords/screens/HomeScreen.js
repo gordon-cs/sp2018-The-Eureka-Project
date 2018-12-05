@@ -37,16 +37,7 @@ export default class HomeScreen extends React.Component {
       });
     } catch (err) {
       throw new Error('/people did not work');
-    }
-    try {
-      console.log("Got into try for /targetLanguage")
-      axios.get(fullRoutePrefix + '/targetLanguage').then(res => {
-        const targetLanguage = res.data;
-        console.log("targetLanguage", targetLanguage);
-      });
-    } catch (err) { 
-      throw new Error('/targetLanguage did not work');
-    }    
+    } 
   }
 
   render() {
