@@ -190,6 +190,9 @@ We can upgrade to a workstation (have UI), there should be documentation somewhe
 As of 11/3/18 1:05pm, it does not have a network connection yet so we cannot access it.
 
 
+# Libraries & Helpful Sources of Information 
+
+https://medium.com/@miguelhaba/my-first-game-with-react-native-40a83aa91274
 
 # Misc
 
