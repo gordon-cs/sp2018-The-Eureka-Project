@@ -27,27 +27,24 @@ export default class RegisterScreen extends Component {
         };
     }
 
-    async registerStudent() {
-        const {navigate} = this.props.navigation;
-        navigate('Login');
-        this.setState({ role: 'Student'});
+    registerStudent() {
         let data = {
             firstName: this.state.firstName,
             lastName: this.state.lastName,
             email: this.state.email,
             password: this.state.password,
-            role: this.state.role,         
+            role: 'Student',         
         }
         console.log('before registerStudent try statement', data)
         try {
             console.log('entered try block')
-            await axios.get('http://' + backwordsIP + ':8080' + '/user', {firstName: 'R', lastName: 'S'}).then(res => {
-                console.log(res);
-            });
+            axios.post('http://' + backwordsIP + ':8080' + '/user', data);
             console.log("Student registered");
         } catch (err) {
             throw new Error('Post /users did not work');
         }
+        const {navigate} = this.props.navigation;
+        navigate('Login');
     }
     render() {
         let content;
@@ -93,7 +90,7 @@ export default class RegisterScreen extends Component {
                     style={styles.button}
                     title='Student'/>
                 <Button 
-                    onPress = {() => console.log(this.state.firstName, this.state.lastName,this.state.email,this.state.password)}
+                    onPress = {() => console.log('teacher', this.state.firstName, this.state.lastName,this.state.email,this.state.password)}
                     style={styles.button}
                     title='Teacher'/>
                 </View>

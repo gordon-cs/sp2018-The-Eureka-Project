@@ -45,7 +45,7 @@ connection.connect(function(err) {
 
 app.get('/', function(req, res) {
 	res.send("Welcome to forwords");
-})
+});
 
 app.get('/people', function (req, res) {
 	connection.query('SELECT * FROM Users', function (error, results, fields) {
@@ -53,14 +53,20 @@ app.get('/people', function (req, res) {
 			throw error;
 		res.json(results);
   });
-})
+});
 
 //POST API
-app.get('/user', function(req , res){
-  console.log(req);
-  res.send("Post request successful");
-  var query = "INSERT INTO Users (FirstName,LastName) VALUES ('Russ','Tuck');" 
-//   executeQuery (res, query);
+// app.post('/user', data);
+app.post('/user', function(req , res){
+  // res.sendStatus(200);
+  res.send('Post request sent');
+  // console.log(res.data);
+  // var query = "INSERT INTO Users (FirstName,LastName, TargetLanguage) VALUES ('Russ','Tuck','CN'); SELECT * FROM Users;" 
+  // connection.query (query, function (error, results) {
+  //   if (error)
+	// 		throw error;
+	// 	res.stat.json(results);
+  // });
 });
 
 //PUT API
@@ -100,7 +106,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.sendStatus(err.status || 500);
-	res.send(err.status);
+	res.sendStatus(err.status);
 //  res.render('error');
 });
 
