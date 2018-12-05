@@ -66,7 +66,7 @@ app.post('/user', function(req , res){
     if (error)
 			throw error;
 		res.json(results);
-  // });
+  });
 });
 
 //PUT API
