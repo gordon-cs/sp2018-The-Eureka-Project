@@ -48,11 +48,7 @@ React Native Documentation: https://github.com/facebook/react-native
 # Applications
 ### 1. Visual Studio
 To install the code editor:
-
-There were some issues here, make sure that you check out this link if you have trouble 
-
-Extensions:
-
+https://code.visualstudio.com/download
 
 # Tools/Libraries/Stuff
 ### 1. Node.js
