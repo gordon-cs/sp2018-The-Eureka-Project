@@ -42,16 +42,13 @@ We will use 'create-react-native-app' as opposed to 'react-native init' because 
 
 React Native Documentation: https://github.com/facebook/react-native
 
+(https://firebase.googleblog.com/2016/01/the-beginners-guide-to-react-native-and_84.html)
+
 
 # Applications
 ### 1. Visual Studio
 To install the code editor:
-https://www.w3schools.com/sql/default.asp
-
-There were some issues here, make sure that you check out this link if you have trouble (https://firebase.googleblog.com/2016/01/the-beginners-guide-to-react-native-and_84.html)
-
-Extensions:
-
+https://code.visualstudio.com/download
 
 # Tools/Libraries/Stuff
 ### 1. Node.js
@@ -167,6 +164,13 @@ P.S. This site (https://www.w3schools.com/sql/default.asp) is really useful for 
 P.S.2 This site (https://www.terlici.com/2015/08/13/mysql-node-express.html) shows codes on how to connect mysql with node and express
 
 
+To access MySQL:
+> mysql -u root
+
+Our DB is called "forwords."
+
+> USE forwords; 
+
 # Our Linux VM: EurekaProjectVM on HyperV-Lab1
 (Created through Hyper V Lab) It is a server VM, not a workstation VM. (AKA there is no UI.)
 
@@ -183,6 +187,9 @@ We can upgrade to a workstation (have UI), there should be documentation somewhe
 As of 11/3/18 1:05pm, it does not have a network connection yet so we cannot access it.
 
 
+# Libraries & Helpful Sources of Information 
+
+https://medium.com/@miguelhaba/my-first-game-with-react-native-40a83aa91274
 
 # Misc
 
