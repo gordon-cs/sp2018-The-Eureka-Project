@@ -1,80 +1,90 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
   Alert,
-  AppRegistry,
   Button,
   Image,
   Platform,
-  Form,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
-  Container,
-  TextInput,
-  Item,
-  Label,
-  Input} from 'react-native'; // There are some unecessary imports, but they were made just to be safe
+  View
+} from 'react-native';
 import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 
-export default class LoginScreen extends React.Component {
+export default class PlaceholderScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
- 
-  constructor(props) {
-    super(props);
-    this.state = { text: '' };
-  }
+
+  
   render() {
-    const {navigate} = this.props.navigation;
     return (
-   <View style={styles.container}>
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <View style={styles.getStartedContainer}>
-        <Text style={styles.forwordsText}>
-              forwords!
-        </Text>
+      <View style={styles.container}>
+        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+          <View style={styles.container}>
+              <Text style={styles.getStartedText}>
+                Click a class to begin!
+              </Text>
+              <Text style={styles.homeScreenText}>
+                My Classes
+              </Text>
+              <FlatList
+                data={[
+                  {key: 'MAN 202 Intermediate Chinese'},
+                  {key: 'SPN 202 Intermediate Spanish'},
+                  {key: 'Add a class'},
 
-        <TextInput
-          style={{height: 60, width: 200}}
-          placeholder = "Email"
-          onChangeText={(text) => this.setState({text})}
-          autoCorrect={false}
-          autoCapitalize="none"
-          returnKeyType= "next"
+                ]}
+                renderItem={({item}) => <Text style={styles.listText}>{item.key}</Text>}
+              />
+            </View>
 
-        />
-        <TextInput
-          style={{height: 60, width: 200}}
-          placeholder = "Password"
-          onChangeText={(text) => this.setState({text})}
-          autoCorrect={false}
-          autoCapitalize="none"
-          secureTextEntry={true}
-          returnKeyType= "done"
-        />
-
-        <Button style={styles.button}
-          title = 'Log In'
-          onPress={() => navigate('Home')}
-          color = 'purple'
-        />
-        </View>
-    </ScrollView>
-  </View>
-   );
+        </ScrollView>
+      </View>
+    );
   }
+
+  _maybeRenderDevelopmentModeWarning() {
+    if (__DEV__) {
+      const learnMoreButton = (
+        <Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
+          Learn more
+        </Text>
+      );
+
+      return (
+        <Text style={styles.developmentModeText}>
+          Development mode is enabled, your app will be slower but you can use useful development
+          tools. {learnMoreButton}
+        </Text>
+      );
+    } else {
+      return (
+        <Text style={styles.developmentModeText}>
+          You are not in development mode, your app will run at full speed.
+        </Text>
+      );
+    }
+  }
+
+  _handleLearnMorePress = () => {
+    WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/guides/development-mode');
+  };
+
+  _handleHelpPress = () => {
+    WebBrowser.openBrowserAsync(
+      'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
+    );
+  };
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 10,
+    flex: 1,
     backgroundColor: '#fff',
-    padding: 10,
   },
   developmentModeText: {
     marginBottom: 20,
@@ -171,5 +181,11 @@ const styles = StyleSheet.create({
     color: '#800080',
     marginVertical: 10,
     fontSize: 30,
+  },
+  pictureContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 });

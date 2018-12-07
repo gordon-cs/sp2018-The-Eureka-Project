@@ -9,9 +9,12 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  FlatList,
 } from 'react-native';
+import { DrawerNavigator } from 'react-navigation';
 import { WebBrowser } from 'expo';
+
 
 import { MonoText } from '../components/StyledText';
 
@@ -31,7 +34,7 @@ export default class HomeScreen extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-         <View style={styles.pictureContainer}>
+        <View style={styles.pictureContainer}>
             <Image
               source={
                 __DEV__
@@ -118,6 +121,10 @@ export default class HomeScreen extends React.Component {
     );
   };
 }
+
+const App = DrawerNavigator({
+
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -225,5 +232,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  homeScreenText: {
+    flex: 1,
+    flexDirection: 'row',
+    textAlign: 'center',
+    marginVertical: 10,
+    fontSize: 30,
+    textDecorationLine: 'underline',
+  },
+  listText: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: 'black',
+    marginVertical: 10,
+    fontSize: 20,
   }
 });

@@ -41,6 +41,20 @@ LoginStack.navigationOptions = {
   ),
 };
 
+const PlaceholderStack = createStackNavigator({
+  Placeholder: PlaceholderScreen,
+});
+
+LinksStack.navigationOptions = {
+  tabBarLabel: 'Placeholder',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === 'ios' ? `ios-link${focused ? '' : '-outline'}` : 'md-link'}
+    />
+  ),
+};
+
 const LinksStack = createStackNavigator({
   Links: LinksScreen,
 });
@@ -72,6 +86,7 @@ SettingsStack.navigationOptions = {
 export default createStackNavigator({
   LoginStack,
   HomeStack,
+  PlaceholderStack,
   LinksStack,
   SettingsStack,
 });
