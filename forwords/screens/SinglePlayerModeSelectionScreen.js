@@ -66,19 +66,16 @@ export default class SinglePlayerModeSelectionScreen extends Component {
             👤
         </Text>
         </View>
-
         <FlatList
           data={this.state.lessonList}
           renderItem={({ item }) => 
             <Text>{item.Title}</Text>}
           keyExtractor={item => item.Number}
         />
-
         <Button style={styles.button}
           title = '▶️'
           onPress={() => navigate('GamePlay')}
         />
-
       </View>
     );
   }
