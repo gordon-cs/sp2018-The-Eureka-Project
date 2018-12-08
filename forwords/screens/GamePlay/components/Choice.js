@@ -12,8 +12,8 @@ export default class Choice extends Component {
 
         this.state = {
             title: this.props,
-            promptID: this.props.promptID,
-            choiceID: this.props.choiceID,
+            promptID: this.props,
+            choiceID: this.props,
             correctAnswer: Boolean,
         };
         this.handleAttempt = this.handleAttempt.bind(this);
