@@ -42,16 +42,13 @@ We will use 'create-react-native-app' as opposed to 'react-native init' because 
 
 React Native Documentation: https://github.com/facebook/react-native
 
+(https://firebase.googleblog.com/2016/01/the-beginners-guide-to-react-native-and_84.html)
+
 
 # Applications
 ### 1. Visual Studio
 To install the code editor:
-https://www.w3schools.com/sql/default.asp
-
-There were some issues here, make sure that you check out this link if you have trouble (https://firebase.googleblog.com/2016/01/the-beginners-guide-to-react-native-and_84.html)
-
-Extensions:
-
+https://code.visualstudio.com/download
 
 # Tools/Libraries/Stuff
 ### 1. Node.js
@@ -190,6 +187,9 @@ We can upgrade to a workstation (have UI), there should be documentation somewhe
 As of 11/3/18 1:05pm, it does not have a network connection yet so we cannot access it.
 
 
+# Libraries & Helpful Sources of Information 
+
+https://medium.com/@miguelhaba/my-first-game-with-react-native-40a83aa91274
 
 # Misc
 

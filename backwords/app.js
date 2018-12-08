@@ -42,7 +42,7 @@ connection.connect(function(err) {
 
 app.get('/', function(req, res) {
 	res.send("Welcome to forwords");
-})
+});
 
 app.get('/people', function (req, res) {
 	console.log("in /people route in backend");
@@ -72,19 +72,27 @@ app.get('/lesson-list', function (req, res) {
 })
 
 //POST API
-app.post("/api/user", function(req , res){
-  var query = "INSERT INTO Users (FirstName,LastName) VALUES ('Russ','Tuck');" 
-//   executeQuery (res, query);
+// app.post('/user', data);
+app.post('/user', function(req , res){
+  // res.sendStatus(200);
+  // res.send('Post request sent');
+  // console.log(res.data);
+  var query = "INSERT INTO Users (FirstName,LastName, TargetLanguage) VALUES ('Russ','Tuck','CN'); SELECT * FROM Users;" 
+  connection.query (query, function (error, results) {
+    if (error)
+			throw error;
+		res.json(results);
+  });
 });
 
 //PUT API
-app.put("/api/user/:id", function(req , res){
+app.put('/api/user/:id', function(req , res){
   var query = "UPDATE Users SET LastName = Bjork WHERE FirstName = Russ;"
 //   executeQuery (res, query);
 });
 
 // DELETE API
-app.delete("/api/user /:id", function(req , res){
+app.delete('/user /:id', function(req , res){
   var query = "DELETE FROM Users WHERE FirstName=Russ;"
 //   executeQuery (res, query);
 });
@@ -110,8 +118,8 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-	res.send(err.status);
+  res.sendStatus(err.status || 500);
+	res.sendStatus(err.status);
 //  res.render('error');
 });
 
