@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import Choice from "./components/Choice";
 import {
   AppRegistry,
   FlatList,
@@ -30,19 +31,20 @@ export default class GamePlayScreen extends Component {
   render() {
     return (
       <View style={styles.mainContainer}>
-      <View style={styles.circle}>
-          <Text style={styles.answerText}>西瓜</Text>
-        </View>
+      <Choice asdfg="Apple">
 
-        <View style={styles.circle}>
-          <Text style={styles.answerText}>🍏</Text>
-        </View>
-        <View style={styles.circle}>
-          <Text style={styles.answerText}>🍒</Text>
-        </View> 
-        <View style={styles.circle}>
-          <Text style={styles.answerText}>🍌</Text>
-        </View>
+      </Choice>
+       
+
+        <Choice asdfg="jake moon">
+        
+      </Choice>
+        <Choice>
+        
+        </Choice> 
+        <Choice>
+        
+        </Choice>
         <View style={styles.circle}>
           <Text style={styles.answerText}>🍉</Text>
         </View>
