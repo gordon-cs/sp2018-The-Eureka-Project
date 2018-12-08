@@ -71,6 +71,15 @@ app.get('/lesson-list', function (req, res) {
 	});
 })
 
+app.get('/word', function (req, res) {
+  console.log('in /word route in backend');
+  connection.query('SELECT * FROM Lesson11 WHERE ID = 1;', function (error, results, fields) {
+    if (error)
+      throw error;
+    res.json(results);
+  });
+})
+
 //POST API
 // app.post('/user', data);
 app.post('/user', function(req , res){

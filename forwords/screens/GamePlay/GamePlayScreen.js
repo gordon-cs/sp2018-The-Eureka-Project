@@ -10,6 +10,8 @@ import {
   Platform
 } from "react-native";
 
+var backwordsIP = '172.27.43.141';
+
 export default class GamePlayScreen extends Component {
   static navigationOptions = {
     header: null
@@ -19,12 +21,22 @@ export default class GamePlayScreen extends Component {
 
     this.state = {
       isLoading: true,
-      lessonList: []
+      prompt: '',
+      choice1: '',
+      choice2: '',
+      choice3: '',
     };
   }
 
   async componentWillMount() {
-    console.log("GamePlayScreen: Got into componentDidMount");
+    try {
+      axios.get('http://' + backwordsIP + ':8080' + '/word').then(res => {
+        console.log(res.data)
+      });
+    } catch (error) {
+      throw new Error('/word did not work');
+    }
+    console.log("GamePlayScreen: Got into componentWillMount");
   }
 
   render() {
