@@ -89,6 +89,15 @@ app.get('/choices', function (req, res) {
   });
 })
 
+app.getLessonSize('/lesson-length', function(req, res) {
+  console.log('in /lesson-list from backend');
+  connection.query('SELECT COUNT(*) FROM Lesson11;').then(res => {
+    if (error)
+      throw error;
+    res.send(results);
+  });
+})
+
 //POST API
 // app.post('/user', data);
 app.post('/user', function(req , res){

@@ -28,6 +28,23 @@ export default class GamePlayScreen extends Component {
     };
   }
 
+  randomNumGen() {
+    let randNum = Math.floor(Math.random()*4)+1;
+    return randNum;
+  }
+
+  checkDuplicates() {
+    let numList = [];
+    while (numList.length < 4) {
+      let potential = this.randomNumGen();
+      while (numList.includes(potential)){
+        potential = this.randomNumGen();
+      }
+      numList.push(potential);
+    }    
+    return numList;
+  }
+
   async componentWillMount() {
     try {
       await axios.get('http://' + backwordsIP + ':8080' + '/word').then(res => {
@@ -52,6 +69,12 @@ export default class GamePlayScreen extends Component {
       throw new Error('/word did not work');
     }
     console.log("GamePlayScreen: Got into componentWillMount");
+    let length;
+    await axios.get('http://' + backwordsIP + ':8080' + '/lesson-length').then(res => {
+      length = res.data;
+    });
+    console.log("length: ", length);
+    console.log("4 unique numbers: ", this.checkDuplicates());
   }
 
   render() {
@@ -67,7 +90,7 @@ export default class GamePlayScreen extends Component {
         <View style={styles.mainContainer}>
           <View style={styles.circle}>
             <Text style={styles.answerText}>
-              {this.state.choice1.Chinese}
+              {this.state.prompt.Chinese}
             </Text>
           </View>
           <View style={styles.circle}>
