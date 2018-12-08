@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Choice from "./components/Choice";
+import Prompt from './components/Prompt';
 import {
   AppRegistry,
   FlatList,
@@ -31,6 +32,8 @@ export default class GamePlayScreen extends Component {
   render() {
     return (
       <View style={styles.mainContainer}>
+        <Prompt>
+        </Prompt>
         <Choice text="苹果" promptID="1" choiceID="1">
         </Choice>
         <Choice text="飞翔" promptID="1" choiceID="2">
