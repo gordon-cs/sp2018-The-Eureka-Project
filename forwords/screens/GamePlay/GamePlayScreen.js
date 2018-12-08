@@ -31,23 +31,14 @@ export default class GamePlayScreen extends Component {
   render() {
     return (
       <View style={styles.mainContainer}>
-      <Choice asdfg="Apple">
-
-      </Choice>
-       
-
-        <Choice asdfg="jake moon">
-        
-      </Choice>
-        <Choice>
-        
-        </Choice> 
-        <Choice>
-        
+        <Choice text="苹果" promptID="1" choiceID="1">
         </Choice>
-        <View style={styles.circle}>
-          <Text style={styles.answerText}>🍉</Text>
-        </View>
+        <Choice text="飞翔" promptID="1" choiceID="2">
+        </Choice>
+        <Choice text="你好" promptID="1" choiceID="3">
+        </Choice>
+        <Choice text="西瓜" promptID="1" choiceID="4">
+        </Choice>
       </View>
     );
   }
