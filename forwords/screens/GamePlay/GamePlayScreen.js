@@ -21,7 +21,7 @@ export default class GamePlayScreen extends Component {
 
     this.state = {
       isLoading: true,
-      prompt: '',
+      prompt: [],
       choice1: '',
       choice2: '',
       choice3: '',
@@ -31,7 +31,13 @@ export default class GamePlayScreen extends Component {
   async componentWillMount() {
     try {
       axios.get('http://' + backwordsIP + ':8080' + '/word').then(res => {
-        console.log(res.data)
+        const word = res.data;
+        this.setState({
+          isLoading: false,
+          prompt: word[0]
+        });
+        console.log("prompt: ", this.state.prompt);
+        //console.log(res.data)
       });
     } catch (error) {
       throw new Error('/word did not work');
@@ -42,10 +48,11 @@ export default class GamePlayScreen extends Component {
   render() {
     return (
       <View style={styles.mainContainer}>
-      <View style={styles.circle}>
-          <Text style={styles.answerText}>西瓜</Text>
+        <View style={styles.circle}>
+          <Text style={styles.answerText}>
+            {this.state.prompt.Chinese} 
+          </Text>
         </View>
-
         <View style={styles.circle}>
           <Text style={styles.answerText}>🍏</Text>
         </View>
@@ -77,7 +84,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white"
   },
   answerText: {
-    fontSize: 60,
+    fontSize: 24,
     color: "rgba(96,100,109, 1)",
     textAlign: "center"
   }
