@@ -91,7 +91,7 @@ app.get('/choices', function (req, res) {
 
 app.get('/lesson-length', function(req, res) {
   console.log('in /lesson-list from backend');
-  connection.query('SELECT COUNT(*) FROM Lesson11;').then(res => {
+  connection.query('SELECT COUNT(*) FROM Lesson11;', function (error, results, fields) {
     if (error)
       throw error;
     res.send(results);
