@@ -24,6 +24,7 @@ export default class HomeScreen extends React.Component {
   async componentWillMount() {
     console.log("Got into componentDidMount");
     try {
+      console.log("Got into try for /people")
       axios.get('http://' + backwordsIP + ':8080' + '/people').then(res => {
         const users = res.data;
         console.log("res: ", res);
@@ -33,8 +34,16 @@ export default class HomeScreen extends React.Component {
     } catch (err) {
       throw new Error('/people did not work');
     }
+    try {
+      console.log("Got into try for /targetLanguage")
+      axios.get('http://' + backwordsIP + ':8080' + '/targetLanguage').then(res => {
+        const targetLanguage = res.data;
+        console.log("targetLanguage", targetLanguage);
+      });
+    } catch (err) { 
+      throw new Error('/targetLanguage did not work');
+    }    
   }
-
 
   render() {
     return (

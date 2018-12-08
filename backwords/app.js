@@ -10,9 +10,6 @@ var logger = require('morgan');
 // Body Parser Middleware
 app.use(bodyParser.json()); 
 
-var indexRouter = require('./routes/index');
-var peopleRouter = require('./routes/people');
-
 //CORS Middleware
 app.use(function (req, res, next) {
     //Enabling CORS 
@@ -52,8 +49,16 @@ app.get('/people', function (req, res) {
 		if (error)
 			throw error;
 		res.json(results);
-  });
-});
+	});
+})
+
+app.get('/targetLanguage', function (req, res) {
+	connection.query('SELECT TargetLanguage FROM Users WHERE FirstName = "Nikki"', function (error, results, fields) {
+		if (error)
+			throw error;
+		res.json(results);
+	});
+})
 
 //POST API
 // app.post('/user', data);
@@ -89,9 +94,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-// app.use('/', indexRouter);
-// app.use('/people', peopleRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
