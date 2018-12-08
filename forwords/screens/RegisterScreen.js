@@ -17,6 +17,7 @@ export default class RegisterScreen extends Component {
         super(props);
         
         this.registerStudent = this.registerStudent.bind(this);
+        this.registerTeacher = this.registerTeacher.bind(this);
 
         this.state = {
             firstName:  '',
@@ -35,19 +36,33 @@ export default class RegisterScreen extends Component {
             password: this.state.password,
             role: 'Student',         
         }
-        console.log('before registerStudent try statement', data)
-        try {
-            console.log('entered try block')
-            axios.post('http://' + backwordsIP + ':8080' + '/user', data);
-            // console.log(res);
-            console.log("Student registered");
-        } catch (err) {
-            throw new Error('Post /users did not work');
+        // console.log('before registerStudent try statement', data)
+        // try {
+        //     console.log('entered try block')
+        //     axios.post('http://' + backwordsIP + ':8080' + '/user', data);
+        //     // console.log(res);
+        //     console.log("Student registered");
+        // } catch (err) {
+        //     throw new Error('Post /users did not work');
+        // }
+        const {navigate} = this.props.navigation;
+        navigate('Login');
+    }
+
+    registerTeacher() {
+        let data = {
+            firstName: this.state.firstName,
+            lastName: this.state.lastName,
+            email: this.state.email,
+            password: this.state.password,
+            role: 'Teacher',
         }
         const {navigate} = this.props.navigation;
         navigate('Login');
     }
+
     render() {
+        const {navigate} = this.props.navigation;
         let content;
         return (
             <View style={styles.container}>
@@ -91,9 +106,12 @@ export default class RegisterScreen extends Component {
                     style={styles.button}
                     title='Student'/>
                 <Button 
-                    onPress = {() => console.log('teacher', this.state.firstName, this.state.lastName,this.state.email,this.state.password)}
+                    onPress = {this.registerTeacher}
                     style={styles.button}
                     title='Teacher'/>
+                <Button
+                    onPress = {() => navigate('Login')}
+                    title = 'Cancel'/>
                 </View>
             </View>
         )
@@ -106,6 +124,7 @@ const styles = StyleSheet.create({
         color: '#800080',
         borderRadius: 50,
         width: 160,
+        marginVertical: 30,
     },
     container: {
         flex: 10,
