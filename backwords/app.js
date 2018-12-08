@@ -89,7 +89,7 @@ app.get('/choices', function (req, res) {
   });
 })
 
-app.getLessonSize('/lesson-length', function(req, res) {
+app.get('/lesson-length', function(req, res) {
   console.log('in /lesson-list from backend');
   connection.query('SELECT COUNT(*) FROM Lesson11;').then(res => {
     if (error)
