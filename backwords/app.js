@@ -45,6 +45,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/people', function (req, res) {
+	console.log("in /people route in backend");
 	connection.query('SELECT * FROM Users', function (error, results, fields) {
 		if (error)
 			throw error;
@@ -53,7 +54,17 @@ app.get('/people', function (req, res) {
 })
 
 app.get('/targetLanguage', function (req, res) {
+	console.log("in /targetLanguage route in backend");
 	connection.query('SELECT TargetLanguage FROM Users WHERE FirstName = "Nikki"', function (error, results, fields) {
+		if (error)
+			throw error;
+		res.json(results);
+	});
+})
+
+app.get('/lesson-list', function (req, res) {
+	console.log("in /lesson-list route in backend");
+	connection.query('SELECT * FROM Lessons;', function (error, results, fields) {
 		if (error)
 			throw error;
 		res.json(results);
