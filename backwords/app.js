@@ -80,6 +80,15 @@ app.get('/word', function (req, res) {
   });
 })
 
+app.get('/choices', function (req, res) {
+  console.log('in /choices route in backend');
+  connection.query('SELECT * FROM Lesson11 WHERE ID in (2,3,4);', function (error, results, fields) {
+    if (error)
+      throw error;
+    res.json(results);
+  });
+})
+
 //POST API
 // app.post('/user', data);
 app.post('/user', function(req , res){

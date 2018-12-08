@@ -30,14 +30,23 @@ export default class GamePlayScreen extends Component {
 
   async componentWillMount() {
     try {
-      axios.get('http://' + backwordsIP + ':8080' + '/word').then(res => {
+      await axios.get('http://' + backwordsIP + ':8080' + '/word').then(res => {
         const word = res.data;
         this.setState({
           isLoading: false,
           prompt: word[0]
         });
         console.log("prompt: ", this.state.prompt);
-        //console.log(res.data)
+      });
+      await axios.get('http://' + backwordsIP + ':8080' + '/choices').then(res => {
+        const choices = res.data;
+        this.setState({
+          isLoading: false,
+          choice1: choices[0],
+          choice2: choices[1],
+          choice3: choices[2],
+        });
+        console.log("choices: ", choices);
       });
     } catch (error) {
       throw new Error('/word did not work');
@@ -47,23 +56,37 @@ export default class GamePlayScreen extends Component {
 
   render() {
     return (
-      <View style={styles.mainContainer}>
-        <View style={styles.circle}>
-          <Text style={styles.answerText}>
-            {this.state.prompt.Chinese} 
-          </Text>
+      <View>
+        <View style={styles.mainContainer}>
+          <View style={styles.circle}>
+            <Text style={styles.answerText}>
+              {this.state.prompt.Chinese}
+            </Text>
+          </View>
         </View>
-        <View style={styles.circle}>
-          <Text style={styles.answerText}>🍏</Text>
+        <View style={styles.mainContainer}>
+          <View style={styles.circle}>
+            <Text style={styles.answerText}>
+              {this.state.choice1.Chinese}
+            </Text>
+          </View>
+          <View style={styles.circle}>
+            <Text style={styles.answerText}>
+              {this.state.choice1.Chinese}
+            </Text>
+          </View>
         </View>
-        <View style={styles.circle}>
-          <Text style={styles.answerText}>🍒</Text>
-        </View> 
-        <View style={styles.circle}>
-          <Text style={styles.answerText}>🍌</Text>
-        </View>
-        <View style={styles.circle}>
-          <Text style={styles.answerText}>🍉</Text>
+        <View style={styles.mainContainer}>
+          <View style={styles.circle}>
+            <Text style={styles.answerText}>
+              {this.state.choice2.Chinese}
+            </Text>
+          </View>
+          <View style={styles.circle}>
+            <Text style={styles.answerText}>
+              {this.state.choice3.Chinese}
+            </Text>
+          </View>
         </View>
       </View>
     );
@@ -74,7 +97,8 @@ const styles = StyleSheet.create({
   mainContainer: {
     justifyContent: "center",
     flex: 1,
-    margin: 10,
+    flexDirection: 'row',
+    margin: 100,
     paddingTop: Platform.OS === "ios" ? 20 : 0
   },
   circle: {
