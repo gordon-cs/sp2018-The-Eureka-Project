@@ -2,15 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import Choice from "./components/Choice";
 import Prompt from './components/Prompt';
-import {
-  AppRegistry,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-  ActivityIndicator,
-  Platform
-} from "react-native";
+import { StyleSheet, View, Platform } from "react-native";
 
 export default class GamePlayScreen extends Component {
   static navigationOptions = {
@@ -21,27 +13,74 @@ export default class GamePlayScreen extends Component {
 
     this.state = {
       isLoading: true,
-      lessonList: []
+      lessonList: [],
+      answeredCorrectly: '0',
+      topLeftText: 'tL:苹果',
+      topRightText: 'tR:飞翔',
+      bottomLeftText: 'bL:你好',
+      bottomRightText: 'bR:西瓜',
+      promptID: '1',
     };
+    this.wasAnsweredCorrectly = this.wasAnsweredCorrectly.bind(this);
   }
 
-  async componentWillMount() {
-    console.log("GamePlayScreen: Got into componentDidMount");
+
+  wasAnsweredCorrectly(answer, prompt) {
+    if (answer === prompt) {
+      this.setState({ answeredCorrectly: '1' });
+    } else {
+      this.setState({ answeredCorrectly: '2' });
+    }
+    console.log("I got it right?: ", this.state.answeredCorrectly);
   }
+
+
 
   render() {
+    const topLeftText = this.state.topLeftText;
+    const topRightText = this.state.topRightText;
+    const bottomLeftText = this.state.bottomLeftText;
+    const bottomRightText = this.state.bottomRightText;
+    const promptID = this.state.promptID;
+    const answeredCorrectly = this.state.answeredCorrectly;
+
     return (
       <View style={styles.mainContainer}>
         <Prompt>
         </Prompt>
-        <Choice text="苹果" promptID="1" choiceID="1">
-        </Choice>
-        <Choice text="飞翔" promptID="1" choiceID="2">
-        </Choice>
-        <Choice text="你好" promptID="1" choiceID="3">
-        </Choice>
-        <Choice text="西瓜" promptID="1" choiceID="4">
-        </Choice>
+        <View style={styles.choicesTopContainer}>
+          <Choice
+            text={topLeftText}
+            promptID={promptID}
+            choiceID="1"
+            answeredCorrectly={answeredCorrectly}
+            wasAnsweredCorrectly={this.wasAnsweredCorrectly} // a function
+          >
+          </Choice>
+          <Choice
+            text={topRightText}
+            promptID={promptID}
+            choiceID="2"
+            answeredCorrectly={answeredCorrectly}
+            wasAnsweredCorrectly={this.wasAnsweredCorrectly}>
+          </Choice>
+        </View>
+        <View style={styles.choicesBottomContainer}>
+          <Choice
+            text={bottomLeftText}
+            promptID={promptID}
+            choiceID="3"
+            answeredCorrectly={answeredCorrectly}
+            wasAnsweredCorrectly={this.wasAnsweredCorrectly}>
+          </Choice>
+          <Choice
+            text={bottomRightText}
+            promptID={promptID}
+            choiceID="4"
+            answeredCorrectly={answeredCorrectly}
+            wasAnsweredCorrectly={this.wasAnsweredCorrectly}>
+          </Choice>
+        </View>
       </View>
     );
   }
@@ -51,18 +90,20 @@ const styles = StyleSheet.create({
   mainContainer: {
     justifyContent: "center",
     flex: 1,
-    margin: 10,
     paddingTop: Platform.OS === "ios" ? 20 : 0
   },
-  circle: {
-    width: 100,
-    height: 100,
-    borderRadius: 100 / 2,
-    backgroundColor: "white"
+  choicesTopContainer: {
+    justifyContent: "center",
+    flex: 1,
+    flexDirection: 'row',
+    margin: 10,
+    // paddingTop: Platform.OS === "ios" ? 20 : 0
   },
-  answerText: {
-    fontSize: 60,
-    color: "rgba(96,100,109, 1)",
-    textAlign: "center"
-  }
+  choicesBottomContainer: {
+    justifyContent: "center",
+    flex: 1,
+    flexDirection: 'row',
+    margin: 10,
+    // paddingTop: Platform.OS === "ios" ? 20 : 0
+  },
 });

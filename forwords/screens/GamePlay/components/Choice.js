@@ -1,42 +1,53 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
     StyleSheet,
     Text,
     Platform,
     TouchableOpacity,
-} from 'react-native';
+    View
+} from "react-native";
 
 export default class Choice extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            title: this.props,
-            promptID: this.props,
-            choiceID: this.props,
-            correctAnswer: Boolean,
-        };
         this.handleAttempt = this.handleAttempt.bind(this);
     }
 
-    handleAttempt() {
-        if (this.state.promptID === this.state.choiceID) {
-            this.setState({ correctAnswer: true });
-        } else {
-            this.setState({ correctAnswer: false }); 
-        }
+    handleAttempt(answer, prompt) {
+        this.props.wasAnsweredCorrectly(answer, prompt);
     }
 
     render() {
-        // const backgroundColor = this.state.correctAnswer ? 'green' : 'red';
+        const text = this.props.text;
+        const choiceID = this.props.choiceID;
+        const promptID = this.props.promptID;
+        const answeredCorrectly = this.props.answeredCorrectly;
+        if (answeredCorrectly == '0') {
+            var backgroundColor = {
+                backgroundColor: "white",
+            };
+        } else if (answeredCorrectly == '1') {
+            backgroundColor = {
+                backgroundColor: "green",
+            };
+        } else if (answeredCorrectly == '2') {
+            backgroundColor = {
+                backgroundColor: "red",
+            };
+        }
+
         return (
-            <TouchableOpacity style={styles.mainContainer}
-                onPress={this.handleAttempt}>
-                <Text style={styles.choiceText}>
-                    {this.props.text}
-                </Text>
-            </TouchableOpacity>
-        )
+            <View style={[styles.mainContainer, backgroundColor]}>
+                <TouchableOpacity
+                    style={styles.mainContainer}
+                    onPress={() => {
+                        this.handleAttempt(choiceID, promptID);
+                    }}
+                >
+                    <Text style={[styles.choiceText, backgroundColor]}>{text}</Text>
+                </TouchableOpacity>
+            </View>
+        );
     }
 }
 
@@ -49,11 +60,10 @@ const styles = StyleSheet.create({
         width: 120,
         height: 100,
         borderRadius: 80,
-        backgroundColor: "white",
     },
     choiceText: {
         textAlign: "center",
         fontSize: 20,
-        fontWeight: "bold",
-    },
+        fontWeight: "bold"
+    }
 });
