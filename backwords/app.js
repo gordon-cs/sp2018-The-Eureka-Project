@@ -71,6 +71,42 @@ app.get('/lesson-list', function (req, res) {
 	});
 })
 
+// Gets a single word, for multiplayer
+app.get('/word/:id', function (req, res) {
+  console.log('in /word route in backend');
+  var id = req.params.id;
+  connection.query('SELECT * FROM Lesson11 WHERE ID = ' + id + ';', function (error, results, fields) {
+    if (error)
+      throw error;
+    res.json(results);
+  });
+})
+
+app.get('/choices/:lesson/:first/:second/:third/:fourth', function (req, res) {
+  console.log('in /choices route in backend');
+  var lesson = req.params.lesson;
+  var first = req.params.first;
+  var second = req.params.second;
+  var third = req.params.third;
+  var fourth = req.params.fourth;
+  connection.query('SELECT * FROM Lesson' + lesson + ' WHERE ID in (' + first +',' + second + ',' + third + ',' + fourth + ');', function (error, results, fields) {
+    if (error)
+      throw error;
+    res.json(results);
+  });
+})
+
+app.get('/lesson-words/:lesson', function(req, res) {
+  console.log('in /lesson-words from backend');
+  var lesson = req.params.lesson;
+  console.log('url param lesson: ', lesson);
+  connection.query('SELECT * FROM Lesson11;', function (error, results, fields) {
+    if (error)
+      throw error;
+    res.json(results);
+  });
+})
+
 //POST API
 // app.post('/user', data);
 app.post('/user', function(req , res){
