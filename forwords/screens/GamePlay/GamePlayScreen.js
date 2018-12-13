@@ -41,7 +41,7 @@ export default class GamePlayScreen extends Component {
 
   // Generate random integer from 1 to lesson length
   randomNumGen(lessonLength) {
-    let randNum = Math.floor(Math.random()*lessonLength)+1;
+    let randNum = Math.floor(Math.random() * lessonLength) + 1;
     return randNum;
   }
 
@@ -52,11 +52,11 @@ export default class GamePlayScreen extends Component {
     let numList = [];
     while (numList.length < 4) {
       let potential = this.randomNumGen(lessonLength);
-      while (numList.includes(potential)){
+      while (numList.includes(potential)) {
         potential = this.randomNumGen(lessonLength);
       }
       numList.push(potential);
-    }    
+    }
     return numList;
   }
 
@@ -71,7 +71,7 @@ export default class GamePlayScreen extends Component {
       //   });
       //   console.log("prompt: ", this.state.prompt);
       // });
-      
+
       // Hard coded lesson 11
       let length;
       await axios.get('http://' + backwordsIP + ':8080' + '/lesson-words/11').then(res => {
@@ -82,22 +82,20 @@ export default class GamePlayScreen extends Component {
       var arrangeArr = this.fourWordsPicker(4); // Randomize order of choices returned
       console.log("Pick arrangement", arrangeArr);
       // Will eventually need a parameter for the specific lesson to pull from
-      await axios.get('http://' + backwordsIP + ':8080' + '/choices/11/ ' + array[0] + '/' + array[1] + '/' + array[2] + '/' + array [3]).then(res => {
+      await axios.get('http://' + backwordsIP + ':8080' + '/choices/11/ ' + array[0] + '/' + array[1] + '/' + array[2] + '/' + array[3]).then(res => {
         const choices = res.data;
         this.setState({
           isLoading: false,
-          topLeftText: choices[arrangeArr[0]-1].Chinese,
-          topRightText: choices[arrangeArr[1]-1].Chinese,
-          bottomLeftText: choices[arrangeArr[2]-1].Chinese,
-          bottomRightText: choices[arrangeArr[3]-1].Chinese,
+          topLeftText: choices[arrangeArr[0] - 1].Chinese,
+          topRightText: choices[arrangeArr[1] - 1].Chinese,
+          bottomLeftText: choices[arrangeArr[2] - 1].Chinese,
+          bottomRightText: choices[arrangeArr[3] - 1].Chinese,
         });
       });
     } catch (error) {
       throw new Error('component will not mount');
     }
   }
-
-
 
   render() {
     const topLeftText = this.state.topLeftText;
@@ -143,37 +141,6 @@ export default class GamePlayScreen extends Component {
             answeredCorrectly={answeredCorrectly}
             wasAnsweredCorrectly={this.wasAnsweredCorrectly}>
           </Choice>
-      {/* <View>
-        <View style={styles.mainContainer}>
-          <View style={styles.circle}>
-            <Text style={styles.answerText}>
-              {this.state.topLeftText.Chinese}
-            </Text>
-          </View>
-        </View>
-        <View style={styles.mainContainer}>
-          <View style={styles.circle}>
-            <Text style={styles.answerText}>
-              {this.state.topLeftText.Chinese}
-            </Text>
-          </View>
-          <View style={styles.circle}>
-            <Text style={styles.answerText}>
-              {this.state.topRightText.Chinese}
-            </Text>
-          </View>
-        </View>
-        <View style={styles.mainContainer}>
-          <View style={styles.circle}>
-            <Text style={styles.answerText}>
-              {this.state.bottomLeftText.Chinese}
-            </Text>
-          </View>
-          <View style={styles.circle}>
-            <Text style={styles.answerText}>
-              {this.state.bottomRightText.Chinese}
-            </Text>
-          </View> */}
         </View>
       </View>
     );
