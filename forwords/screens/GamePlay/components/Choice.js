@@ -31,7 +31,7 @@ export default class Choice extends Component {
             // if i got it correct
             if (answeredCorrectly[1] == 1) {
                 backgroundColor = {
-                    backgroundColor: "green",
+                    backgroundColor: "#5cbf4a",
                 };
                 // if i got it incorrect
             } else if (answeredCorrectly[1] == 2) {
