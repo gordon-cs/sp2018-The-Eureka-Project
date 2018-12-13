@@ -44,6 +44,10 @@ export default class HomeScreen extends React.Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
+      <Button style={styles.button}
+          title = '▶️'
+          onPress={() => navigate('GamePlay')}
+        />
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.headingView}>
             <Text style={styles.icon}>
