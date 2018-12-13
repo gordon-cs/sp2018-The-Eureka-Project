@@ -25,21 +25,21 @@ export default class GamePlayScreen extends Component {
     };
   }
 
-  // Generate random integer from 1 to 4 (hard-coded)
-  randomNumGen() {
-    let randNum = Math.floor(Math.random()*4)+1;
+  // Generate random integer from 1 to lesson length
+  randomNumGen(lessonLength) {
+    let randNum = Math.floor(Math.random()*lessonLength)+1;
     return randNum;
   }
 
   /* Create a list of 4 unique numbers
    * If a number is already in the list, then generate a unique number
    */
-  checkDuplicates() {
+  fourWordsPicker(lessonLength) {
     let numList = [];
     while (numList.length < 4) {
-      let potential = this.randomNumGen();
+      let potential = this.randomNumGen(lessonLength);
       while (numList.includes(potential)){
-        potential = this.randomNumGen();
+        potential = this.randomNumGen(lessonLength);
       }
       numList.push(potential);
     }    
@@ -75,10 +75,9 @@ export default class GamePlayScreen extends Component {
     let length;
     await axios.get('http://' + backwordsIP + ':8080' + '/lesson-words/11').then(res => {
       length = res.data.length;
-      // length = res.data[0].COUNT(*); // Does not recognize 'COUNT(*)' as column header
     });
     console.log("array length: ", length);
-    console.log("4 unique numbers: ", this.checkDuplicates());
+    console.log("4 unique numbers: ", this.fourWordsPicker(length));
   }
 
   render() {
