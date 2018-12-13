@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import {
     StyleSheet,
     Text,
-    Platform,
     TouchableOpacity,
-    View
 } from "react-native";
 
 export default class Choice extends Component {
@@ -22,31 +20,40 @@ export default class Choice extends Component {
         const choiceID = this.props.choiceID;
         const promptID = this.props.promptID;
         const answeredCorrectly = this.props.answeredCorrectly;
-        if (answeredCorrectly == '0') {
+        if (answeredCorrectly[1] == 0) {
             var backgroundColor = {
                 backgroundColor: "white",
             };
-        } else if (answeredCorrectly == '1') {
-            backgroundColor = {
-                backgroundColor: "green",
-            };
-        } else if (answeredCorrectly == '2') {
-            backgroundColor = {
-                backgroundColor: "red",
-            };
         }
 
+        // if it is my choiceID
+        if (answeredCorrectly[0] == choiceID) {
+            // if i got it correct
+            if (answeredCorrectly[1] == 1) {
+                backgroundColor = {
+                    backgroundColor: "green",
+                };
+                // if i got it incorrect
+            } else if (answeredCorrectly[1] == 2) {
+                backgroundColor = {
+                    backgroundColor: "red",
+                };
+            }
+            // it is NOT my choiceID
+        } else {
+            backgroundColor = {
+                backgroundColor: "white",
+            };
+        }
         return (
-            <View style={[styles.mainContainer, backgroundColor]}>
-                <TouchableOpacity
-                    style={styles.mainContainer}
-                    onPress={() => {
-                        this.handleAttempt(choiceID, promptID);
-                    }}
-                >
-                    <Text style={[styles.choiceText, backgroundColor]}>{text}</Text>
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+                style={[styles.mainContainer, backgroundColor]}
+                onPress={() => {
+                    this.handleAttempt(choiceID, promptID);
+                }}
+            >
+                <Text style={styles.choiceText}>{text}</Text>
+            </TouchableOpacity >
         );
     }
 }
@@ -56,7 +63,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         flex: 1,
         margin: 10,
-        paddingTop: Platform.OS === "ios" ? 20 : 0,
+        // paddingTop: Platform.OS === "ios" ? 20 : 0,
         width: 120,
         height: 100,
         borderRadius: 80,
@@ -64,6 +71,6 @@ const styles = StyleSheet.create({
     choiceText: {
         textAlign: "center",
         fontSize: 20,
-        fontWeight: "bold"
+        fontWeight: "bold",
     }
 });

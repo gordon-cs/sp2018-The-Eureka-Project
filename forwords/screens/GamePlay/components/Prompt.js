@@ -17,8 +17,8 @@ export default class Prompt extends Component {
             promptID: this.props,
             imageURL: this.props,
         };
-
     }
+    
     render() {
         return (
             <Image style={StyleSheet.promptImage}>

@@ -14,24 +14,23 @@ export default class GamePlayScreen extends Component {
     this.state = {
       isLoading: true,
       lessonList: [],
-      answeredCorrectly: '0',
-      topLeftText: 'tL:苹果',
-      topRightText: 'tR:飞翔',
-      bottomLeftText: 'bL:你好',
-      bottomRightText: 'bR:西瓜',
-      promptID: '1',
+      answeredCorrectly: [0, 0], // [choiceIDGiven, correct=1/wrong=2]
+      topLeftText: '苹果',
+      topRightText: '飞翔',
+      bottomLeftText: '你好',
+      bottomRightText: '西瓜',
+      promptID: 1,
     };
     this.wasAnsweredCorrectly = this.wasAnsweredCorrectly.bind(this);
   }
 
 
-  wasAnsweredCorrectly(answer, prompt) {
-    if (answer === prompt) {
-      this.setState({ answeredCorrectly: '1' });
+  wasAnsweredCorrectly(choiceIDGiven, prompt) {
+    if (choiceIDGiven === prompt) {
+      this.setState({ answeredCorrectly: [choiceIDGiven, 1] }); // got it correct
     } else {
-      this.setState({ answeredCorrectly: '2' });
+      this.setState({ answeredCorrectly: [choiceIDGiven, 2] }); // got it incorrect
     }
-    console.log("I got it right?: ", this.state.answeredCorrectly);
   }
 
 
@@ -52,7 +51,7 @@ export default class GamePlayScreen extends Component {
           <Choice
             text={topLeftText}
             promptID={promptID}
-            choiceID="1"
+            choiceID={1}
             answeredCorrectly={answeredCorrectly}
             wasAnsweredCorrectly={this.wasAnsweredCorrectly} // a function
           >
@@ -60,7 +59,7 @@ export default class GamePlayScreen extends Component {
           <Choice
             text={topRightText}
             promptID={promptID}
-            choiceID="2"
+            choiceID={2}
             answeredCorrectly={answeredCorrectly}
             wasAnsweredCorrectly={this.wasAnsweredCorrectly}>
           </Choice>
@@ -69,14 +68,14 @@ export default class GamePlayScreen extends Component {
           <Choice
             text={bottomLeftText}
             promptID={promptID}
-            choiceID="3"
+            choiceID={3}
             answeredCorrectly={answeredCorrectly}
             wasAnsweredCorrectly={this.wasAnsweredCorrectly}>
           </Choice>
           <Choice
             text={bottomRightText}
             promptID={promptID}
-            choiceID="4"
+            choiceID={4}
             answeredCorrectly={answeredCorrectly}
             wasAnsweredCorrectly={this.wasAnsweredCorrectly}>
           </Choice>
@@ -90,7 +89,8 @@ const styles = StyleSheet.create({
   mainContainer: {
     justifyContent: "center",
     flex: 1,
-    paddingTop: Platform.OS === "ios" ? 20 : 0
+    paddingTop: Platform.OS === "ios" ? 20 : 0,
+    backgroundColor: '#5b3b89'
   },
   choicesTopContainer: {
     justifyContent: "center",
