@@ -48,36 +48,41 @@ export default class GamePlayScreen extends Component {
 
   async componentWillMount() {
     try {
-      // Will eventually need a parameter in the URL for different word IDs
-      await axios.get('http://' + backwordsIP + ':8080' + '/word').then(res => {
-        const word = res.data;
-        this.setState({
-          isLoading: false,
-          prompt: word[0]
-        });
-        console.log("prompt: ", this.state.prompt);
+      // Will eventually need this for multiplayer to update just a single word
+      // await axios.get('http://' + backwordsIP + ':8080' + '/word/1').then(res => {
+      //   const word = res.data;
+      //   this.setState({
+      //     isLoading: false,
+      //     prompt: word[0]
+      //   });
+      //   console.log("prompt: ", this.state.prompt);
+      // });
+      
+      // Hard coded lesson 11
+      let length;
+      await axios.get('http://' + backwordsIP + ':8080' + '/lesson-words/11').then(res => {
+        length = res.data.length;
       });
+      console.log("array length: ", length);
+      var array = this.fourWordsPicker(length);
+      console.log("4 unique numbers: ", array);
+
       // Will eventually need a parameter for the specific lesson to pull from
-      await axios.get('http://' + backwordsIP + ':8080' + '/choices').then(res => {
+      await axios.get('http://' + backwordsIP + ':8080' + '/choices/11/ ' + array[0] + '/' + array[1] + '/' + array[2] + '/' + array [3]).then(res => {
         const choices = res.data;
         this.setState({
           isLoading: false,
           choice1: choices[0],
           choice2: choices[1],
           choice3: choices[2],
+          choice4: choices[3],
         });
         console.log("choices: ", choices);
       });
     } catch (error) {
-      throw new Error('/word did not work');
+      throw new Error('component will not mount');
     }
     console.log("GamePlayScreen: Got into componentWillMount");
-    let length;
-    await axios.get('http://' + backwordsIP + ':8080' + '/lesson-words/11').then(res => {
-      length = res.data.length;
-    });
-    console.log("array length: ", length);
-    console.log("4 unique numbers: ", this.fourWordsPicker(length));
   }
 
   render() {
