@@ -18,10 +18,10 @@ export default class GamePlayScreen extends Component {
 
     this.state = {
       isLoading: true,
-      prompt: [],
       choice1: '',
       choice2: '',
       choice3: '',
+      choice4: '',
     };
   }
 
@@ -65,19 +65,19 @@ export default class GamePlayScreen extends Component {
       });
       console.log("array length: ", length);
       var array = this.fourWordsPicker(length);
-      console.log("4 unique numbers: ", array);
-
+      var arrangeArr = this.fourWordsPicker(4); // Randomize order of choices returned
+      console.log("Pick arrangement", arrangeArr);
       // Will eventually need a parameter for the specific lesson to pull from
       await axios.get('http://' + backwordsIP + ':8080' + '/choices/11/ ' + array[0] + '/' + array[1] + '/' + array[2] + '/' + array [3]).then(res => {
         const choices = res.data;
         this.setState({
           isLoading: false,
-          choice1: choices[0],
-          choice2: choices[1],
-          choice3: choices[2],
-          choice4: choices[3],
+          choice1: choices[arrangeArr[0]-1],
+          choice2: choices[arrangeArr[1]-1],
+          choice3: choices[arrangeArr[2]-1],
+          choice4: choices[arrangeArr[3]-1],
         });
-        console.log("choices: ", choices);
+        console.log("choices: ", this.state.choice1, this.state.choice2, this.state.choice3, this.state.choice4);
       });
     } catch (error) {
       throw new Error('component will not mount');
@@ -91,18 +91,6 @@ export default class GamePlayScreen extends Component {
         <View style={styles.mainContainer}>
           <View style={styles.circle}>
             <Text style={styles.answerText}>
-              {this.state.prompt.Chinese}
-            </Text>
-          </View>
-        </View>
-        <View style={styles.mainContainer}>
-          <View style={styles.circle}>
-            <Text style={styles.answerText}>
-              {this.state.prompt.Chinese}
-            </Text>
-          </View>
-          <View style={styles.circle}>
-            <Text style={styles.answerText}>
               {this.state.choice1.Chinese}
             </Text>
           </View>
@@ -110,12 +98,24 @@ export default class GamePlayScreen extends Component {
         <View style={styles.mainContainer}>
           <View style={styles.circle}>
             <Text style={styles.answerText}>
-              {this.state.choice2.Chinese}
+              {this.state.choice1.Chinese}
             </Text>
           </View>
           <View style={styles.circle}>
             <Text style={styles.answerText}>
+              {this.state.choice2.Chinese}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.mainContainer}>
+          <View style={styles.circle}>
+            <Text style={styles.answerText}>
               {this.state.choice3.Chinese}
+            </Text>
+          </View>
+          <View style={styles.circle}>
+            <Text style={styles.answerText}>
+              {this.state.choice4.Chinese}
             </Text>
           </View>
         </View>
