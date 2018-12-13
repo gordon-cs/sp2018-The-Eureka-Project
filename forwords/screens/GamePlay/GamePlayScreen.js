@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import TimerMixin from 'react-timer-mixin';
 import Choice from "./components/Choice";
 import Prompt from './components/Prompt';
 import {
@@ -34,6 +35,9 @@ export default class GamePlayScreen extends Component {
   wasAnsweredCorrectly(choiceIDGiven, prompt) {
     if (choiceIDGiven === prompt) {
       this.setState({ answeredCorrectly: [choiceIDGiven, 1] }); // got it correct
+      TimerMixin.setTimeout(() => {
+        this.populateChoices();
+      }, 750);
     } else {
       this.setState({ answeredCorrectly: [choiceIDGiven, 2] }); // got it incorrect
     }
@@ -60,6 +64,31 @@ export default class GamePlayScreen extends Component {
     return numList;
   }
 
+  async populateChoices() {
+    console.log("in populateChoices()")
+    // Hard coded lesson 11
+    let length;
+    await axios.get('http://' + backwordsIP + ':8080' + '/lesson-words/11').then(res => {
+      length = res.data.length;
+    });
+    console.log("array length: ", length);
+    var array = this.fourWordsPicker(length);
+    var arrangeArr = this.fourWordsPicker(4); // Randomize order of choices returned
+    console.log("Pick arrangement", arrangeArr);
+    // Will eventually need a parameter for the specific lesson to pull from
+    await axios.get('http://' + backwordsIP + ':8080' + '/choices/11/ ' + array[0] + '/' + array[1] + '/' + array[2] + '/' + array[3]).then(res => {
+      const choices = res.data;
+      this.setState({
+        isLoading: false,
+        topLeftText: choices[arrangeArr[0] - 1].Chinese,
+        topRightText: choices[arrangeArr[1] - 1].Chinese,
+        bottomLeftText: choices[arrangeArr[2] - 1].Chinese,
+        bottomRightText: choices[arrangeArr[3] - 1].Chinese,
+      });
+    });
+    this.setState({ answeredCorrectly: [0, 0] });
+  }
+
   async componentWillMount() {
     try {
       // Will eventually need this for multiplayer to update just a single word
@@ -71,27 +100,7 @@ export default class GamePlayScreen extends Component {
       //   });
       //   console.log("prompt: ", this.state.prompt);
       // });
-
-      // Hard coded lesson 11
-      let length;
-      await axios.get('http://' + backwordsIP + ':8080' + '/lesson-words/11').then(res => {
-        length = res.data.length;
-      });
-      console.log("array length: ", length);
-      var array = this.fourWordsPicker(length);
-      var arrangeArr = this.fourWordsPicker(4); // Randomize order of choices returned
-      console.log("Pick arrangement", arrangeArr);
-      // Will eventually need a parameter for the specific lesson to pull from
-      await axios.get('http://' + backwordsIP + ':8080' + '/choices/11/ ' + array[0] + '/' + array[1] + '/' + array[2] + '/' + array[3]).then(res => {
-        const choices = res.data;
-        this.setState({
-          isLoading: false,
-          topLeftText: choices[arrangeArr[0] - 1].Chinese,
-          topRightText: choices[arrangeArr[1] - 1].Chinese,
-          bottomLeftText: choices[arrangeArr[2] - 1].Chinese,
-          bottomRightText: choices[arrangeArr[3] - 1].Chinese,
-        });
-      });
+      this.populateChoices();
     } catch (error) {
       throw new Error('component will not mount');
     }
