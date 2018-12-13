@@ -1,12 +1,9 @@
 import React, { Component } from "react";
 import axios from "axios";
 import {
-  AppRegistry,
-  FlatList,
   StyleSheet,
   Text,
   View,
-  ActivityIndicator,
   Platform
 } from "react-native";
 
@@ -28,11 +25,15 @@ export default class GamePlayScreen extends Component {
     };
   }
 
+  // Generate random integer from 1 to 4 (hard-coded)
   randomNumGen() {
     let randNum = Math.floor(Math.random()*4)+1;
     return randNum;
   }
 
+  /* Create a list of 4 unique numbers
+   * If a number is already in the list, then generate a unique number
+   */
   checkDuplicates() {
     let numList = [];
     while (numList.length < 4) {
@@ -47,6 +48,7 @@ export default class GamePlayScreen extends Component {
 
   async componentWillMount() {
     try {
+      // Will eventually need a parameter in the URL for different word IDs
       await axios.get('http://' + backwordsIP + ':8080' + '/word').then(res => {
         const word = res.data;
         this.setState({
@@ -55,6 +57,7 @@ export default class GamePlayScreen extends Component {
         });
         console.log("prompt: ", this.state.prompt);
       });
+      // Will eventually need a parameter for the specific lesson to pull from
       await axios.get('http://' + backwordsIP + ':8080' + '/choices').then(res => {
         const choices = res.data;
         this.setState({
@@ -70,10 +73,11 @@ export default class GamePlayScreen extends Component {
     }
     console.log("GamePlayScreen: Got into componentWillMount");
     let length;
-    await axios.get('http://' + backwordsIP + ':8080' + '/lesson-length').then(res => {
-      length = res.data;
+    await axios.get('http://' + backwordsIP + ':8080' + '/lesson-words/11').then(res => {
+      length = res.data.length;
+      // length = res.data[0].COUNT(*); // Does not recognize 'COUNT(*)' as column header
     });
-    console.log("length: ", length);
+    console.log("array length: ", length);
     console.log("4 unique numbers: ", this.checkDuplicates());
   }
 

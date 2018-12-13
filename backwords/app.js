@@ -80,7 +80,7 @@ app.get('/word', function (req, res) {
   });
 })
 
-app.get('/choices', function (req, res) {
+app.get('/choices/', function (req, res) {
   console.log('in /choices route in backend');
   connection.query('SELECT * FROM Lesson11 WHERE ID in (2,3,4);', function (error, results, fields) {
     if (error)
@@ -89,12 +89,14 @@ app.get('/choices', function (req, res) {
   });
 })
 
-app.get('/lesson-length', function(req, res) {
-  console.log('in /lesson-list from backend');
-  connection.query('SELECT COUNT(*) FROM Lesson11;', function (error, results, fields) {
+app.get('/lesson-words/:lesson', function(req, res) {
+  console.log('in /lesson-words from backend');
+  var lesson = req.param.lesson;
+  console.log('url param lesson: ', lesson);
+  connection.query('SELECT * FROM Lesson11;', function (error, results, fields) {
     if (error)
       throw error;
-    res.send(results);
+    res.json(results);
   });
 })
 
