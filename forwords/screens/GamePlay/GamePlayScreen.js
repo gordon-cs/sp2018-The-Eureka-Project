@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import axios from "axios";
+import Choice from "./components/Choice";
+import Prompt from './components/Prompt';
 import {
-  StyleSheet,
   Text,
   View,
-  Platform
+  StyleSheet,
+  Platform,
 } from "react-native";
 
 var backwordsIP = '172.27.43.141';
@@ -18,16 +20,28 @@ export default class GamePlayScreen extends Component {
 
     this.state = {
       isLoading: true,
-      choice1: '',
-      choice2: '',
-      choice3: '',
-      choice4: '',
+      lessonList: [],
+      answeredCorrectly: [0, 0], // [choiceIDGiven, correct=1/wrong=2]
+      topLeftText: '',
+      topRightText: '',
+      bottomLeftText: '',
+      bottomRightText: '',
+      promptID: 1,
     };
+    this.wasAnsweredCorrectly = this.wasAnsweredCorrectly.bind(this);
+  }
+
+  wasAnsweredCorrectly(choiceIDGiven, prompt) {
+    if (choiceIDGiven === prompt) {
+      this.setState({ answeredCorrectly: [choiceIDGiven, 1] }); // got it correct
+    } else {
+      this.setState({ answeredCorrectly: [choiceIDGiven, 2] }); // got it incorrect
+    }
   }
 
   // Generate random integer from 1 to lesson length
   randomNumGen(lessonLength) {
-    let randNum = Math.floor(Math.random()*lessonLength)+1;
+    let randNum = Math.floor(Math.random() * lessonLength) + 1;
     return randNum;
   }
 
@@ -38,11 +52,11 @@ export default class GamePlayScreen extends Component {
     let numList = [];
     while (numList.length < 4) {
       let potential = this.randomNumGen(lessonLength);
-      while (numList.includes(potential)){
+      while (numList.includes(potential)) {
         potential = this.randomNumGen(lessonLength);
       }
       numList.push(potential);
-    }    
+    }
     return numList;
   }
 
@@ -57,7 +71,7 @@ export default class GamePlayScreen extends Component {
       //   });
       //   console.log("prompt: ", this.state.prompt);
       // });
-      
+
       // Hard coded lesson 11
       let length;
       await axios.get('http://' + backwordsIP + ':8080' + '/lesson-words/11').then(res => {
@@ -68,56 +82,65 @@ export default class GamePlayScreen extends Component {
       var arrangeArr = this.fourWordsPicker(4); // Randomize order of choices returned
       console.log("Pick arrangement", arrangeArr);
       // Will eventually need a parameter for the specific lesson to pull from
-      await axios.get('http://' + backwordsIP + ':8080' + '/choices/11/ ' + array[0] + '/' + array[1] + '/' + array[2] + '/' + array [3]).then(res => {
+      await axios.get('http://' + backwordsIP + ':8080' + '/choices/11/ ' + array[0] + '/' + array[1] + '/' + array[2] + '/' + array[3]).then(res => {
         const choices = res.data;
         this.setState({
           isLoading: false,
-          choice1: choices[arrangeArr[0]-1],
-          choice2: choices[arrangeArr[1]-1],
-          choice3: choices[arrangeArr[2]-1],
-          choice4: choices[arrangeArr[3]-1],
+          topLeftText: choices[arrangeArr[0] - 1].Chinese,
+          topRightText: choices[arrangeArr[1] - 1].Chinese,
+          bottomLeftText: choices[arrangeArr[2] - 1].Chinese,
+          bottomRightText: choices[arrangeArr[3] - 1].Chinese,
         });
-        console.log("choices: ", this.state.choice1, this.state.choice2, this.state.choice3, this.state.choice4);
       });
     } catch (error) {
       throw new Error('component will not mount');
     }
-    console.log("GamePlayScreen: Got into componentWillMount");
   }
 
   render() {
+    const topLeftText = this.state.topLeftText;
+    const topRightText = this.state.topRightText;
+    const bottomLeftText = this.state.bottomLeftText;
+    const bottomRightText = this.state.bottomRightText;
+    const promptID = this.state.promptID;
+    const answeredCorrectly = this.state.answeredCorrectly;
+
     return (
-      <View>
-        <View style={styles.mainContainer}>
-          <View style={styles.circle}>
-            <Text style={styles.answerText}>
-              {this.state.choice1.Chinese}
-            </Text>
-          </View>
+      <View style={styles.mainContainer}>
+        <Prompt>
+        </Prompt>
+        <View style={styles.choicesTopContainer}>
+          <Choice
+            text={topLeftText}
+            promptID={promptID}
+            choiceID={1}
+            answeredCorrectly={answeredCorrectly}
+            wasAnsweredCorrectly={this.wasAnsweredCorrectly} // a function
+          >
+          </Choice>
+          <Choice
+            text={topRightText}
+            promptID={promptID}
+            choiceID={2}
+            answeredCorrectly={answeredCorrectly}
+            wasAnsweredCorrectly={this.wasAnsweredCorrectly}>
+          </Choice>
         </View>
-        <View style={styles.mainContainer}>
-          <View style={styles.circle}>
-            <Text style={styles.answerText}>
-              {this.state.choice1.Chinese}
-            </Text>
-          </View>
-          <View style={styles.circle}>
-            <Text style={styles.answerText}>
-              {this.state.choice2.Chinese}
-            </Text>
-          </View>
-        </View>
-        <View style={styles.mainContainer}>
-          <View style={styles.circle}>
-            <Text style={styles.answerText}>
-              {this.state.choice3.Chinese}
-            </Text>
-          </View>
-          <View style={styles.circle}>
-            <Text style={styles.answerText}>
-              {this.state.choice4.Chinese}
-            </Text>
-          </View>
+        <View style={styles.choicesBottomContainer}>
+          <Choice
+            text={bottomLeftText}
+            promptID={promptID}
+            choiceID={3}
+            answeredCorrectly={answeredCorrectly}
+            wasAnsweredCorrectly={this.wasAnsweredCorrectly}>
+          </Choice>
+          <Choice
+            text={bottomRightText}
+            promptID={promptID}
+            choiceID={4}
+            answeredCorrectly={answeredCorrectly}
+            wasAnsweredCorrectly={this.wasAnsweredCorrectly}>
+          </Choice>
         </View>
       </View>
     );
@@ -128,19 +151,23 @@ const styles = StyleSheet.create({
   mainContainer: {
     justifyContent: "center",
     flex: 1,
+    paddingTop: Platform.OS === "ios" ? 20 : 0,
+    backgroundColor: '#5b3b89'
+  },
+  choicesTopContainer: {
+    justifyContent: "center",
+    flex: 1,
     flexDirection: 'row',
-    margin: 100,
-    paddingTop: Platform.OS === "ios" ? 20 : 0
+    margin: 10,
+    // flexDirection: 'row',
+    // margin: 100,
+    // paddingTop: Platform.OS === "ios" ? 20 : 0
   },
-  circle: {
-    width: 100,
-    height: 100,
-    borderRadius: 100 / 2,
-    backgroundColor: "white"
+  choicesBottomContainer: {
+    justifyContent: "center",
+    flex: 1,
+    flexDirection: 'row',
+    margin: 10,
+    // paddingTop: Platform.OS === "ios" ? 20 : 0
   },
-  answerText: {
-    fontSize: 24,
-    color: "rgba(96,100,109, 1)",
-    textAlign: "center"
-  }
 });
