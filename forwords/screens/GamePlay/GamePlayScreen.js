@@ -65,16 +65,16 @@ export default class GamePlayScreen extends Component {
   }
 
   async populateChoices() {
-    // Hard coded lesson 11
+    // Hard coded lesson 2
     let length;
-    await axios.get('http://' + backwordsIP + ':8080' + '/lesson-words/11').then(res => {
+    await axios.get('http://' + backwordsIP + ':8080' + '/lesson-words/22').then(res => {
       lessonLength = res.data.length;
     });
     var fourWords = this.fourWordsPicker(lessonLength); // List of four words ids, eg. 5,2,17,11
     var shuffleSQLRows = this.fourWordsPicker(4); // Randomize order of fourSQLWordObjects returned
 
-    //Hard coded Lesson 11
-    await axios.get('http://' + backwordsIP + ':8080' + '/choices/11/ ' + fourWords[0] + '/' + fourWords[1] + '/' + fourWords[2] + '/' + fourWords[3]).then(res => {
+    //Hard coded Lesson 22
+    await axios.get('http://' + backwordsIP + ':8080' + '/choices/22/ ' + fourWords[0] + '/' + fourWords[1] + '/' + fourWords[2] + '/' + fourWords[3]).then(res => {
       const fourSQLWordObjects = res.data; // SQL will always return an ordered array, eg. 5,2,17,11 -> SQL -> 2,5,11,17
       this.setState({
         isLoading: false,
