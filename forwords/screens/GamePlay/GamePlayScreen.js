@@ -23,10 +23,10 @@ export default class GamePlayScreen extends Component {
       isLoading: true,
       lessonList: [],
       answeredCorrectly: [0, 0], // [choiceIDGiven, correct=1/wrong=2]
-      topLeftText: {},
-      topRightText: {},
-      bottomLeftText: {},
-      bottomRightText: {},
+      topLeftChoice: {},
+      topRightChoice: {},
+      bottomLeftChoice: {},
+      bottomRightChoice: {},
       promptID: '',
     };
     this.wasAnsweredCorrectly = this.wasAnsweredCorrectly.bind(this);
@@ -65,12 +65,13 @@ export default class GamePlayScreen extends Component {
   }
 
   async populateChoices() {
-    // Hard coded lesson 2
+    // Hard coded lesson 22
     let length;
     await axios.get('http://' + backwordsIP + ':8080' + '/lesson-words/22').then(res => {
       lessonLength = res.data.length;
+      console.log(lessonLength)
     });
-    var fourWords = this.fourWordsPicker(lessonLength); // List of four words ids, eg. 5,2,17,11
+    var fourWords = this.fourWordsPicker(lessonLength); // Array of four words ids, eg. 5,2,17,11
     var shuffleSQLRows = this.fourWordsPicker(4); // Randomize order of fourSQLWordObjects returned
 
     //Hard coded Lesson 22
@@ -78,13 +79,12 @@ export default class GamePlayScreen extends Component {
       const fourSQLWordObjects = res.data; // SQL will always return an ordered array, eg. 5,2,17,11 -> SQL -> 2,5,11,17
       this.setState({
         isLoading: false,
-        topLeftText: fourSQLWordObjects[shuffleSQLRows[0] - 1],
-        topRightText: fourSQLWordObjects[shuffleSQLRows[1] - 1],
-        bottomLeftText: fourSQLWordObjects[shuffleSQLRows[2] - 1],
-        bottomRightText: fourSQLWordObjects[shuffleSQLRows[3] - 1],
+        topLeftChoice: fourSQLWordObjects[shuffleSQLRows[0] - 1],
+        topRightChoice: fourSQLWordObjects[shuffleSQLRows[1] - 1],
+        bottomLeftChoice: fourSQLWordObjects[shuffleSQLRows[2] - 1],
+        bottomRightChoice: fourSQLWordObjects[shuffleSQLRows[3] - 1],
         promptID: this.randomNumGen(4) // Picks one of the choice ids as the promtp id
       });
-      console.log("fourSQLWordObjects[shuffleSQLRows[1] - 1]",fourSQLWordObjects[shuffleSQLRows[0] - 1], fourSQLWordObjects[shuffleSQLRows[1] - 1], fourSQLWordObjects[shuffleSQLRows[2] - 1], fourSQLWordObjects[shuffleSQLRows[3] - 1])
     });
     console.log(this.state.promptID)
     this.setState({ answeredCorrectly: [0, 0] });
@@ -108,32 +108,26 @@ export default class GamePlayScreen extends Component {
   }
 
   render() {
-    const topLeftText = this.state.topLeftText;
-    const topRightText = this.state.topRightText;
-    const bottomLeftText = this.state.bottomLeftText;
-    const bottomRightText = this.state.bottomRightText;
+    const topLeftChoice = this.state.topLeftChoice;
+    const topRightChoice = this.state.topRightChoice;
+    const bottomLeftChoice = this.state.bottomLeftChoice;
+    const bottomRightChoice = this.state.bottomRightChoice;
     const promptID = this.state.promptID;
     const answeredCorrectly = this.state.answeredCorrectly;
 
-    // const topLeftObj = this.state.topRightObj;
-    // const topRightObj = this.state.topRightObj;
-    // const bottomLeftObj = this.state.bottomLeftObj;
-    // const bottomRightObj = this.state.bottomRightObj;
-    // const promptID = this.state.promptID;
-    // const answeredCorrectly = this.state.answeredCorrectly;
     let promptObj;
     switch (promptID) {
       case 1:
-        promptObj = topLeftText.Pinyin;
+        promptObj = topLeftChoice.Pinyin;
         break;
       case 2:
-        promptObj = topRightText.Pinyin;
+        promptObj = topRightChoice.Pinyin;
         break;
       case 3:
-        promptObj = bottomLeftText.Pinyin;
+        promptObj = bottomLeftChoice.Pinyin;
         break;
       default:
-        promptObj = bottomRightText.Pinyin;
+        promptObj = bottomRightChoice.Pinyin;
 
     }
 
@@ -145,7 +139,7 @@ export default class GamePlayScreen extends Component {
         </View>
         <View style={styles.choicesTopContainer}>
           <Choice
-            text={topLeftText.Chinese}
+            text={topLeftChoice.Chinese}
             promptID={promptID}
             choiceID={1}
             answeredCorrectly={answeredCorrectly}
@@ -153,7 +147,7 @@ export default class GamePlayScreen extends Component {
           >
           </Choice>
           <Choice
-            text={topRightText.Chinese}
+            text={topRightChoice.Chinese}
             promptID={promptID}
             choiceID={2}
             answeredCorrectly={answeredCorrectly}
@@ -162,14 +156,14 @@ export default class GamePlayScreen extends Component {
         </View>
         <View style={styles.choicesBottomContainer}>
           <Choice
-            text={bottomLeftText.Chinese}
+            text={bottomLeftChoice.Chinese}
             promptID={promptID}
             choiceID={3}
             answeredCorrectly={answeredCorrectly}
             wasAnsweredCorrectly={this.wasAnsweredCorrectly}>
           </Choice>
           <Choice
-            text={bottomRightText.Chinese}
+            text={bottomRightChoice.Chinese}
             promptID={promptID}
             choiceID={4}
             answeredCorrectly={answeredCorrectly}
