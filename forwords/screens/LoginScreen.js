@@ -70,7 +70,7 @@ export default class LoginScreen extends React.Component {
         />
         <Button style={styles.button}
           title = 'CLICK FOR DEVELOPING BABY'
-          onPress = {() => navigate('GamePlay')}
+          onPress = {() => navigate('Instruction')}
           color = 'red'
         />
         </View>

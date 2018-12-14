@@ -10,6 +10,8 @@ import SettingsScreen from '../screens/SettingsScreen';
 import GamePlayScreen from '../screens/GamePlay/GamePlayScreen';
 import SinglePlayerModeSelectionScreen from '../screens/SinglePlayerModeSelectionScreen';
 import RegisterScreen from '../screens/RegisterScreen';
+import InstructionScreen from '../screens/InstructionScreen';
+import PlaceholderScreen from '../screens/PlaceholderScreen';
 
 
 
@@ -49,15 +51,6 @@ const PlaceholderStack = createStackNavigator({
   Placeholder: PlaceholderScreen,
 });
 
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Placeholder',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? `ios-link${focused ? '' : '-outline'}` : 'md-link'}
-    />
-  ),
-};
 
 const LinksStack = createStackNavigator({
   Links: LinksScreen,
@@ -101,12 +94,17 @@ SettingsStack.navigationOptions = {
   ),
 };
 
+
 const SinglePlayerModeSelectionStack = createStackNavigator({
   SinglePlayerModeSelection: SinglePlayerModeSelectionScreen,
 });
 
 const GamePlayScreenStack = createStackNavigator({
   GamePlay: GamePlayScreen,
+});
+
+const InstructionStack = createStackNavigator({
+  Instruction: InstructionScreen,
 });
 
 export default createStackNavigator({
@@ -117,5 +115,6 @@ export default createStackNavigator({
   RegisterStack,
   SettingsStack,
   SinglePlayerModeSelectionStack,
-  GamePlayScreenStack
+  GamePlayScreenStack,
+  InstructionStack
 });

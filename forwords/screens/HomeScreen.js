@@ -12,7 +12,6 @@ import {
   View,
   FlatList,
 } from 'react-native';
-import { DrawerNavigator } from 'react-navigation';
 import { WebBrowser } from 'expo';
 import { fullRoutePrefix } from '../constants/API';
 
@@ -67,9 +66,6 @@ export default class HomeScreen extends React.Component {
   }
 }
 
-const App = DrawerNavigator({
-
-});
 
 const styles = StyleSheet.create({
   container: {
