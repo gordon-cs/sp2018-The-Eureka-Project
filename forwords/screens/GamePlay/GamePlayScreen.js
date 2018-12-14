@@ -23,8 +23,8 @@ export default class GamePlayScreen extends Component {
       isLoading: true,
       lessonList: [],
       answeredCorrectly: [0, 0], // [choiceIDGiven, correct=1/wrong=2]
-      topLeftText: '',
-      topRightText: '',
+      topLeftText: {},
+      topRightText: {},
       bottomLeftText: '',
       bottomRightText: '',
       promptID: '',
@@ -78,8 +78,8 @@ export default class GamePlayScreen extends Component {
       const fourSQLWordObjects = res.data; // SQL will always return an ordered array, eg. 5,2,17,11 -> SQL -> 2,5,11,17
       this.setState({
         isLoading: false,
-        topLeftText: fourSQLWordObjects[shuffleSQLRows[0] - 1].Chinese,
-        topRightText: fourSQLWordObjects[shuffleSQLRows[1] - 1].Chinese,
+        topLeftText: fourSQLWordObjects[shuffleSQLRows[0] - 1],
+        topRightText: fourSQLWordObjects[shuffleSQLRows[1] - 1],
         bottomLeftText: fourSQLWordObjects[shuffleSQLRows[2] - 1].Chinese,
         bottomRightText: fourSQLWordObjects[shuffleSQLRows[3] - 1].Chinese,
         promptID: this.randomNumGen(4) // Picks one of the choice ids as the promtp id
@@ -143,7 +143,7 @@ export default class GamePlayScreen extends Component {
         </View>
         <View style={styles.choicesTopContainer}>
           <Choice
-            text={topLeftText}
+            text={topLeftText.Chinese}
             promptID={promptID}
             choiceID={1}
             answeredCorrectly={answeredCorrectly}
@@ -151,7 +151,7 @@ export default class GamePlayScreen extends Component {
           >
           </Choice>
           <Choice
-            text={topRightText}
+            text={topRightText.Chinese}
             promptID={promptID}
             choiceID={2}
             answeredCorrectly={answeredCorrectly}
