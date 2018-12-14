@@ -113,10 +113,34 @@ export default class GamePlayScreen extends Component {
     const promptID = this.state.promptID;
     const answeredCorrectly = this.state.answeredCorrectly;
 
+    // const topLeftObj = this.state.topRightObj;
+    // const topRightObj = this.state.topRightObj;
+    // const bottomLeftObj = this.state.bottomLeftObj;
+    // const bottomRightObj = this.state.bottomRightObj;
+    // const promptID = this.state.promptID;
+    // const answeredCorrectly = this.state.answeredCorrectly;
+    let promptObj;
+    switch (promptID) {
+      case 1:
+        promptObj = topLeftText;
+        break;
+      case 2:
+        promptObj = topRightText;
+        break;
+      case 3:
+        promptObj = bottomLeftText;
+        break;
+      default:
+        promptObj = bottomRightText;
+
+    }
+
     return (
       <View style={styles.mainContainer}>
-        <Prompt>
-        </Prompt>
+        <View style={styles.choicesTopContainer}>
+          <Prompt promptObj={promptObj}>
+          </Prompt>
+        </View>
         <View style={styles.choicesTopContainer}>
           <Choice
             text={topLeftText}
