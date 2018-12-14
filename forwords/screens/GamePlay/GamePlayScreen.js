@@ -27,7 +27,7 @@ export default class GamePlayScreen extends Component {
       topRightText: '',
       bottomLeftText: '',
       bottomRightText: '',
-      promptID: 1,
+      promptID: '',
     };
     this.wasAnsweredCorrectly = this.wasAnsweredCorrectly.bind(this);
   }
@@ -65,25 +65,24 @@ export default class GamePlayScreen extends Component {
   }
 
   async populateChoices() {
-    console.log("in populateChoices()")
     // Hard coded lesson 11
     let length;
     await axios.get('http://' + backwordsIP + ':8080' + '/lesson-words/11').then(res => {
-      length = res.data.length;
+      lessonLength = res.data.length;
     });
-    console.log("array length: ", length);
-    var array = this.fourWordsPicker(length);
-    var arrangeArr = this.fourWordsPicker(4); // Randomize order of choices returned
-    console.log("Pick arrangement", arrangeArr);
-    // Will eventually need a parameter for the specific lesson to pull from
-    await axios.get('http://' + backwordsIP + ':8080' + '/choices/11/ ' + array[0] + '/' + array[1] + '/' + array[2] + '/' + array[3]).then(res => {
-      const choices = res.data;
+    var fourWords = this.fourWordsPicker(lessonLength); // List of four words ids, eg. 5,2,17,11
+    var shuffleSQLRows = this.fourWordsPicker(4); // Randomize order of fourSQLWordObjects returned
+
+    //Hard coded Lesson 11
+    await axios.get('http://' + backwordsIP + ':8080' + '/choices/11/ ' + fourWords[0] + '/' + fourWords[1] + '/' + fourWords[2] + '/' + fourWords[3]).then(res => {
+      const fourSQLWordObjects = res.data; // SQL will always return an ordered array, eg. 5,2,17,11 -> SQL -> 2,5,11,17
       this.setState({
         isLoading: false,
-        topLeftText: choices[arrangeArr[0] - 1].Chinese,
-        topRightText: choices[arrangeArr[1] - 1].Chinese,
-        bottomLeftText: choices[arrangeArr[2] - 1].Chinese,
-        bottomRightText: choices[arrangeArr[3] - 1].Chinese,
+        topLeftText: fourSQLWordObjects[shuffleSQLRows[0] - 1].Chinese,
+        topRightText: fourSQLWordObjects[shuffleSQLRows[1] - 1].Chinese,
+        bottomLeftText: fourSQLWordObjects[shuffleSQLRows[2] - 1].Chinese,
+        bottomRightText: fourSQLWordObjects[shuffleSQLRows[3] - 1].Chinese,
+        promptID: this.randomNumGen(4) // Picks one of the choice ids as the promtp id
       });
     });
     this.setState({ answeredCorrectly: [0, 0] });
