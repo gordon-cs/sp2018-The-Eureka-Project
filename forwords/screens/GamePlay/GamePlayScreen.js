@@ -28,13 +28,25 @@ export default class GamePlayScreen extends Component {
       bottomLeftText: '',
       bottomRightText: '',
       promptID: '',
+      counter: 1,
+      //timer: null,
     };
     this.wasAnsweredCorrectly = this.wasAnsweredCorrectly.bind(this);
   }
 
+  // gameTimerTicker(){
+  //   this.setState({
+  //     counter: this.state.counter - 1
+  //   });
+  // }
   wasAnsweredCorrectly(choiceIDGiven, prompt) {
+    const {navigate} = this.props.navigation;
     if (choiceIDGiven === prompt) {
       this.setState({ answeredCorrectly: [choiceIDGiven, 1] }); // got it correct
+      this.setState({counter: this.state.counter + 1}); // count down from 10
+      if (this.state.counter === 10) {
+        navigate('SinglePlayerModeSelection')
+      }
       TimerMixin.setTimeout(() => {
         this.populateChoices();
       }, 750);
@@ -100,11 +112,16 @@ export default class GamePlayScreen extends Component {
       //   console.log("prompt: ", this.state.prompt);
       // });
       this.populateChoices();
+      // let timer = setInterval(this.tick, 1000);
+      // this.setState({timer});
     } catch (error) {
       throw new Error('component will not mount');
     }
   }
 
+  // componentWillUnmount() {
+  //   this.clearInterval(this.state.timer);
+  // }
   render() {
     const topLeftText = this.state.topLeftText;
     const topRightText = this.state.topRightText;
@@ -112,7 +129,7 @@ export default class GamePlayScreen extends Component {
     const bottomRightText = this.state.bottomRightText;
     const promptID = this.state.promptID;
     const answeredCorrectly = this.state.answeredCorrectly;
-
+    // <div>Loading{"...".substr(0, this.state.counter % 3 + 1)}</div>
     return (
       <View style={styles.mainContainer}>
         <Prompt>
