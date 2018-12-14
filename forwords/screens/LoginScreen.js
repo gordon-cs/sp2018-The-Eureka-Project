@@ -68,11 +68,11 @@ export default class LoginScreen extends React.Component {
           onPress = {() => navigate('Register')}
           color = 'purple'
         />
-        <Button style={styles.button}
+        {/* <Button style={styles.button}
           title = 'CLICK FOR DEVELOPING BABY'
           onPress = {() => navigate('Instruction')}
           color = 'red'
-        />
+        /> */}
         </View>
     </ScrollView>
   </View>
