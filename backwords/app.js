@@ -10,16 +10,13 @@ var logger = require('morgan');
 // Body Parser Middleware
 app.use(bodyParser.json()); 
 
-var indexRouter = require('./routes/index');
-var peopleRouter = require('./routes/people');
-
 //CORS Middleware
 app.use(function (req, res, next) {
     //Enabling CORS 
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, contentType,Content-Type, Accept, Authorization");
-     next();
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, contentType,Content-Type, Accept, Authorization");
+    next();
    });
    
 //Setting up server
@@ -45,74 +42,96 @@ connection.connect(function(err) {
 
 app.get('/', function(req, res) {
 	res.send("Welcome to forwords");
-})
+});
 
 app.get('/people', function (req, res) {
-	connection.query('SELECT * FROM users', function (error, results, fields) {
+	console.log("in /people route in backend");
+	connection.query('SELECT * FROM Users', function (error, results, fields) {
 		if (error)
 			throw error;
 		res.json(results);
-
-// 		results.forEach(result => {
-// 			console.log(result);
-// 		});
 	});
-
-// 	res.send("your get for '/people' worked!")
 })
 
-// var  executeQuery = function(res, query){             
-//   connection.connect(dbConfig, function (err) {
-//     if (err) {   
-//       console.log("Error while connecting database :- " + err);
-//       res.send(err);
-//     }
-//     else {
-      // create Request object
-//       var request = new sql.Request();
-      // query to the database
-//       request.query(query, function (err, res) {
-//         if (err) {
-//           console.log("Error while querying database :- " + err);
-//           res.send(err);
-//         }
-//         else {
-//           res.send(res);
-//         }
-//       });
-//     }
-//   });
-// }
+app.get('/targetLanguage', function (req, res) {
+	console.log("in /targetLanguage route in backend");
+	connection.query('SELECT TargetLanguage FROM Users WHERE FirstName = "Nikki"', function (error, results, fields) {
+		if (error)
+			throw error;
+		res.json(results);
+	});
+})
 
-// GET API
-// app.get("/api/people", function(req , res){
-//   var query = "SELECT * FROM users;";
-//   executeQuery (res, query);
+app.get('/lesson-list', function (req, res) {
+	console.log("in /lesson-list route in backend");
+	connection.query('SELECT * FROM Lessons;', function (error, results, fields) {
+		if (error)
+			throw error;
+		res.json(results);
+	});
+})
 
-// });
+// Gets a single word, for multiplayer
+app.get('/word/:id', function (req, res) {
+  console.log('in /word route in backend');
+  var id = req.params.id;
+  connection.query('SELECT * FROM Lesson11 WHERE ID = ' + id + ';', function (error, results, fields) {
+    if (error)
+      throw error;
+    res.json(results);
+  });
+})
+
+app.get('/choices/:lesson/:first/:second/:third/:fourth', function (req, res) {
+  console.log('in /choices route in backend');
+  var lesson = req.params.lesson;
+  var first = req.params.first;
+  var second = req.params.second;
+  var third = req.params.third;
+  var fourth = req.params.fourth;
+  connection.query('SELECT * FROM Lesson' + lesson + ' WHERE ID in (' + first +',' + second + ',' + third + ',' + fourth + ');', function (error, results, fields) {
+    if (error)
+      throw error;
+    res.json(results);
+  });
+})
+
+app.get('/lesson-words/:lesson', function(req, res) {
+  console.log('in /lesson-words from backend');
+  var lesson = req.params.lesson;
+  console.log('url param lesson: ', lesson);
+  connection.query('SELECT * FROM Lesson11;', function (error, results, fields) {
+    if (error)
+      throw error;
+    res.json(results);
+  });
+})
 
 //POST API
-app.post("/api/user", function(req , res){
-  var query = "INSERT INTO users (FirstName,LastName) VALUES ('Russ','Tuck');" 
-//   executeQuery (res, query);
+// app.post('/user', data);
+app.post('/user', function(req , res){
+  // res.sendStatus(200);
+  // res.send('Post request sent');
+  // console.log(res.data);
+  var query = "INSERT INTO Users (FirstName,LastName, TargetLanguage) VALUES ('Russ','Tuck','CN'); SELECT * FROM Users;" 
+  connection.query (query, function (error, results) {
+    if (error)
+			throw error;
+		res.json(results);
+  });
 });
 
 //PUT API
-app.put("/api/user/:id", function(req , res){
-  var query = "UPDATE users SET LastName = Bjork WHERE FirstName = Russ;"
+app.put('/api/user/:id', function(req , res){
+  var query = "UPDATE Users SET LastName = Bjork WHERE FirstName = Russ;"
 //   executeQuery (res, query);
 });
 
 // DELETE API
-app.delete("/api/user /:id", function(req , res){
-  var query = "DELETE FROM users WHERE FirstName=Russ;"
+app.delete('/user /:id', function(req , res){
+  var query = "DELETE FROM Users WHERE FirstName=Russ;"
 //   executeQuery (res, query);
 });
-
-// app.get("/url", (req, res, next) => {
-//   res.json(["Tony","Lisa","Michael","Ginger","Food"]);
-// });
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -122,9 +141,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-// app.use('/', indexRouter);
-// app.use('/people', peopleRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -138,8 +154,8 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-	res.send(err.status);
+  res.sendStatus(err.status || 500);
+	res.sendStatus(err.status);
 //  res.render('error');
 });
 
