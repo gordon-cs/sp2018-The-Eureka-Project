@@ -25,8 +25,8 @@ export default class GamePlayScreen extends Component {
       answeredCorrectly: [0, 0], // [choiceIDGiven, correct=1/wrong=2]
       topLeftText: {},
       topRightText: {},
-      bottomLeftText: '',
-      bottomRightText: '',
+      bottomLeftText: {},
+      bottomRightText: {},
       promptID: '',
     };
     this.wasAnsweredCorrectly = this.wasAnsweredCorrectly.bind(this);
@@ -80,11 +80,13 @@ export default class GamePlayScreen extends Component {
         isLoading: false,
         topLeftText: fourSQLWordObjects[shuffleSQLRows[0] - 1],
         topRightText: fourSQLWordObjects[shuffleSQLRows[1] - 1],
-        bottomLeftText: fourSQLWordObjects[shuffleSQLRows[2] - 1].Chinese,
-        bottomRightText: fourSQLWordObjects[shuffleSQLRows[3] - 1].Chinese,
+        bottomLeftText: fourSQLWordObjects[shuffleSQLRows[2] - 1],
+        bottomRightText: fourSQLWordObjects[shuffleSQLRows[3] - 1],
         promptID: this.randomNumGen(4) // Picks one of the choice ids as the promtp id
       });
+      console.log("fourSQLWordObjects[shuffleSQLRows[1] - 1]",fourSQLWordObjects[shuffleSQLRows[0] - 1], fourSQLWordObjects[shuffleSQLRows[1] - 1], fourSQLWordObjects[shuffleSQLRows[2] - 1], fourSQLWordObjects[shuffleSQLRows[3] - 1])
     });
+    console.log(this.state.promptID)
     this.setState({ answeredCorrectly: [0, 0] });
   }
 
@@ -122,16 +124,16 @@ export default class GamePlayScreen extends Component {
     let promptObj;
     switch (promptID) {
       case 1:
-        promptObj = topLeftText;
+        promptObj = topLeftText.Pinyin;
         break;
       case 2:
-        promptObj = topRightText;
+        promptObj = topRightText.Pinyin;
         break;
       case 3:
-        promptObj = bottomLeftText;
+        promptObj = bottomLeftText.Pinyin;
         break;
       default:
-        promptObj = bottomRightText;
+        promptObj = bottomRightText.Pinyin;
 
     }
 
@@ -160,14 +162,14 @@ export default class GamePlayScreen extends Component {
         </View>
         <View style={styles.choicesBottomContainer}>
           <Choice
-            text={bottomLeftText}
+            text={bottomLeftText.Chinese}
             promptID={promptID}
             choiceID={3}
             answeredCorrectly={answeredCorrectly}
             wasAnsweredCorrectly={this.wasAnsweredCorrectly}>
           </Choice>
           <Choice
-            text={bottomRightText}
+            text={bottomRightText.Chinese}
             promptID={promptID}
             choiceID={4}
             answeredCorrectly={answeredCorrectly}
