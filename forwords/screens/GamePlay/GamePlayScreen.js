@@ -74,7 +74,7 @@ export default class GamePlayScreen extends Component {
     var shuffleSQLRows = this.fourWordsPicker(4); // Randomize order of fourSQLWordObjects returned
 
     //Hard coded Lesson 11
-    await axios.get('http://' + backwordsIP + ':8080' + '/fourSQLWordObjects/11/ ' + fourWords[0] + '/' + fourWords[1] + '/' + fourWords[2] + '/' + fourWords[3]).then(res => {
+    await axios.get('http://' + backwordsIP + ':8080' + '/choices/11/ ' + fourWords[0] + '/' + fourWords[1] + '/' + fourWords[2] + '/' + fourWords[3]).then(res => {
       const fourSQLWordObjects = res.data; // SQL will always return an ordered array, eg. 5,2,17,11 -> SQL -> 2,5,11,17
       this.setState({
         isLoading: false,
