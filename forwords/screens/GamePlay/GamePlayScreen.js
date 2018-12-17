@@ -43,7 +43,7 @@ export default class GamePlayScreen extends Component {
     const {navigate} = this.props.navigation;
     if (choiceIDGiven === prompt) {
       this.setState({ answeredCorrectly: [choiceIDGiven, 1] }); // got it correct
-       this.setState({counter: this.state.counter + 1}); count the number of correct answers, up to 10 correct
+     this.setState({counter: this.state.counter + 1}); // count the number of correct answers, up to 10 correct 
       if (this.state.counter === 10) {
         navigate('SinglePlayerModeSelection')
       }
