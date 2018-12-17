@@ -74,7 +74,7 @@ export default class SinglePlayerModeSelectionScreen extends Component {
         />
         <Button style={styles.button}
           title = '▶️'
-          onPress={() => navigate('GamePlay')}
+          onPress={() => navigate('Instruction')}
         />
       </View>
     );
