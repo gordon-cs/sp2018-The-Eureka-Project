@@ -10,6 +10,8 @@ import SettingsScreen from '../screens/SettingsScreen';
 import GamePlayScreen from '../screens/GamePlay/GamePlayScreen';
 import SinglePlayerModeSelectionScreen from '../screens/SinglePlayerModeSelectionScreen';
 import RegisterScreen from '../screens/RegisterScreen';
+import InstructionScreen from '../screens/InstructionScreen';
+import PlaceholderScreen from '../screens/PlaceholderScreen';
 
 
 
@@ -44,6 +46,11 @@ LoginStack.navigationOptions = {
     />
   ),
 };
+
+const PlaceholderStack = createStackNavigator({
+  Placeholder: PlaceholderScreen,
+});
+
 
 const LinksStack = createStackNavigator({
   Links: LinksScreen,
@@ -87,6 +94,7 @@ SettingsStack.navigationOptions = {
   ),
 };
 
+
 const SinglePlayerModeSelectionStack = createStackNavigator({
   SinglePlayerModeSelection: SinglePlayerModeSelectionScreen,
 });
@@ -95,12 +103,18 @@ const GamePlayScreenStack = createStackNavigator({
   GamePlay: GamePlayScreen,
 });
 
+const InstructionStack = createStackNavigator({
+  Instruction: InstructionScreen,
+});
+
 export default createStackNavigator({
   LoginStack,
   HomeStack,
+  PlaceholderStack,
   LinksStack,
   RegisterStack,
   SettingsStack,
   SinglePlayerModeSelectionStack,
-  GamePlayScreenStack
+  GamePlayScreenStack,
+  InstructionStack
 });

@@ -9,7 +9,8 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  FlatList,
 } from 'react-native';
 import { WebBrowser } from 'expo';
 import { fullRoutePrefix } from '../constants/API';
@@ -60,6 +61,7 @@ export default class HomeScreen extends React.Component {
     );
   }
 }
+
 
 const styles = StyleSheet.create({
   container: {
