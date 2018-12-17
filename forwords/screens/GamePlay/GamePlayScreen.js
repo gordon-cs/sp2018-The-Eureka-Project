@@ -28,16 +28,30 @@ export default class GamePlayScreen extends Component {
       bottomLeftChoice: {},
       bottomRightChoice: {},
       promptID: '',
+      counter: 1,
+      //timer: null,
     };
     this.wasAnsweredCorrectly = this.wasAnsweredCorrectly.bind(this);
   }
 
+  // gameTimerTicker(){
+  //   this.setState({
+  //     counter: this.state.counter - 1
+  //   });
+  // }
   wasAnsweredCorrectly(choiceIDGiven, prompt) {
+    const {navigate} = this.props.navigation;
     if (choiceIDGiven === prompt) {
       this.setState({ answeredCorrectly: [choiceIDGiven, 1] }); // got it correct
+     this.setState({counter: this.state.counter + 1}); // count the number of correct answers, up to 10 correct 
+      if (this.state.counter === 10) {
+        navigate('SinglePlayerModeSelection')
+      }
+else {
       TimerMixin.setTimeout(() => {
         this.populateChoices();
       }, 750);
+} // Delay the refresh of screen so user can see the correct answer response
     } else {
       this.setState({ answeredCorrectly: [choiceIDGiven, 2] }); // got it incorrect
     }
@@ -102,11 +116,16 @@ export default class GamePlayScreen extends Component {
       //   console.log("prompt: ", this.state.prompt);
       // });
       this.populateChoices();
+      // let timer = setInterval(this.tick, 1000);
+      // this.setState({timer});
     } catch (error) {
       throw new Error('component will not mount');
     }
   }
 
+  // componentWillUnmount() {
+  //   this.clearInterval(this.state.timer);
+  // }
   render() {
     const topLeftChoice = this.state.topLeftChoice;
     const topRightChoice = this.state.topRightChoice;
