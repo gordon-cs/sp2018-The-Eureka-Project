@@ -47,6 +47,7 @@ export default class GamePlayScreen extends Component {
       if (this.state.counter === 10) {
         navigate('SinglePlayerModeSelection')
       }
+else {
       TimerMixin.setTimeout(() => {
         this.populateChoices();
       }, 750);
