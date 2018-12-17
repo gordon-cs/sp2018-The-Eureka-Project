@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, {Component} from 'React';
 import {Button,
-    KeyboardAvoidingView,
     StyleSheet,
     Text,
     TextInput,
@@ -66,55 +65,55 @@ export default class RegisterScreen extends Component {
         const {navigate} = this.props.navigation;
         let content;
         return (
-            <KeyboardAvoidingView style={styles.container} behavior="position">
+            <View style={styles.container}>
                 <View style={styles.contentContainer}>
-                    <Text style={styles.title}>
-                        Register!
-                    </Text>
-                    <TextInput
-                        onChangeText={(firstName) => this.setState({firstName})}
-                        placeholder='First Name'
-                        returnKeyType= "next"
-                        style={{height: 60, width: 200}}
-                    />
-                    <TextInput 
-                        onChangeText={(lastName) => this.setState({lastName})}
-                        placeholder='Last Name' 
-                        returnKeyType= "next"
-                        style={{height: 60, width: 200}}
-                    />
-                    <TextInput 
-                        onChangeText={(email) => this.setState({email})}
-                        placeholder='Email'
-                        returnKeyType= "next"
-                        style={{height: 60, width: 200}}/>
-                    <TextInput 
-                        onChangeText={(password) => this.setState({password})}
-                        placeholder='Password' 
-                        returnKeyType= "next"
-                        secureTextEntry={true}
-                        style={{height: 60, width: 200}}
-                    />
-                    <TextInput 
-                        placeholder='Confirm Password'
-                        secureTextEntry={true}
-                        style={{height: 60, width: 200}} />
-                    <Text>
-                        Register as...
-                    </Text>
-                    <Button 
-                        onPress = {this.registerStudent}
-                        style={styles.button}
-                        title='Student'/>
-                    <Button 
-                        onPress = {this.registerTeacher}
-                        style={styles.button}
-                        title='Teacher'/>
-                    <Button
-                        onPress = {() => navigate('Login')}
-                        title = 'Cancel'/>
+                <Text style={styles.title}>
+                    Register!
+                </Text>
+                <TextInput
+                    onChangeText={(firstName) => this.setState({firstName})}
+                    placeholder='First Name'
+                    returnKeyType= "next"
+                    style={{height: 60, width: 200}}
+                />
+                <TextInput 
+                    onChangeText={(lastName) => this.setState({lastName})}
+                    placeholder='Last Name' 
+                    returnKeyType= "next"
+                    style={{height: 60, width: 200}}
+                />
+                <TextInput 
+                    onChangeText={(email) => this.setState({email})}
+                    placeholder='Email'
+                    returnKeyType= "next"
+                    style={{height: 60, width: 200}}/>
+                <TextInput 
+                    onChangeText={(password) => this.setState({password})}
+                    placeholder='Password' 
+                    returnKeyType= "next"
+                    secureTextEntry={true}
+                    style={{height: 60, width: 200}}
+                />
+                <TextInput 
+                    placeholder='Confirm Password'
+                    secureTextEntry={true}
+                    style={{height: 60, width: 200}} />
+                <Text>
+                    Register as...
+                </Text>
+                <Button 
+                    onPress = {this.registerStudent}
+                    style={styles.button}
+                    title='Student'/>
+                <Button 
+                    onPress = {this.registerTeacher}
+                    style={styles.button}
+                    title='Teacher'/>
+                <Button
+                    onPress = {() => navigate('Login')}
+                    title = 'Cancel'/>
                 </View>
-            </KeyboardAvoidingView>
+            </View>
         )
     }
 }
