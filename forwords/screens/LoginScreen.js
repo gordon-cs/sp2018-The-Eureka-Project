@@ -4,7 +4,6 @@ import {
   AppRegistry,
   Button,
   Image,
-  KeyboardAvoidingView,
   Platform,
   Form,
   ScrollView,
@@ -33,29 +32,20 @@ export default class LoginScreen extends React.Component {
   render() {
     const {navigate} = this.props.navigation;
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="position">
-        <View style={styles.getStartedContainer}>
-          <Text style={styles.forwordsText}>
-                forwords!
-          </Text>
-          <TextInput
-            style={{height: 60, width: 200}}
-            placeholder = "Email"
-            onChangeText={(text) => this.setState({text})}
-            autoCorrect={false}
-            autoCapitalize="none"
-            returnKeyType= "next"
+   <View style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <View style={styles.getStartedContainer}>
+        <Text style={styles.forwordsText}>
+              forwords!
+        </Text>
 
-          />
-          <TextInput
-            style={{height: 60, width: 200}}
-            placeholder = "Password"
-            onChangeText={(text) => this.setState({text})}
-            autoCorrect={false}
-            autoCapitalize="none"
-            secureTextEntry={true}
-            returnKeyType= "done"
-          />
+        <TextInput
+          style={{height: 60, width: 200}}
+          placeholder = "Email"
+          onChangeText={(text) => this.setState({text})}
+          autoCorrect={false}
+          autoCapitalize="none"
+          returnKeyType= "next"
 
         />
         <TextInput
@@ -84,8 +74,9 @@ export default class LoginScreen extends React.Component {
           color = 'red'
         /> */}
         </View>
-      </KeyboardAvoidingView>
-    );
+    </ScrollView>
+  </View>
+   );
   }
 }
 
