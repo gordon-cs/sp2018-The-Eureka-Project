@@ -72,10 +72,11 @@ app.get('/lesson-list', function (req, res) {
 })
 
 // Gets a single word, for multiplayer
-app.get('/word/:id', function (req, res) {
+app.get('/word/:lesson/:id', function (req, res) {
   console.log('in /word route in backend');
   var id = req.params.id;
-  connection.query('SELECT * FROM Lesson11 WHERE ID = ' + id + ';', function (error, results, fields) {
+  var lesson = req.params.lesson;
+  connection.query('SELECT * FROM Lesson' + lesson + ' WHERE ID = ' + id + ';', function (error, results, fields) {
     if (error)
       throw error;
     res.json(results);
@@ -100,7 +101,7 @@ app.get('/lesson-words/:lesson', function(req, res) {
   console.log('in /lesson-words from backend');
   var lesson = req.params.lesson;
   console.log('url param lesson: ', lesson);
-  connection.query('SELECT * FROM Lesson11;', function (error, results, fields) {
+  connection.query('SELECT * FROM Lesson' + lesson +';', function (error, results, fields) {
     if (error)
       throw error;
     res.json(results);
