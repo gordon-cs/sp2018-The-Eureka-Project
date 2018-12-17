@@ -51,6 +51,7 @@ else {
       TimerMixin.setTimeout(() => {
         this.populateChoices();
       }, 750);
+} // Delay the refresh of screen so user can see the correct answer response
     } else {
       this.setState({ answeredCorrectly: [choiceIDGiven, 2] }); // got it incorrect
     }
