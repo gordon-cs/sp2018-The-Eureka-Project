@@ -1,24 +1,13 @@
 import React, {Component} from 'react';
 import {
-  Alert,
-  AppRegistry,
   Button,
-  Image,
   Platform,
-  Form,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
-  Container,
-  TextInput,
-  Item,
-  Label,
-  Input} from 'react-native'; // There are some unecessary imports, but they were made just to be safe
-import { WebBrowser } from 'expo';
+  TextInput,} from 'react-native'; // There are some unecessary imports, but they were made just to be safe
 
-import { MonoText } from '../components/StyledText';
 
 export default class LoginScreen extends React.Component {
   static navigationOptions = {
