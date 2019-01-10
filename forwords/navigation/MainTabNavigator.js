@@ -8,6 +8,7 @@ import SinglePlayerModeSelectionScreen from '../screens/SinglePlayerModeSelectio
 import RegisterScreen from '../screens/RegisterScreen';
 import InstructionScreen from '../screens/InstructionScreen';
 import PlaceholderScreen from '../screens/PlaceholderScreen';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -21,6 +22,9 @@ const PlaceholderStack = createStackNavigator({
   Placeholder: PlaceholderScreen,
 });
 
+const ForgotPasswordStack = createStackNavigator({
+  ForgotPassword: ForgotPasswordScreen,
+});
 
 const RegisterStack = createStackNavigator({
   Register: RegisterScreen,
@@ -46,9 +50,10 @@ export default createStackNavigator({
   LoginStack,
   RegisterStack,
   HomeStack,
+  ForgotPasswordStack,
   PlaceholderStack,
   SettingsStack,
   SinglePlayerModeSelectionStack,
   GamePlayScreenStack,
-  InstructionStack
+  InstructionStack,
 });
