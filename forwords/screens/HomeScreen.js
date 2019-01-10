@@ -1,19 +1,13 @@
 import React from 'react';
 import axios from 'axios';
 import {
-  Alert,
   Button,
-  Image,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
-  FlatList,
 } from 'react-native';
-import { WebBrowser } from 'expo';
-import { fullRoutePrefix } from '../constants/API';
+import * as firebase from 'firebase';
 
 var backwordsIP = '172.27.43.141';
 
@@ -41,6 +35,12 @@ export default class HomeScreen extends React.Component {
     }
   }
 
+  onSignOutPress = () => {
+    const { navigate } = this.props.navigation;
+    firebase.auth().signOut();
+    navigate('Login');
+  }
+
   render() {
     const { navigate } = this.props.navigation;
     return (
@@ -56,12 +56,16 @@ export default class HomeScreen extends React.Component {
             onPress={() => navigate('SinglePlayerModeSelection')}
             color='purple'
           />
+          <Button style={styles.button}
+            title='Sign Out!'
+            onPress={() => this.onSignOutPress()}
+            color='purple'
+          />
         </ScrollView>
       </View>
     );
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {
