@@ -1,71 +1,86 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Button,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
+  Alert,
   View,
-  TextInput,} from 'react-native'; // There are some unecessary imports, but they were made just to be safe
+  TextInput,
+  KeyboardAvoidingView,
+} from 'react-native'; // There are some unecessary imports, but they were made just to be safe
+import * as firebase from 'firebase';
 
 
 export default class LoginScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
- 
+
   constructor(props) {
     super(props);
-    this.state = { text: '' };
+    this.state = {
+      text: '',
+      email: '',
+      password: '',
+    };
+  }
+
+  onLoginPress = () => {
+    console.log("GOT INTO onloginpress")
+    firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+      .then(() => {
+        console.log("success onLoginPress")
+      }, (error) => {
+        Alert.alert(error.message);
+        console.log("failure onLoginPress")
+      }
+      );
   }
   render() {
-    const {navigate} = this.props.navigation;
+    const { navigate } = this.props.navigation;
     return (
-   <View style={styles.container}>
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <View style={styles.getStartedContainer}>
-        <Text style={styles.forwordsText}>
-              forwords!
-        </Text>
-
-        <TextInput
-          style={{height: 60, width: 200}}
-          placeholder = "Email"
-          onChangeText={(text) => this.setState({text})}
-          autoCorrect={false}
-          autoCapitalize="none"
-          returnKeyType= "next"
-
-        />
-        <TextInput
-          style={{height: 60, width: 200}}
-          placeholder = "Password"
-          onChangeText={(text) => this.setState({text})}
-          autoCorrect={false}
-          autoCapitalize="none"
-          secureTextEntry={true}
-          returnKeyType= "done"
-        />
-
-        <Button style={styles.button}
-          title = 'Log In'
-          onPress={() => navigate('Home')}
-          color = 'purple'
-        />
-        <Button style={styles.button}
-          title = 'New User? Register here!'
-          onPress = {() => navigate('Register')}
-          color = 'purple'
-        />
-        {/* <Button style={styles.button}
-          title = 'CLICK FOR DEVELOPING BABY'
-          onPress = {() => navigate('Instruction')}
-          color = 'red'
-        /> */}
+      <KeyboardAvoidingView style={styles.container} behavior="position" keyboardVerticalOffset={-25}>
+        <View style={styles.getStartedContainer}>
+          <Text style={styles.forwordsText}>
+            forwords!
+            </Text>
+          <TextInput
+            style={{ height: 60, width: 200 }}
+            placeholder="Email"
+            onChangeText={(text) => this.setState({ text })}
+            autoCorrect={false}
+            autoCapitalize="none"
+            returnKeyType="next"
+          />
+          <TextInput
+            style={{ height: 60, width: 200 }}
+            placeholder="Password"
+            onChangeText={(text) => this.setState({ text })}
+            autoCorrect={false}
+            autoCapitalize="none"
+            secureTextEntry={true}
+            returnKeyType="done"
+          />
+          <Button style={styles.button}
+            title='Log In'
+            onPress={() => navigate('Home')}
+            color='purple'
+          />
+          <Button style={styles.button}
+            title='New User? Register here!'
+            onPress={() => navigate('Register')}
+            color='purple'
+          />
+          {/* <Button style={styles.button}
+              title = 'CLICK FOR DEVELOPING BABY'
+              onPress = {() => navigate('GamePlay')}
+              color = 'red'
+            /> */}
         </View>
-    </ScrollView>
-  </View>
-   );
+      </KeyboardAvoidingView>
+    );
   }
 }
 
