@@ -70,6 +70,11 @@ export default class LoginScreen extends React.Component {
             onPress={() => navigate('Register')}
             color='purple'
           />
+          <Button style={styles.button}
+            title='I forgot my password.'
+            onPress={() => navigate('ForgotPassword')}
+            color='purple'
+          />
           {/* <Button style={styles.button}
               title = 'CLICK FOR DEVELOPING BABY'
               onPress = {() => navigate('GamePlay')}
