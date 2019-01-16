@@ -7,7 +7,7 @@ import {
   View,
   TextInput,
   KeyboardAvoidingView,
-} from 'react-native'; // There are some unecessary imports, but they were made just to be safe
+} from 'react-native'; 
 import * as firebase from 'firebase';
 
 
