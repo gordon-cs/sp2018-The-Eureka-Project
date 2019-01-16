@@ -185,6 +185,10 @@ ssh offcampus to @nabi.cs.gordon.edu and then ssh into anything on campus that h
 
 https://medium.com/@miguelhaba/my-first-game-with-react-native-40a83aa91274
 
+Passing params:
+
+https://reactnavigation.org/docs/en/params.html
+
 # Misc
 
 **The forwords email:**
