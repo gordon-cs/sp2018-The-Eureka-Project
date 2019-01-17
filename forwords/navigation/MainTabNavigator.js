@@ -1,16 +1,15 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
-
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/LoginScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import GamePlayScreen from '../screens/GamePlay/GamePlayScreen';
-import SinglePlayerModeSelectionScreen from '../screens/SinglePlayerModeSelectionScreen';
+import SinglePlayerModeSelectionScreen from '../screens/Selection/SinglePlayerModeSelectionScreen';
 import RegisterScreen from '../screens/RegisterScreen';
-import InstructionScreen from '../screens/InstructionScreen';
+import InstructionScreen from '../screens/Instruction/InstructionScreen';
 import PlaceholderScreen from '../screens/PlaceholderScreen';
 
 
