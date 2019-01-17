@@ -40,18 +40,18 @@ export default class GamePlayScreen extends Component {
   //   });
   // }
   wasAnsweredCorrectly(choiceIDGiven, prompt) {
-    const {navigate} = this.props.navigation;
+    const { navigate } = this.props.navigation;
     if (choiceIDGiven === prompt) {
       this.setState({ answeredCorrectly: [choiceIDGiven, 1] }); // got it correct
-     this.setState({counter: this.state.counter + 1}); // count the number of correct answers, up to 10 correct 
+      this.setState({ counter: this.state.counter + 1 }); // count the number of correct answers, up to 10 correct 
       if (this.state.counter === 10) {
         navigate('SinglePlayerModeSelection')
       }
-else {
-      TimerMixin.setTimeout(() => {
-        this.populateChoices();
-      }, 750);
-} // Delay the refresh of screen so user can see the correct answer response
+      else {
+        TimerMixin.setTimeout(() => {
+          this.populateChoices();
+        }, 750);
+      } // Delay the refresh of screen so user can see the correct answer response
     } else {
       this.setState({ answeredCorrectly: [choiceIDGiven, 2] }); // got it incorrect
     }
@@ -79,17 +79,16 @@ else {
   }
 
   async populateChoices() {
-    // Hard coded lesson 22
+    var lesson = this.props.navigation.state.params.lesson;
+    console.log("IN GAMEPLAYSCREEN lesson being passed: ", lesson);
     let length;
-    await axios.get('http://' + backwordsIP + ':8080' + '/lesson-words/22').then(res => {
+    await axios.get('http://' + backwordsIP + ':8080' + '/lesson-words/' + lesson).then(res => {
       lessonLength = res.data.length;
       console.log(lessonLength)
     });
     var fourWords = this.fourWordsPicker(lessonLength); // Array of four words ids, eg. 5,2,17,11
     var shuffleSQLRows = this.fourWordsPicker(4); // Randomize order of fourSQLWordObjects returned
-
-    //Hard coded Lesson 22
-    await axios.get('http://' + backwordsIP + ':8080' + '/choices/22/ ' + fourWords[0] + '/' + fourWords[1] + '/' + fourWords[2] + '/' + fourWords[3]).then(res => {
+    await axios.get('http://' + backwordsIP + ':8080' + '/choices/' + lesson + '/ ' + fourWords[0] + '/' + fourWords[1] + '/' + fourWords[2] + '/' + fourWords[3]).then(res => {
       const fourSQLWordObjects = res.data; // SQL will always return an ordered array, eg. 5,2,17,11 -> SQL -> 2,5,11,17
       this.setState({
         isLoading: false,
@@ -97,10 +96,10 @@ else {
         topRightChoice: fourSQLWordObjects[shuffleSQLRows[1] - 1],
         bottomLeftChoice: fourSQLWordObjects[shuffleSQLRows[2] - 1],
         bottomRightChoice: fourSQLWordObjects[shuffleSQLRows[3] - 1],
-        promptID: this.randomNumGen(4) // Picks one of the choice ids as the promtp id
+        promptID: this.randomNumGen(4) // Picks one of the choice ids as the prompt id
       });
     });
-    console.log(this.state.promptID)
+    console.log("promptID: ", this.state.promptID);
     this.setState({ answeredCorrectly: [0, 0] });
   }
 

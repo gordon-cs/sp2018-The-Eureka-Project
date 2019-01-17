@@ -172,24 +172,22 @@ Our DB is called "forwords."
 > USE forwords; 
 
 # Our Linux VM: EurekaProjectVM on HyperV-Lab1
-(Created through Hyper V Lab) It is a server VM, not a workstation VM. (AKA there is no UI.)
+(Created through Hyper V Lab) It is a server VM, not a workstation VM.
 
 Root/Sudoer Privileges:
 
 > first name: Eureka Project
 
-> password: 4words!
-
 ssh offcampus to @nabi.cs.gordon.edu and then ssh into anything on campus that has an ssh server, which means we would just need to put in the local IP of our server (10.100.150.128) to get in.
-
-We can upgrade to a workstation (have UI), there should be documentation somewhere for that.
-
-As of 11/3/18 1:05pm, it does not have a network connection yet so we cannot access it.
 
 
 # Libraries & Helpful Sources of Information 
 
 https://medium.com/@miguelhaba/my-first-game-with-react-native-40a83aa91274
+
+Passing params:
+
+https://reactnavigation.org/docs/en/params.html
 
 # Misc
 

@@ -35,7 +35,7 @@ export default class SinglePlayerModeSelectionScreen extends Component {
       });
     } catch (err) {
       throw new Error('/lesson-list did not work');
-    }
+    };
   }
 
   render() {
