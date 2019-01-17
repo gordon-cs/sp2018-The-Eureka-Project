@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { AppRegistry, Button, FlatList, StyleSheet, Text, View, ActivityIndicator, Platform } from 'react-native';
-import { fullRoutePrefix } from '../constants/API';
+import { fullRoutePrefix } from '../../constants/API';
 
 var backwordsIP = '172.27.43.141';
 
