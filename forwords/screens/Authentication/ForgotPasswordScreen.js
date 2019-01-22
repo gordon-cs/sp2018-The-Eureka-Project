@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, View, Text, TextInput, Button, Alert } from 'react-native';
-import { NavigationActions } from 'react-navigation';
 import * as firebase from 'firebase';
 
 export default class ForgotPasswordScreen extends React.Component {

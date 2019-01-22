@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-    Button,
-    Image,
-    Platform,
-    StyleSheet,
-    Text,
-    View
-  } from 'react-native';
+import { Button, StyleSheet, Text, View, } from 'react-native';
 
   export default class InstructionScreen extends React.Component {
     static navigationOptions = {
@@ -43,7 +36,6 @@ import {
             </View>
         )
     }
-
 };
 
 const styles = StyleSheet.create({

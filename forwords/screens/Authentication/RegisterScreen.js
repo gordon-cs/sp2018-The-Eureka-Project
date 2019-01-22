@@ -1,17 +1,7 @@
 import axios from "axios";
 import React, { Component } from "React";
-import {
-    Button,
-    StyleSheet,
-    Text,
-    TextInput,
-    View,
-    Alert,
-    KeyboardAvoidingView
-} from "react-native";
+import { Button, StyleSheet, Text, TextInput, View, Alert, KeyboardAvoidingView, } from "react-native";
 import * as firebase from "firebase";
-
-var backwordsIP = "172.27.43.141";
 
 export default class RegisterScreen extends Component {
     static navigationOptions = {

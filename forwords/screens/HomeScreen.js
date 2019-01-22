@@ -1,15 +1,6 @@
 import React from 'react';
-import axios from 'axios';
-import {
-  Button,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { Button, ScrollView, StyleSheet, Text, View, } from 'react-native';
 import * as firebase from 'firebase';
-
-var backwordsIP = '172.27.43.141';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -18,21 +9,6 @@ export default class HomeScreen extends React.Component {
 
   constructor(props) {
     super(props);
-  }
-
-  async componentWillMount() {
-    console.log("Got into componentDidMount");
-    try {
-      console.log("Got into try for /people")
-      axios.get('http://' + backwordsIP + ':8080' + '/people').then(res => {
-        const users = res.data;
-        console.log("res: ", res);
-        console.log("users: ", users);
-        // this.setState({ users });
-      });
-    } catch (err) {
-      throw new Error('/people did not work');
-    }
   }
 
   onSignOutPress = () => {

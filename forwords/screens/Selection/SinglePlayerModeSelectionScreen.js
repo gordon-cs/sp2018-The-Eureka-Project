@@ -1,110 +1,95 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import { AppRegistry, Button, FlatList, StyleSheet, Text, View, ActivityIndicator, Platform } from 'react-native';
-import { fullRoutePrefix } from '../../constants/API';
-
-var backwordsIP = '172.27.43.141';
-
+import React, { Component } from "react";
+import axios from "axios";
+import { Button, StyleSheet, Text, View, ActivityIndicator, Platform, ScrollView, } from "react-native";
+import { fullRoutePrefix } from "../../constants/API";
 
 export default class SinglePlayerModeSelectionScreen extends Component {
   static navigationOptions = {
-    header: null,
+    header: null
   };
   constructor(props) {
     super(props);
 
     this.state = {
       isLoading: true,
-      lessonList: [],
+      lessonList: []
     };
   }
 
-
   async componentWillMount() {
-    console.log("SINGLEPLAYERMODESELECTIONSCREEN: Got into componentDidMount");
     try {
-      console.log("Got into try for /lesson-list")
-      axios.get('http://' + backwordsIP + ':8080' + '/lesson-list').then(res => {
-        const lessons = res.data;
-        console.log("res: ", res);
-        console.log("lessons: ", lessons);
-        this.setState({
-          isLoading: false,
-          lessonList: lessons
+      console.log("Got into try for /lesson-list");
+      axios
+        .get(fullRoutePrefix + "/lesson-list")
+        .then(res => {
+          const lessons = res.data;
+          this.setState({
+            isLoading: false,
+            lessonList: lessons
+          });
         });
-      });
     } catch (err) {
-      throw new Error('/lesson-list did not work');
-    };
+      throw new Error("/lesson-list did not work");
+    }
   }
 
   render() {
-    const {navigate} = this.props.navigation;
+    const { navigate } = this.props.navigation;
+    const titles = this.state.lessonList;
+    const buttons = titles.map(element => (
+      <Button
+        key={element.Number}
+        style={styles.button}
+        title={'Lesson ' + element.Number + ': ' + element.Title}
+        onPress={() => navigate("Instruction", { lesson: element.Number })}
+      />
+    ));
+
     if (this.state.isLoading) {
       return (
         <View style={styles.headingView}>
-          <Text style={styles.headingText}>
-            Single Player Mode
-        </Text>
-          <Text style={styles.icon}>
-            👤
-        </Text>
+          <Text style={styles.headingText}>Single Player Mode</Text>
+          <Text style={styles.icon}>👤</Text>
           <View style={{ flex: 1, paddingTop: 20 }}>
             <ActivityIndicator />
           </View>
         </View>
-      )
-    }
-    else return (
-
-      <View style={styles.MainContainer}>
-        <View style={styles.headingView}>
-          <Text style={styles.headingText}>
-            Single Player Mode
-        </Text>
-          <Text style={styles.icon}>
-            👤
-        </Text>
-        </View>
-        <FlatList
-          data={this.state.lessonList}
-          renderItem={({ item }) => 
-            <Text>{item.Title}</Text>}
-          keyExtractor={item => item.Number}
-        />
-        <Button style={styles.button}
-          title = '▶️'
-          onPress={() => navigate('Instruction')}
-        />
-      </View>
-    );
+      );
+    } else
+      return (
+        <ScrollView>
+          <View style={styles.MainContainer}>
+            <View style={styles.headingView}>
+              <Text style={styles.headingText}>Single Player Mode</Text>
+              <Text style={styles.icon}>👤</Text>
+            </View>
+            {buttons}
+          </View>
+        </ScrollView>
+      );
   }
 }
 
-
 const styles = StyleSheet.create({
   MainContainer: {
-    justifyContent: 'center',
+    justifyContent: "center",
     flex: 1,
     margin: 10,
-    paddingTop: (Platform.OS === 'ios') ? 20 : 0,
-
+    paddingTop: Platform.OS === "ios" ? 20 : 0
   },
-
   headingText: {
-    // color: 'blue',
-    fontWeight: 'bold',
-    fontSize: 30,
+    fontWeight: "bold",
+    fontSize: 30
   },
   headingView: {
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 10,
-    marginBottom: 20,
+    marginBottom: 20
   },
   icon: {
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 10,
     marginBottom: 20,
-    fontSize: 80,
+    fontSize: 80
   }
 });
