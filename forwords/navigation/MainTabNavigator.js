@@ -8,6 +8,7 @@ import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import GamePlayScreen from '../screens/GamePlay/GamePlayScreen';
 import SinglePlayerModeSelectionScreen from '../screens/Selection/SinglePlayerModeSelectionScreen';
+import JoinMultiplayerScreen from '..screens/Multiplayer/JoinMultiplayerScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import InstructionScreen from '../screens/Instruction/InstructionScreen';
 import PlaceholderScreen from '../screens/PlaceholderScreen';
@@ -98,6 +99,10 @@ const SinglePlayerModeSelectionStack = createStackNavigator({
   SinglePlayerModeSelection: SinglePlayerModeSelectionScreen,
 });
 
+const JoinMultiplayerStack = createStackNavigator({
+  JoinMultiplayer: JoinMultiplayerScreen,
+});
+
 const GamePlayScreenStack = createStackNavigator({
   GamePlay: GamePlayScreen,
 });
@@ -114,6 +119,7 @@ export default createStackNavigator({
   RegisterStack,
   SettingsStack,
   SinglePlayerModeSelectionStack,
+  JoinMultiplayerStack,
   GamePlayScreenStack,
   InstructionStack
 });
