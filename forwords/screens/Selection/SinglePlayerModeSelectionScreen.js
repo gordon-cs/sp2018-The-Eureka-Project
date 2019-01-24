@@ -18,7 +18,6 @@ export default class SinglePlayerModeSelectionScreen extends Component {
 
   async componentWillMount() {
     try {
-      console.log("Got into try for /lesson-list");
       axios
         .get(fullRoutePrefix + "/lesson-list")
         .then(res => {
