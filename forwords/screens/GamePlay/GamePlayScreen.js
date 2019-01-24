@@ -75,7 +75,7 @@ export default class GamePlayScreen extends Component {
     var lesson = this.props.navigation.state.params.lesson;
     console.log("lesson in gameplay screen is: ", lesson);
     let length;
-    await axios.get('http://' + backwordsIP + ':8080' + '/lesson-words/' + lesson).then(res => {
+    await axios.get(fullRoutePrefix + '/lesson-words/' + lesson).then(res => {
       lessonLength = res.data.length;
     });
     var fourWords = this.fourWordsPicker(lessonLength); // Array of four words ids, eg. 5,2,17,11
@@ -102,9 +102,6 @@ export default class GamePlayScreen extends Component {
     }
   }
 
-  // componentWillUnmount() {
-  //   this.clearInterval(this.state.timer);
-  // }
   render() {
     const topLeftChoice = this.state.topLeftChoice;
     const topRightChoice = this.state.topRightChoice;
@@ -185,15 +182,11 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     margin: 10,
-    // flexDirection: 'row',
-    // margin: 100,
-    // paddingTop: Platform.OS === "ios" ? 20 : 0
   },
   choicesBottomContainer: {
     justifyContent: "center",
     flex: 1,
     flexDirection: 'row',
     margin: 10,
-    // paddingTop: Platform.OS === "ios" ? 20 : 0
   },
 });
