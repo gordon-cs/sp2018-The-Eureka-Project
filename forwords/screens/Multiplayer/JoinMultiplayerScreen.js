@@ -13,72 +13,59 @@ import {
 } from "react-native";
 import { fullRoutePrefix } from "../../constants/API";
 
+const url = 'ws://' + (location.hostname || 'localhost') + ':8080';
+const connection = new WebSocket(url);
+
+// var input;
 var backwordsIP = "172.27.43.141";
 
-export default class SinglePlayerModeSelectionScreen extends Component {
+export default class JoinMultiplayerScreen extends Component {
   static navigationOptions = {
     header: null
   };
   constructor(props) {
     super(props);
 
-    this.state = {
-      isLoading: true,
-      lessonList: []
-    };
+  }
+  joinOnPress() {
+
+window.onload = () => {
+  connection.send(true)
+
+
+  connection.onerror = error => {
+    console.log(`WebSocket error: ${error}`)
   }
 
-  async componentWillMount() {
-    try {
-      console.log("Got into try for /lesson-list");
-      axios
-        .get("http://" + backwordsIP + ":8080" + "/lesson-list")
-        .then(res => {
-          const lessons = res.data;
-          this.setState({
-            isLoading: false,
-            lessonList: lessons
-          });
-        });
-    } catch (err) {
-      throw new Error("/lesson-list did not work");
-    }
+  connection.onopen = () => {
+    console.log('Connection Established! :)))))')
   }
 
+//   connection.onmessage = e => {
+//     console.log('Received message:', e.data)
+//     document.getElementById('messages').innerHTML += (e.data + '<br/>')
+//     input.disabled = false
+//   }
+}
+  }
   render() {
     const { navigate } = this.props.navigation;
-    const titles = this.state.lessonList;
-    const buttons = titles.map(element => (
-      <Button
-        key={element.Number}
-        style={styles.button}
-        title={'Lesson '+element.Number+': '+element.Title}
-        onPress={() => navigate("Instruction", {lesson: element.Number})}
-      />
-    ));
-
-    if (this.state.isLoading) {
-      return (
-        <View style={styles.headingView}>
-          <Text style={styles.headingText}>Single Player Mode</Text>
-          <Text style={styles.icon}>👤</Text>
-          <View style={{ flex: 1, paddingTop: 20 }}>
-            <ActivityIndicator />
+    return (
+      <View style={styles.container}>
+        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+          <View style={styles.headingView}>
+            <Text style={styles.icon}>
+              👤
+          </Text>
           </View>
-        </View>
-      );
-    } else
-      return (
-        <ScrollView>
-          <View style={styles.MainContainer}>
-            <View style={styles.headingView}>
-              <Text style={styles.headingText}>Single Player Mode</Text>
-              <Text style={styles.icon}>👤</Text>
-            </View>
-            {buttons}
-          </View>
+          <Button style={styles.button}
+            title='Join Game!'
+            onPress={() => joinOnPress()}
+            color='purple'
+          />
         </ScrollView>
-      );
+      </View>
+    );
   }
 }
 

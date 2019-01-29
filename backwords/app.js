@@ -7,6 +7,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+const WebSocket = require('ws')
+
+const wss = new WebSocket.Server({ port: 8080 })
+
+var clients = []
 // Body Parser Middleware
 app.use(bodyParser.json()); 
 
@@ -160,4 +165,20 @@ app.use(function(err, req, res, next) {
 //  res.render('error');
 });
 
+wss.on('connection', (ws, req) => {
+  console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''), req.headers['user-agent'])
+  var index = clients.push(ws) - 1
+  ws.on('message', message => {
+    console.log(`Received message: ${message}`)
+  })
+  ws.on('close', () => {
+    console.log(`Client #${index} has disconnected`)
+    delete clients[index]
+    var i = clients.length - 1
+    while (clients[i] === undefined && i >= 0) {
+      clients.pop()
+      i--
+    }
+  })
+})
 module.exports = app;
