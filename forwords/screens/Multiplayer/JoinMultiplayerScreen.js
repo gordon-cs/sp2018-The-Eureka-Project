@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { fullRoutePrefix } from "../../constants/API";
 // const Spidersocket = require('ws');
-const ws = new WebSocket('ws://http://172.27.43.141:4000');
+const ws = new WebSocket('ws://172.27.43.141:4000');
 
 
 export default class JoinMultiplayerScreen extends Component {
@@ -26,24 +26,7 @@ export default class JoinMultiplayerScreen extends Component {
   }
   joinOnPress() {
     const { navigate } = this.props.navigation;
-    window.onload = () => {
-    // ws.on('open', function open() {
-    //  ws.send('hi');
-    // });
-      ws.onopen = () => {
-        console.log('Connection Established! :)')
-        ws.send('Hi!')
-      }
-    }
-  // ws.on('message', function incoming(data) {
-  //   console.log(data);
-  // });
-
-//   connection.onmessage = e => {
-//     console.log('Received message:', e.data)
-//     document.getElementById('messages').innerHTML += (e.data + '<br/>')
-//     input.disabled = false
-//   }
+    ws.send("hello")
 }
   render() {
     const { navigate } = this.props.navigation;
