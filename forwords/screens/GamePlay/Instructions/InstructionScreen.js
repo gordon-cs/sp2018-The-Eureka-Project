@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-    Button,
-    Image,
-    Platform,
-    StyleSheet,
-    Text,
-    View
-  } from 'react-native';
+import { Button, StyleSheet, Text, View, } from 'react-native';
 
   export default class InstructionScreen extends React.Component {
     static navigationOptions = {
@@ -17,6 +10,7 @@ import {
       }
     render(){
         const {navigate} = this.props.navigation;
+        const {lesson} = this.props.navigation.state.params;
         return(
             <View style= {styles.container}>
                 <Text style= {styles.headingText}>
@@ -34,16 +28,14 @@ import {
                 <Text style= {styles.bulletText}>
                     4.  Play till timer runs out
                 </Text>
-
                 <Button style={styles.button}
                 title = 'Proceed'
-                onPress = {() => navigate('GamePlay')}
+                onPress = {() => navigate('GamePlay', {lesson: lesson})}
                 color = 'green'
                 />
             </View>
         )
     }
-
 };
 
 const styles = StyleSheet.create({

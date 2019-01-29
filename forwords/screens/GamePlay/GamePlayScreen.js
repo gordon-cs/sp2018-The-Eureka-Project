@@ -9,8 +9,7 @@ import {
   StyleSheet,
   Platform,
 } from "react-native";
-
-var backwordsIP = '172.27.43.141';
+import { fullRoutePrefix } from "../../constants/API";
 
 export default class GamePlayScreen extends Component {
   static navigationOptions = {
@@ -29,16 +28,10 @@ export default class GamePlayScreen extends Component {
       bottomRightChoice: {},
       promptID: '',
       counter: 1,
-      //timer: null,
     };
     this.wasAnsweredCorrectly = this.wasAnsweredCorrectly.bind(this);
   }
 
-  // gameTimerTicker(){
-  //   this.setState({
-  //     counter: this.state.counter - 1
-  //   });
-  // }
   wasAnsweredCorrectly(choiceIDGiven, prompt) {
     const { navigate } = this.props.navigation;
     if (choiceIDGiven === prompt) {
@@ -80,15 +73,14 @@ export default class GamePlayScreen extends Component {
 
   async populateChoices() {
     var lesson = this.props.navigation.state.params.lesson;
-    console.log("IN GAMEPLAYSCREEN lesson being passed: ", lesson);
+    console.log("lesson in gameplay screen is: ", lesson);
     let length;
-    await axios.get('http://' + backwordsIP + ':8080' + '/lesson-words/' + lesson).then(res => {
+    await axios.get(fullRoutePrefix + '/lesson-words/' + lesson).then(res => {
       lessonLength = res.data.length;
-      console.log(lessonLength)
     });
     var fourWords = this.fourWordsPicker(lessonLength); // Array of four words ids, eg. 5,2,17,11
     var shuffleSQLRows = this.fourWordsPicker(4); // Randomize order of fourSQLWordObjects returned
-    await axios.get('http://' + backwordsIP + ':8080' + '/choices/' + lesson + '/ ' + fourWords[0] + '/' + fourWords[1] + '/' + fourWords[2] + '/' + fourWords[3]).then(res => {
+    await axios.get(fullRoutePrefix + '/choices/' + lesson + '/ ' + fourWords[0] + '/' + fourWords[1] + '/' + fourWords[2] + '/' + fourWords[3]).then(res => {
       const fourSQLWordObjects = res.data; // SQL will always return an ordered array, eg. 5,2,17,11 -> SQL -> 2,5,11,17
       this.setState({
         isLoading: false,
@@ -99,32 +91,17 @@ export default class GamePlayScreen extends Component {
         promptID: this.randomNumGen(4) // Picks one of the choice ids as the prompt id
       });
     });
-    console.log("promptID: ", this.state.promptID);
     this.setState({ answeredCorrectly: [0, 0] });
   }
 
   async componentWillMount() {
     try {
-      // Will eventually need this for multiplayer to update just a single word
-      // await axios.get('http://' + backwordsIP + ':8080' + '/word/1').then(res => {
-      //   const word = res.data;
-      //   this.setState({
-      //     isLoading: false,
-      //     prompt: word[0]
-      //   });
-      //   console.log("prompt: ", this.state.prompt);
-      // });
       this.populateChoices();
-      // let timer = setInterval(this.tick, 1000);
-      // this.setState({timer});
     } catch (error) {
       throw new Error('component will not mount');
     }
   }
 
-  // componentWillUnmount() {
-  //   this.clearInterval(this.state.timer);
-  // }
   render() {
     const topLeftChoice = this.state.topLeftChoice;
     const topRightChoice = this.state.topRightChoice;
@@ -205,15 +182,11 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     margin: 10,
-    // flexDirection: 'row',
-    // margin: 100,
-    // paddingTop: Platform.OS === "ios" ? 20 : 0
   },
   choicesBottomContainer: {
     justifyContent: "center",
     flex: 1,
     flexDirection: 'row',
     margin: 10,
-    // paddingTop: Platform.OS === "ios" ? 20 : 0
   },
 });
