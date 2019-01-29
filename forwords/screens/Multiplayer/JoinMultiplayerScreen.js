@@ -12,12 +12,9 @@ import {
   ScrollView
 } from "react-native";
 import { fullRoutePrefix } from "../../constants/API";
+// const Spidersocket = require('ws');
+const ws = new WebSocket('ws://http://172.27.43.141:4000');
 
-const url = 'ws://' + (location.hostname || 'localhost') + ':8080';
-const connection = new WebSocket(url);
-
-// var input;
-var backwordsIP = "172.27.43.141";
 
 export default class JoinMultiplayerScreen extends Component {
   static navigationOptions = {
@@ -28,18 +25,19 @@ export default class JoinMultiplayerScreen extends Component {
 
   }
   joinOnPress() {
-
-window.onload = () => {
-  connection.send(true)
-
-
-  connection.onerror = error => {
-    console.log(`WebSocket error: ${error}`)
-  }
-
-  connection.onopen = () => {
-    console.log('Connection Established! :)))))')
-  }
+    const { navigate } = this.props.navigation;
+    window.onload = () => {
+    // ws.on('open', function open() {
+    //  ws.send('hi');
+    // });
+      ws.onopen = () => {
+        console.log('Connection Established! :)')
+        ws.send('Hi!')
+      }
+    }
+  // ws.on('message', function incoming(data) {
+  //   console.log(data);
+  // });
 
 //   connection.onmessage = e => {
 //     console.log('Received message:', e.data)
@@ -47,7 +45,6 @@ window.onload = () => {
 //     input.disabled = false
 //   }
 }
-  }
   render() {
     const { navigate } = this.props.navigation;
     return (
@@ -60,7 +57,7 @@ window.onload = () => {
           </View>
           <Button style={styles.button}
             title='Join Game!'
-            onPress={() => joinOnPress()}
+            onPress={() => this.joinOnPress()}
             color='purple'
           />
         </ScrollView>
