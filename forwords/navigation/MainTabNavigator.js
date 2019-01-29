@@ -1,99 +1,28 @@
-import React from 'react';
-import { Platform } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
-import TabBarIcon from '../components/TabBarIcon';
+import { createStackNavigator } from 'react-navigation';
 import HomeScreen from '../screens/HomeScreen';
-import LoginScreen from '../screens/LoginScreen';
-import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import LoginScreen from '../screens/Authentication/LoginScreen';
 import GamePlayScreen from '../screens/GamePlay/GamePlayScreen';
+import JoinMultiplayerScreen from '../screens/Multiplayer/JoinMultiplayerScreen';
 import SinglePlayerModeSelectionScreen from '../screens/Selection/SinglePlayerModeSelectionScreen';
-import JoinMultiplayerScreen from '..screens/Multiplayer/JoinMultiplayerScreen';
-import RegisterScreen from '../screens/RegisterScreen';
-import InstructionScreen from '../screens/Instruction/InstructionScreen';
-import PlaceholderScreen from '../screens/PlaceholderScreen';
-
-
+import RegisterScreen from '../screens/Authentication/RegisterScreen';
+import InstructionScreen from '../screens/GamePlay/Instructions/InstructionScreen';
+import ForgotPasswordScreen from '../screens/Authentication/ForgotPasswordScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
 });
 
-HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
-    />
-  ),
-};
-
 const LoginStack = createStackNavigator({
   Login: LoginScreen,
 });
 
-LoginStack.navigationOptions = {
-  tabBarLabel: 'Login',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? `ios-link${focused ? '' : '-outline'}` : 'md-login'}
-    />
-  ),
-};
-
-const PlaceholderStack = createStackNavigator({
-  Placeholder: PlaceholderScreen,
+const ForgotPasswordStack = createStackNavigator({
+  ForgotPassword: ForgotPasswordScreen,
 });
-
-
-const LinksStack = createStackNavigator({
-  Links: LinksScreen,
-});
-
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? `ios-link${focused ? '' : '-outline'}` : 'md-link'}
-    />
-  ),
-};
 
 const RegisterStack = createStackNavigator({
   Register: RegisterScreen,
 });
-
-RegisterStack.navigationOptions = {
-  tabBarLabel: 'Register',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? `ios-link${focused ? '' : '-outline'}` : 'md-link'}
-    />
-  ),
-}
-
-const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
-});
-
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? `ios-options${focused ? '' : '-outline'}` : 'md-options'}
-    />
-  ),
-};
-
 
 const SinglePlayerModeSelectionStack = createStackNavigator({
   SinglePlayerModeSelection: SinglePlayerModeSelectionScreen,
@@ -113,13 +42,11 @@ const InstructionStack = createStackNavigator({
 
 export default createStackNavigator({
   LoginStack,
-  HomeStack,
-  PlaceholderStack,
-  LinksStack,
   RegisterStack,
-  SettingsStack,
+  HomeStack,
+  ForgotPasswordStack,
   SinglePlayerModeSelectionStack,
   JoinMultiplayerStack,
   GamePlayScreenStack,
-  InstructionStack
+  InstructionStack,
 });

@@ -1,21 +1,6 @@
 import React from 'react';
-import axios from 'axios';
-import {
-  Alert,
-  Button,
-  Image,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  FlatList,
-} from 'react-native';
-import { WebBrowser } from 'expo';
-import { fullRoutePrefix } from '../constants/API';
-
-var backwordsIP = '172.27.43.141';
+import { Button, ScrollView, StyleSheet, Text, View, } from 'react-native';
+import * as firebase from 'firebase';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -26,19 +11,10 @@ export default class HomeScreen extends React.Component {
     super(props);
   }
 
-  async componentWillMount() {
-    console.log("Got into componentDidMount");
-    try {
-      console.log("Got into try for /people")
-      axios.get('http://' + backwordsIP + ':8080' + '/people').then(res => {
-        const users = res.data;
-        console.log("res: ", res);
-        console.log("users: ", users);
-        // this.setState({ users });
-      });
-    } catch (err) {
-      throw new Error('/people did not work');
-    }
+  onSignOutPress = () => {
+    const { navigate } = this.props.navigation;
+    firebase.auth().signOut();
+    navigate('Login');
   }
 
   render() {
@@ -61,12 +37,16 @@ export default class HomeScreen extends React.Component {
             onPress={() => navigate('JoinMultiplayer')}
             color='purple'
           />
+          <Button style={styles.button}
+            title='Sign Out!'
+            onPress={() => this.onSignOutPress()}
+            color='purple'
+          />
         </ScrollView>
       </View>
     );
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {

@@ -1,19 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
-import {
-  AppRegistry,
-  Button,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-  ActivityIndicator,
-  Platform,
-  ScrollView
-} from "react-native";
+import { Button, StyleSheet, Text, View, ActivityIndicator, Platform, ScrollView, } from "react-native";
 import { fullRoutePrefix } from "../../constants/API";
-
-var backwordsIP = "172.27.43.141";
 
 export default class SinglePlayerModeSelectionScreen extends Component {
   static navigationOptions = {
@@ -30,9 +18,8 @@ export default class SinglePlayerModeSelectionScreen extends Component {
 
   async componentWillMount() {
     try {
-      console.log("Got into try for /lesson-list");
       axios
-        .get("http://" + backwordsIP + ":8080" + "/lesson-list")
+        .get(fullRoutePrefix + "/lesson-list")
         .then(res => {
           const lessons = res.data;
           this.setState({
@@ -52,8 +39,8 @@ export default class SinglePlayerModeSelectionScreen extends Component {
       <Button
         key={element.Number}
         style={styles.button}
-        title={'Lesson '+element.Number+': '+element.Title}
-        onPress={() => navigate("Instruction", {lesson: element.Number})}
+        title={'Lesson ' + element.Number + ': ' + element.Title}
+        onPress={() => navigate("Instruction", { lesson: element.Number })}
       />
     ));
 
@@ -89,7 +76,6 @@ const styles = StyleSheet.create({
     margin: 10,
     paddingTop: Platform.OS === "ios" ? 20 : 0
   },
-  button: {},
   headingText: {
     fontWeight: "bold",
     fontSize: 30

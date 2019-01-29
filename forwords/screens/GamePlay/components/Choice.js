@@ -1,9 +1,5 @@
 import React, { Component } from "react";
-import {
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, } from "react-native";
 
 export default class Choice extends Component {
     constructor(props) {
@@ -63,7 +59,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         flex: 1,
         margin: 10,
-        // paddingTop: Platform.OS === "ios" ? 20 : 0,
         width: 120,
         height: 100,
         borderRadius: 80,

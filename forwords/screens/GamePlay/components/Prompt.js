@@ -1,13 +1,5 @@
 import React, { Component } from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    Platform,
-    Button,
-    TouchableOpacity,
-    Image,
-} from 'react-native';
+import { StyleSheet, Text, View, } from 'react-native';
 
 export default class Prompt extends Component {
     constructor(props) {
@@ -16,7 +8,6 @@ export default class Prompt extends Component {
         this.state = {
             promptID: this.props,
             imageURL: this.props,
-            // promptObj: thi
         };
     }
     render() {
@@ -27,23 +18,15 @@ export default class Prompt extends Component {
                     {promptText}
                 </Text>
             </View>
-            // <Image style={StyleSheet.promptImage}>
-            //     {this.props.promptImage}
-            // </Image>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    promptImage: {
-        width: 100,
-        height: 100,
-    },
     mainContainer: {
         justifyContent: "center",
         flex: 1,
         margin: 10,
-        // paddingTop: Platform.OS === "ios" ? 20 : 0,
         width: 120,
         height: 100,
         borderRadius: 80,

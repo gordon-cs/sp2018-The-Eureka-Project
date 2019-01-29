@@ -189,11 +189,26 @@ Passing params:
 
 https://reactnavigation.org/docs/en/params.html
 
+
 # Misc
 
 **The forwords email:**
 forwordsinc@gmail.com
 
+
+**SFTP**
+
+If you want to sftp a file to the server, you can do so by navigating to the directory on the local machine of where the file is located. Then, you can execute "sftp eureka@172.27.43.141" on the command line. Then, 
+
+> \>sftp put sqlFile.text
+
+Would upload that file to the VM.
+
+**MySQL**
+
+If you create a file that has a lot of SQL commands to execute, this is the way you can run it on the VM:
+
+> mysql -u root forwords < sqlCommandsMan101.text 
 
 ## Troubleshooting
 
