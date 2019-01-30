@@ -169,7 +169,7 @@ wss.on('connection', (ws, req) => {
   console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''), req.headers['user-agent'])
   ws.on('message', message => {
     console.log(`Received message: ${message}`)
-    if (message == true) {
+    if (message == '12345') {
       client[index].send('You are in a group!');
       var index = clients.push(ws) - 1
     }
