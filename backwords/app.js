@@ -170,7 +170,7 @@ wss.on('connection', (ws, req) => {
   ws.on('message', message => {
     console.log(`Received message: ${message}`)
     if (message == '12345') {
-      client[index].send('You are in a group!');
+      clients[index].send('You are in a group!');
       var index = clients.push(ws) - 1
     }
     console.log('Current Connections: ' + clients.length());
