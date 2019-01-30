@@ -167,9 +167,17 @@ app.use(function(err, req, res, next) {
 
 wss.on('connection', (ws, req) => {
   console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''), req.headers['user-agent'])
-  var index = clients.push(ws) - 1
   ws.on('message', message => {
     console.log(`Received message: ${message}`)
+    if (message === true) {
+      client[index].send('You are in a group!');
+      var index = clients.push(ws) - 1
+    }
+    console.log('Current Connections: ' + clients.length());
+    for (var i = 0; i < clients.length; i++) {
+      clients[i] && clients[i].send('Hello Special Group!');
+    }
+
   })
   ws.on('close', () => {
     console.log(`Client #${index} has disconnected`)

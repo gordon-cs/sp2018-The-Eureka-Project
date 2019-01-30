@@ -26,7 +26,7 @@ export default class JoinMultiplayerScreen extends Component {
   }
   joinOnPress() {
     const { navigate } = this.props.navigation;
-    ws.send("hello")
+    ws.send(true)
 }
   render() {
     const { navigate } = this.props.navigation;
