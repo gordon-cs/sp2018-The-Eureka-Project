@@ -29,6 +29,7 @@ export default class GamePlayScreen extends Component {
       bottomRightChoice: {},
       promptID: '',
       counter: 1,
+      resetTimer: true, // Default is true, false means  ??
     };
     this.wasAnsweredCorrectly = this.wasAnsweredCorrectly.bind(this);
   }
@@ -36,16 +37,13 @@ export default class GamePlayScreen extends Component {
   wasAnsweredCorrectly(choiceIDGiven, prompt) {
     const { navigate } = this.props.navigation;
     if (choiceIDGiven === prompt) {
-      this.setState({ answeredCorrectly: [choiceIDGiven, 1] }); // got it correct
-      this.setState({ counter: this.state.counter + 1 }); // count the number of correct answers, up to 10 correct 
-      if (this.state.counter === 10) {
-        navigate('SinglePlayerModeSelection')
-      }
-      else {
-        TimerMixin.setTimeout(() => {
-          this.populateChoices();
-        }, 750);
-      } // Delay the refresh of screen so user can see the correct answer response
+      this.setState({ 
+        answeredCorrectly: [choiceIDGiven, 1],
+        counter: (this.state.counter + 1), // count the number of correct answers, up to 10 correct 
+      });
+      TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
+        this.populateChoices();
+      }, 750);
     } else {
       this.setState({ answeredCorrectly: [choiceIDGiven, 2] }); // got it incorrect
     }
@@ -73,8 +71,8 @@ export default class GamePlayScreen extends Component {
   }
 
   async populateChoices() {
+    console.log("populateChoices();");
     var lesson = this.props.navigation.state.params.lesson;
-    console.log("lesson in gameplay screen is: ", lesson);
     let length;
     await axios.get(fullRoutePrefix + '/lesson-words/' + lesson).then(res => {
       lessonLength = res.data.length;
@@ -92,7 +90,15 @@ export default class GamePlayScreen extends Component {
         promptID: this.randomNumGen(4) // Picks one of the choice ids as the prompt id
       });
     });
-    this.setState({ answeredCorrectly: [0, 0] });
+    console.log("after axios, before settingState");
+    this.setState({
+      answeredCorrectly: [0, 0],
+      resetTimer: true,
+    });
+    this.setState({ // Set to false so that the timer does not reset
+      resetTimer: false,
+    });
+    console.log("in end of populateChoices()");
   }
 
   async componentWillMount() {
@@ -110,6 +116,7 @@ export default class GamePlayScreen extends Component {
     const bottomRightChoice = this.state.bottomRightChoice;
     const promptID = this.state.promptID;
     const answeredCorrectly = this.state.answeredCorrectly;
+    const resetTimer = this.state.resetTimer;
 
     let promptObj;
     switch (promptID) {
@@ -134,7 +141,9 @@ export default class GamePlayScreen extends Component {
           </Prompt>
         </View>
         <View style={styles.timerContainer}>
-          <Timer></Timer>
+          <Timer
+            resetTimer={resetTimer}>
+          </Timer>
         </View>
         <View style={styles.choicesTopContainer}>
           <Choice
@@ -194,10 +203,10 @@ const styles = StyleSheet.create({
   timerContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 40,    
+    borderRadius: 40,
     borderColor: 'white',
     width: 75,
-    height: 75,     
+    height: 75,
     backgroundColor: 'white',
   },
 });
