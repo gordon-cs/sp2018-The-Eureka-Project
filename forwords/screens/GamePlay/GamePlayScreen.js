@@ -3,6 +3,7 @@ import axios from "axios";
 import TimerMixin from 'react-timer-mixin';
 import Choice from "./components/Choice";
 import Prompt from './components/Prompt';
+import Timer from './components/Timer';
 import {
   Text,
   View,
@@ -132,6 +133,9 @@ export default class GamePlayScreen extends Component {
           <Prompt promptObj={promptObj}>
           </Prompt>
         </View>
+        <View style={styles.timerContainer}>
+          <Timer></Timer>
+        </View>
         <View style={styles.choicesTopContainer}>
           <Choice
             text={topLeftChoice.Chinese}
@@ -172,21 +176,28 @@ export default class GamePlayScreen extends Component {
 
 const styles = StyleSheet.create({
   mainContainer: {
-    justifyContent: "center",
+    alignItems: 'center',
     flex: 1,
     paddingTop: Platform.OS === "ios" ? 20 : 0,
     backgroundColor: '#5b3b89'
   },
   choicesTopContainer: {
-    justifyContent: "center",
     flex: 1,
     flexDirection: 'row',
     margin: 10,
   },
   choicesBottomContainer: {
-    justifyContent: "center",
     flex: 1,
     flexDirection: 'row',
     margin: 10,
+  },
+  timerContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 40,    
+    borderColor: 'white',
+    width: 75,
+    height: 75,     
+    backgroundColor: 'white',
   },
 });
