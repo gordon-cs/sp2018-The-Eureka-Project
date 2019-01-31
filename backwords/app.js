@@ -175,7 +175,7 @@ wss.on('connection', (ws, req) => {
       var index = clients.push(ws) - 1
       clients[index].send('You are in a group!');
     }
-    console.log('Current Connections: ' + clients.length());
+    console.log('Current Connections: ' + clients.length);
     for (var i = 0; i < clients.length; i++) {
       clients[i] && clients[i].send('Hello Special Group!');
     }
