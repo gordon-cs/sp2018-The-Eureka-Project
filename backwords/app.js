@@ -171,7 +171,7 @@ wss.on('connection', (ws, req) => {
     console.log(`Received message: ${message}`)
     // Prototype statement for placing user/client into 
     // groups based off the code in the message that they send.
-    if (message.toString == '12345') {
+    if (message == '12345') {
       var index = clients.push(ws) - 1
       clients[index].send('You are in a group!');
     }
