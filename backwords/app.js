@@ -164,14 +164,16 @@ app.use(function(err, req, res, next) {
 	res.sendStatus(err.status);
 //  res.render('error');
 });
-
+// Connect to client via ws, log the proxess of receiving and sending messages
 wss.on('connection', (ws, req) => {
   console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''), req.headers['user-agent'])
   ws.on('message', message => {
     console.log(`Received message: ${message}`)
-    if (message == '12345') {
-      clients[index].send('You are in a group!');
+    // Prototype statement for placing user/client into 
+    // groups based off the code in the message that they send.
+    if (message.toString == '12345') {
       var index = clients.push(ws) - 1
+      clients[index].send('You are in a group!');
     }
     console.log('Current Connections: ' + clients.length());
     for (var i = 0; i < clients.length; i++) {

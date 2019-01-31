@@ -12,7 +12,6 @@ import {
   ScrollView
 } from "react-native";
 import { fullRoutePrefix } from "../../constants/API";
-// const Spidersocket = require('ws');
 const ws = new WebSocket('ws://172.27.43.141:4000');
 
 
