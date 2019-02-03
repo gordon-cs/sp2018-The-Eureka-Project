@@ -6,11 +6,13 @@ import {
   FlatList,
   StyleSheet,
   Text,
+  TextInput,
   View,
   ActivityIndicator,
   Platform,
   ScrollView
 } from "react-native";
+
 import { fullRoutePrefix } from "../../constants/API";
 const ws = new WebSocket('ws://172.27.43.141:4000');
 
@@ -45,12 +47,12 @@ createOnPress() {
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.headingView}>
-            <Text style={styles.headingText}>
+            <Text style={styles.mainText}>
               Enter an existing group code and join, or create your own group!
             </Text>
           </View>
           <TextInput
-            style={{ height: 60, width: 200 }}
+            style={{ height: 60, width: 100 }}
             placeholder="Group Code"
             onChangeText={(groupCode) => this.setState({ groupCode })}
             autoCorrect={false}
@@ -85,6 +87,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 30
   },
+  mainText: {
+    alignItems: 'center',
+    marginTop: 10,
+    marginBottom: 10,
+    marginLeft: 10,
+    fontSize: 20,
+    color: 'black',
+},
   headingView: {
     alignItems: "center",
     marginTop: 10,
