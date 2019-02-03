@@ -173,7 +173,7 @@ app.use(function(err, req, res, next) {
       // groups based off the code in the message that they send.
       if (message == 'create') {
         groupCode = 1;
-        clients[index].send('You created a group! Here is the Code: ' + groupCode);
+        clients[index].send('You created a group! Here is the Code: ', groupCode);
       }
       else if (message == groupCode) {
         var index = clients.push(ws) - 1; //ideally have the correct classes to be able to store multiple sets of clients/groups

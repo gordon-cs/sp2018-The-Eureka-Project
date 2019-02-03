@@ -53,6 +53,7 @@ createOnPress() {
           </View>
           <TextInput
             style={{ height: 60, width: 100 }}
+            justifyContent='center'
             placeholder="Group Code"
             onChangeText={(groupCode) => this.setState({ groupCode })}
             autoCorrect={false}
