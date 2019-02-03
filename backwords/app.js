@@ -170,10 +170,10 @@ app.use(function(err, req, res, next) {
       console.log(`Received message: ${message}`);
       // Prototype statement for placing user/client into 
       // groups based off the code in the message that they send.
-      var groupCode = 0;
       if (message == 'create') {
-        groupCode = 1;
-        clients[index].send('You created a group! Here is the Code: ', groupCode);
+        groupCode = '1';
+        newMessage = 'You created a group! Here is the Code: ' + groupCode;
+        clients[index].send( newMessage );
       }
       else if (message == groupCode) {
         var index = clients.push(ws) - 1; //ideally have the correct classes to be able to store multiple sets of clients/groups
