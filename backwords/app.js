@@ -7,11 +7,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-const WebSocket = require('ws')
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 4000 });
+var clients = [];
 
-const wss = new WebSocket.Server({ port: 4000 })
-
-var clients = []
 // Body Parser Middleware
 app.use(bodyParser.json()); 
 
@@ -164,31 +163,31 @@ app.use(function(err, req, res, next) {
 	res.sendStatus(err.status);
 //  res.render('error');
 });
-// Connect to client via ws, log the proxess of receiving and sending messages
-wss.on('connection', (ws, req) => {
-  console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''), req.headers['user-agent'])
-  ws.on('message', message => {
-    console.log(`Received message: ${message}`)
-    // Prototype statement for placing user/client into 
-    // groups based off the code in the message that they send.
-    if (message == '12345') {
-      var index = clients.push(ws) - 1
-      clients[index].send('You are in a group!');
-    }
-    console.log('Current Connections: ' + clients.length);
-    for (var i = 0; i < clients.length; i++) {
-      clients[i] && clients[i].send('Hello Special Group!');
-    }
-
-  })
-  ws.on('close', () => {
-    console.log(`Client #${index} has disconnected`)
-    delete clients[index]
-    var i = clients.length - 1
-    while (clients[i] === undefined && i >= 0) {
-      clients.pop()
-      i--
-    }
-  })
-})
+  // Connect to client via ws, log the proxess of receiving and sending messages
+  // wss.on('connection', (ws, req) => {
+  //   console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''), req.headers['user-agent']);
+  //   ws.on('message', message => {
+  //     console.log(`Received message: ${message}`);
+  //     // Prototype statement for placing user/client into 
+  //     // groups based off the code in the message that they send.
+  //     if (message == '12345') {
+  //       var index = clients.push(ws) - 1;
+  //       clients[index].send('You are in a group!');
+  //     }
+  //     console.log('Current Connections: ' + clients.length);
+  //     for (var i = 0; i < clients.length; i++) {
+  //       clients[i] && clients[i].send('Hello Special Group!');
+  //     }
+  
+  //   })
+  //   ws.on('close', () => {
+  //     console.log(`Client #${index} has disconnected`);
+  //     delete clients[index];
+  //     var i = clients.length - 1;
+  //     while (clients[i] === undefined && i >= 0) {
+  //       clients.pop();
+  //       i--;
+  //     }
+  //   })
+  // })
 module.exports = app;
