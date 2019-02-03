@@ -171,12 +171,13 @@ app.use(function(err, req, res, next) {
       // Prototype statement for placing user/client into 
       // groups based off the code in the message that they send.
       if (message == 'create') {
+        var index = clients.push(ws) - 1; //ideally have the correct classes to be able to store multiple sets of clients/groups
         groupCode = '1';
         newMessage = 'You created a group! Here is the Code: ' + groupCode;
         clients[index].send( newMessage );
       }
       else if (message == groupCode) {
-        var index = clients.push(ws) - 1; //ideally have the correct classes to be able to store multiple sets of clients/groups
+        var index = clients.push(ws) - 1;
         clients[index].send('You are in a group!');
         for (var i = 0; i < clients.length; i++) {
           clients[i] && clients[i].send('New player has joined!');

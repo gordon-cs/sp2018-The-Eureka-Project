@@ -52,8 +52,8 @@ createOnPress() {
             </Text>
           </View>
           <TextInput
-            style={{ height: 60, width: 100 }}
-            justifyContent='center'
+            style={{ height: 60, width: 150 }}
+            alignItems='center'
             placeholder="Group Code"
             onChangeText={(groupCode) => this.setState({ groupCode })}
             autoCorrect={false}
@@ -67,7 +67,7 @@ createOnPress() {
           />
           <Button style={styles.button}
             title='Create Game!'
-            onPress={() => this.createOnPress()}
+            onPress={() => this.createOnPress()} // Ideally this will also lead to this player going to a wait screen.
             color='purple'
           />
         </ScrollView>
