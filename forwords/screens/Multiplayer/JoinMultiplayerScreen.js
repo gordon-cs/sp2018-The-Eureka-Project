@@ -21,14 +21,23 @@ export default class JoinMultiplayerScreen extends Component {
   };
   constructor(props) {
     super(props);
-
+    this.state = {
+      groupCode: '',
+    };
   }
   joinOnPress() {
     const { navigate } = this.props.navigation;
-    ws.send('12345')
+    ws.send( groupCode )
     ws.onmessage = e => {
       console.log('Received message:', e.data)
     }
+}
+createOnPress() {
+  const { navigate } = this.props.navigation;
+  ws.send('create')
+  ws.onmessage = e => {
+    console.log('Received message:', e.data)
+  }
 }
   render() {
     const { navigate } = this.props.navigation;
@@ -36,13 +45,26 @@ export default class JoinMultiplayerScreen extends Component {
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.headingView}>
-            <Text style={styles.icon}>
-              👤
-          </Text>
+            <Text style={styles.headingText}>
+              Enter an existing group code and join, or create your own group!
+            </Text>
           </View>
+          <TextInput
+            style={{ height: 60, width: 200 }}
+            placeholder="Group Code"
+            onChangeText={(groupCode) => this.setState({ groupCode })}
+            autoCorrect={false}
+            autoCapitalize="none"
+            returnKeyType="done"
+          />
           <Button style={styles.button}
             title='Join Game!'
-            onPress={() => this.joinOnPress()}
+            onPress={() => this.joinOnPress( groupCode )}
+            color='purple'
+          />
+          <Button style={styles.button}
+            title='Create Game!'
+            onPress={() => this.createOnPress()}
             color='purple'
           />
         </ScrollView>

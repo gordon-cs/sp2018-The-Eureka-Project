@@ -164,30 +164,39 @@ app.use(function(err, req, res, next) {
 //  res.render('error');
 });
   // Connect to client via ws, log the proxess of receiving and sending messages
-  // wss.on('connection', (ws, req) => {
-  //   console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''), req.headers['user-agent']);
-  //   ws.on('message', message => {
-  //     console.log(`Received message: ${message}`);
-  //     // Prototype statement for placing user/client into 
-  //     // groups based off the code in the message that they send.
-  //     if (message == '12345') {
-  //       var index = clients.push(ws) - 1;
-  //       clients[index].send('You are in a group!');
-  //     }
-  //     console.log('Current Connections: ' + clients.length);
-  //     for (var i = 0; i < clients.length; i++) {
-  //       clients[i] && clients[i].send('Hello Special Group!');
-  //     }
+  wss.on('connection', (ws, req) => {
+    console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''), req.headers['user-agent']);
+    ws.on('message', message => {
+      console.log(`Received message: ${message}`);
+      groupCode = 0;
+      // Prototype statement for placing user/client into 
+      // groups based off the code in the message that they send.
+      if (message == 'create') {
+        var index = clients.push(ws) - 1; //ideally have the correct classes to be able to store multiple sets of clients/groups
+        groupCode = 1;
+        clients[index].send('You created a group! Here is the Code: ', groupCode);
+      }
+      else if (message == groupCode) {
+        var index = clients.push(ws) - 1;
+        clients[index].send('You are in a group!');
+      }
+      else {
+        clients[index].send('There has been an error');
+      }
+      console.log('Current Connections: ' + clients.length);
+      for (var i = 0; i < clients.length; i++) {
+        clients[i] && clients[i].send('Hello Special Group!');
+      }
   
-  //   })
-  //   ws.on('close', () => {
-  //     console.log(`Client #${index} has disconnected`);
-  //     delete clients[index];
-  //     var i = clients.length - 1;
-  //     while (clients[i] === undefined && i >= 0) {
-  //       clients.pop();
-  //       i--;
-  //     }
-  //   })
-  // })
+    })
+    ws.on('close', () => {
+      console.log(`Client #${index} has disconnected`);
+      delete clients[index];
+      var i = clients.length - 1;
+      while (clients[i] === undefined && i >= 0) {
+        clients.pop();
+        i--;
+      }
+    })
+  })
 module.exports = app;
