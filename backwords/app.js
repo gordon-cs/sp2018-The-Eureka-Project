@@ -168,11 +168,12 @@ app.use(function(err, req, res, next) {
     console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''), req.headers['user-agent']);
     ws.on('message', message => {
       console.log(`Received message: ${message}`);
+      groupCode = 0;
       // Prototype statement for placing user/client into 
       // groups based off the code in the message that they send.
       if (message == 'create') {
         var index = clients.push(ws) - 1; //ideally have the correct classes to be able to store multiple sets of clients/groups
-        groupCode = '1';
+        groupCode++;
         newMessage = 'You created a group! Here is the Code: ' + groupCode;
         clients[index].send( newMessage );
       }
