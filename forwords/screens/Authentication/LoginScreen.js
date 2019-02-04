@@ -67,11 +67,6 @@ export default class LoginScreen extends React.Component {
             onPress={() => navigate('ForgotPassword')}
             color='purple'
           />
-          <Button style={styles.button}
-              title = 'CLICK FOR DEVELOPING BABY: Lesson:11'
-              onPress = {() => navigate('GamePlay', {lesson:11})}
-              color = 'red'
-            />
         </View>
       </KeyboardAvoidingView>
     );
