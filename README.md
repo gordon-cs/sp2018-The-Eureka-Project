@@ -206,6 +206,9 @@ Would upload that file to the VM.
 
 **MySQL**
 
+Creating a file with lots of SQL commands to execute? Use this awesome tool:
+https://sqlizer.io/#/
+
 If you create a file that has a lot of SQL commands to execute, this is the way you can run it on the VM:
 
 > mysql -u root forwords < sqlCommandsMan101.text 
