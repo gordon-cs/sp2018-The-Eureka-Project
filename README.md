@@ -198,6 +198,10 @@ forwordsinc@gmail.com
 
 **SFTP**
 
+This is a helpful resource for sftp-ing:
+
+https://www.digitalocean.com/community/tutorials/how-to-use-sftp-to-securely-transfer-files-with-a-remote-server
+
 If you want to sftp a file to the server, you can do so by navigating to the directory on the local machine of where the file is located. Then, you can execute "sftp eureka@172.27.43.141" on the command line. Then, 
 
 > \>sftp put sqlFile.text
@@ -205,6 +209,10 @@ If you want to sftp a file to the server, you can do so by navigating to the dir
 Would upload that file to the VM.
 
 **MySQL**
+
+Creating a file with lots of SQL commands to execute? Use this awesome tool:
+
+https://sqlizer.io/#/
 
 If you create a file that has a lot of SQL commands to execute, this is the way you can run it on the VM:
 
