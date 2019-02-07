@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import "../backwords/classes/Player"
-import "../backwords/classes/Group"
 const WebSocket = require('ws');
 const wss = new WebSocket.Server({ port: 4000 });
 var clients = [];
