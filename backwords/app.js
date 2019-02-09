@@ -9,9 +9,7 @@ var logger = require('morgan');
 
 const WebSocket = require('ws');
 const wss = new WebSocket.Server({ port: 4000 });
-var clients = [];
-var groupCode = 0;
-var index = 0;
+
 
 // Body Parser Middleware
 app.use(bodyParser.json()); 
@@ -166,33 +164,35 @@ app.use(function(err, req, res, next) {
 //  res.render('error');
 });
   // Connect to client via ws, log the proxess of receiving and sending messages
+  var players = [];
+  var groupCode = 0;
+  var index = 0;
   wss.on('connection', (ws, req) => {
-    console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''), req.headers['user-agent']);
+    console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''));
     ws.on('message', message => {
       console.log(`Received message: ${message}`);
 
       // Prototype statement for placing user/client into 
       // groups based off the code in the message that they send.
       if (message == 'create') {
-        index = clients.push(ws) - 1; //ideally have the correct classes to be able to store multiple sets of clients/groups
         groupCode++;
-        newMessage = 'You created a group! Here is the Code: ' + groupCode;
-        clients[index].send( newMessage );
+        newMessage = 'You created a group! Here is the group code: ' + groupCode;
+        players[index].send( newMessage );
         // send code to client to that causes React to load a new screen
         // send something to mySQL that will create a new group table
       }
       else if (message == groupCode) {
         index = clients.push(ws) - 1;
-        clients[index].send('You are in a group!');
-        for (var i = 0; i < clients.length; i++) {
-          clients[i] && clients[i].send('New player has joined!');
+        players[index].send('You are now in a group!');
+        for (var i = 0; i < players.length; i++) {
+          players[i] && players[i].send('New player has joined!');
         }
       }
       else {
         console.log('There has been an error');
-        clients[index].send('There has been an error');
+        players[index].send('There has been an error');
       }
-      console.log('Current Connections: ' + clients.length);
+      console.log('Current Connections: ' + players.length);
 
   
     })
