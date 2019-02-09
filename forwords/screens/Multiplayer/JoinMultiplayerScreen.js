@@ -29,6 +29,12 @@ export default class JoinMultiplayerScreen extends Component {
   }
   joinOnPress() {
     const { navigate } = this.props.navigation;
+    // var people = [];
+    // people.push('Hello');
+    // var groups = new Map();
+    // groups.set(this.state.groupCode, people);
+    // groups.get(this.state.groupCode).push('Oi M8!')
+    // console.log('Map Worked:', groups.get(this.state.groupCode))
     ws.send( this.state.groupCode )
     ws.onmessage = e => {
       console.log('Received message:', e.data) // print on client screen ideally

@@ -164,7 +164,8 @@ app.use(function(err, req, res, next) {
 //  res.render('error');
 });
   // Connect to client via ws, log the proxess of receiving and sending messages
-  var players = [];
+ // or client
+  var groups = new Map();
   var groupCode = 0;
   var index = 0;
   wss.on('connection', (ws, req) => {
@@ -175,25 +176,36 @@ app.use(function(err, req, res, next) {
       // Prototype statement for placing user/client into 
       // groups based off the code in the message that they send.
       if (message == 'create') {
-        groupCode++;
-        index = players.push(ws) - 1;
+        var players = [];
+        groupCode++; // group code generation function.
+        groups.set(groupCode, players)
+        index = groups.get(groupCode).push(ws) - 1;
         newMessage = 'You created a group! Here is the group code: ' + groupCode;
-        players[index].send( newMessage );
+        groups.get(groupCode)[index].send( newMessage );
         // send code to client to that causes React to load a new screen
         // send something to mySQL that will create a new group table
       }
-      else if (message == groupCode) {
-        index = players.push(ws) - 1;
-        players[index].send('You are now in a group!');
-        for (var i = 0; i < players.length; i++) {
-          players[i] && players[i].send('New player has joined!');
+      for (var n = 1;  n <= groupCode; n++) {
+        if (message == n) {
+          index = groups.get(n).push(ws) - 1;
+          groups.get(n)[index].send('You are now in a group!');
+          for (var i = 0; i < groups.get(i).length - 1; i++) {
+            groups.get(n)[i] && groups.get(n)[i].send('New player has joined!');
+          }
+          console.log('Current Connections for this group: ' + groups.get(n).length);
         }
       }
-      else {
-        console.log('There has been an error');
-        players[index].send('There has been an error');
-      }
-      console.log('Current Connections: ' + players.length);
+      // else if (message == groupCode) {
+      //   index = players.push(ws) - 1;
+      //   groups.get(groupCode)[index].send('You are now in a group!');
+      //   for (var i = 0; i < groups.get(groupCode).length; i++) {
+      //     groups.get(groupCode)[i] && groups.get(groupCode)[i].send('New player has joined!');
+      //   }
+      // }
+      // else {
+      //   console.log('There has been an error');
+      //   players[index].send('There has been an error');
+      // }
 
   
     })
