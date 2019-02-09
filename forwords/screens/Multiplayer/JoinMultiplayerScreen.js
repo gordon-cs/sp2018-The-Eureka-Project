@@ -46,8 +46,8 @@ createOnPress() {
   ws.send('create')
   ws.onmessage = e => {
     console.log('Received message:', e.data) // print on client screen ideally
+    navigate("Ready", { groupID: e.data })
   }
-  navigate("Ready", { groupID: e.data })
 }
   render() {
     const { navigate } = this.props.navigation;

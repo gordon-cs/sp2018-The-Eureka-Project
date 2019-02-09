@@ -13,7 +13,6 @@ import {
 } from "react-native";
 
 import { fullRoutePrefix } from "../../constants/API";
-const ws = new WebSocket('ws://172.27.43.141:4000');
 
 
 export default class JoinMultiplayerScreen extends Component {
@@ -31,12 +30,10 @@ export default class JoinMultiplayerScreen extends Component {
             console.log('Received message:', e.data) // print on client screen ideally
         }
     }
-    showData() {
-        var groupID = this.props.navigation.state.params.groupID;
-    }
+
     async componentWillMount() {
         try {
-            this.showData();
+
         } catch (error) {
             throw new Error('component will not mount');
         }
@@ -48,7 +45,7 @@ export default class JoinMultiplayerScreen extends Component {
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.headingView}>
           <Text style={styles.mainText}>
-              Your group code is {groupID}
+              Your group code is {this.props.navigation.state.params.groupID}
             </Text>
             <Text style={styles.mainText}>
               Press the button when you're ready to play!
