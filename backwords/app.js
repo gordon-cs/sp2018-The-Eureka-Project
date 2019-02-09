@@ -189,7 +189,7 @@ app.use(function(err, req, res, next) {
         if (message == n) {
           index = groups.get(n).push(ws) - 1;
           groups.get(n)[index].send('You are now in a group!');
-          for (var i = 0; i < groups.get(i).length - 1; i++) {
+          for (var i = 0; i < groups.get(n).length - 1; i++) {
             groups.get(n)[i] && groups.get(n)[i].send('New player has joined!');
           }
           console.log('Current Connections for this group: ' + groups.get(n).length);
