@@ -176,13 +176,14 @@ app.use(function(err, req, res, next) {
       // groups based off the code in the message that they send.
       if (message == 'create') {
         groupCode++;
+        index = players.push(ws) - 1;
         newMessage = 'You created a group! Here is the group code: ' + groupCode;
         players[index].send( newMessage );
         // send code to client to that causes React to load a new screen
         // send something to mySQL that will create a new group table
       }
       else if (message == groupCode) {
-        index = clients.push(ws) - 1;
+        index = players.push(ws) - 1;
         players[index].send('You are now in a group!');
         for (var i = 0; i < players.length; i++) {
           players[i] && players[i].send('New player has joined!');
