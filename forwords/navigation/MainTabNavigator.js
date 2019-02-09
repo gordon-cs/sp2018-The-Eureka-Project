@@ -3,6 +3,7 @@ import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/Authentication/LoginScreen';
 import GamePlayScreen from '../screens/GamePlay/GamePlayScreen';
 import JoinMultiplayerScreen from '../screens/Multiplayer/JoinMultiplayerScreen';
+import ReadyScreen from '../screens/Multiplayer/ReadyScreen';
 import SinglePlayerModeSelectionScreen from '../screens/Selection/SinglePlayerModeSelectionScreen';
 import RegisterScreen from '../screens/Authentication/RegisterScreen';
 import InstructionScreen from '../screens/GamePlay/Instructions/InstructionScreen';
@@ -32,6 +33,10 @@ const JoinMultiplayerStack = createStackNavigator({
   JoinMultiplayer: JoinMultiplayerScreen,
 });
 
+const ReadyStack = createStackNavigator({
+  Ready: ReadyScreen,
+});
+
 const GamePlayScreenStack = createStackNavigator({
   GamePlay: GamePlayScreen,
 });
@@ -47,6 +52,7 @@ export default createStackNavigator({
   ForgotPasswordStack,
   SinglePlayerModeSelectionStack,
   JoinMultiplayerStack,
+  ReadyStack,
   GamePlayScreenStack,
   InstructionStack,
 });

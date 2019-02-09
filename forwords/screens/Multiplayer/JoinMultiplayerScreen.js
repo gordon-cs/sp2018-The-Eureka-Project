@@ -39,6 +39,7 @@ export default class JoinMultiplayerScreen extends Component {
     ws.onmessage = e => {
       console.log('Received message:', e.data) // print on client screen ideally
     }
+    navigate("Ready", { groupID: this.state.groupCode })
 }
 createOnPress() {
   const { navigate } = this.props.navigation;
@@ -46,6 +47,7 @@ createOnPress() {
   ws.onmessage = e => {
     console.log('Received message:', e.data) // print on client screen ideally
   }
+  navigate("Ready", { groupID: e.data })
 }
   render() {
     const { navigate } = this.props.navigation;
@@ -58,7 +60,7 @@ createOnPress() {
             </Text>
           </View>
           <TextInput
-            style={{ height: 60, width: 150 }}
+            style={{ height: 60, width: 300 }}
             alignItems='center'
             placeholder="Group Code"
             onChangeText={(groupCode) => this.setState({ groupCode })}
@@ -66,7 +68,6 @@ createOnPress() {
             autoCapitalize="none"
             returnKeyType="done"
           />
-          console.log()
           <Button style={styles.button}
             title='Join Game!'
             onPress={() => this.joinOnPress()}

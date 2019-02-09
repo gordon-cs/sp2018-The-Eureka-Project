@@ -168,6 +168,7 @@ app.use(function(err, req, res, next) {
   var groups = new Map();
   var groupCode = 0;
   var index = 0;
+  var readyCounter = 0;
   wss.on('connection', (ws, req) => {
     console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''));
     ws.on('message', message => {
@@ -183,25 +184,30 @@ app.use(function(err, req, res, next) {
         newMessage = 'You created a group! Here is the group code: ' + groupCode;
         groups.get(groupCode)[index].send( newMessage );
         // send code to client to that causes React to load a new screen
-        // send something to mySQL that will create a new group table
       }
-      for (var n = 1;  n <= groupCode; n++) {
-        if (message == n) {
-          index = groups.get(n).push(ws) - 1;
-          groups.get(n)[index].send('You are now in a group!');
-          for (var i = 0; i < groups.get(n).length - 1; i++) {
-            groups.get(n)[i] && groups.get(n)[i].send('New player has joined!');
+      else {
+        for (var n = 1;  n <= groupCode; n++) {
+          if (message == 'join' + n) {
+            index = groups.get(n).push(ws) - 1;
+            groups.get(n)[index].send('You are now in a group!');
+            for (var i = 0; i < groups.get(n).length - 1; i++) {
+              groups.get(n)[i] && groups.get(n)[i].send('New player has joined!');
+            }
+            console.log('Current Connections for this group: ' + groups.get(n).length);
           }
-          console.log('Current Connections for this group: ' + groups.get(n).length);
+          else if (message == 'ready' + n) {
+            readyCounter++;
+            if (readyCounter == groups.get(n).length) {
+              readyCounter = 0;
+              for (var i = 0; i < groups.get(n).length; i++) {
+                groups.get(n)[i] && groups.get(n)[i].send('Game is starting!');
+                // Push all of the details about this group into the group table
+                // Start getting words for game and loading Gameplay logic
+              }
+            }
+          }
         }
       }
-      // else if (message == groupCode) {
-      //   index = players.push(ws) - 1;
-      //   groups.get(groupCode)[index].send('You are now in a group!');
-      //   for (var i = 0; i < groups.get(groupCode).length; i++) {
-      //     groups.get(groupCode)[i] && groups.get(groupCode)[i].send('New player has joined!');
-      //   }
-      // }
       // else {
       //   console.log('There has been an error');
       //   players[index].send('There has been an error');
