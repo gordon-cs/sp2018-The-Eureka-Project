@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, StyleSheet,Text, TextInput, View, Platform,} from "react-native";
+import { Button, StyleSheet,Text, TextInput, View,} from "react-native";
 const ws = new WebSocket('ws://172.27.43.141:4000');
 
 // JoinMultiplayerScreen.js 

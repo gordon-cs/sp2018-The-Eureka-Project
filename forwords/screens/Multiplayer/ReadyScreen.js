@@ -31,7 +31,6 @@ export default class JoinMultiplayerScreen extends Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.headingView}>
             <Text style={styles.mainText}>
               Your group code is {this.props.navigation.state.params.groupID}
@@ -45,7 +44,6 @@ export default class JoinMultiplayerScreen extends Component {
             onPress={() => this.readyOnPress()}
             color='purple'
           />
-        </ScrollView>
       </View>
     );
   }
