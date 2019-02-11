@@ -1,19 +1,12 @@
 import React, { Component } from "react";
-import {
-  AppRegistry,
-  Button,
-  FlatList,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  ActivityIndicator,
-  Platform,
-  ScrollView
-} from "react-native";
+import { Button, StyleSheet,Text, View, Platform,} from "react-native";
 
-import { fullRoutePrefix } from "../../constants/API";
-
+// ReadyScreen.js
+// Author: Ezekiel Martinez
+// This screen allows a user to be able to view their group code
+// and then tell or show other users so that they may be able to join.
+// It also will allow(?) user's to set different attributes of the game.
+// When every player has pressed the ready button, the game will then start.
 
 export default class JoinMultiplayerScreen extends Component {
   static navigationOptions = {
@@ -25,26 +18,22 @@ export default class JoinMultiplayerScreen extends Component {
   }
     readyOnPress() {
         const { navigate } = this.props.navigation;
-        ws.send('ready');
+        var ws = this.props.navigation.state.params.ws;
+        ws.send('ready' + this.props.navigation.state.params.groupID);
         ws.onmessage = e => {
-            console.log('Received message:', e.data) // print on client screen ideally
+            console.log('Received message:', e.data)
         }
+        // Navigate to multiplayer gameplay screen
     }
-
-    async componentWillMount() {
-        try {
-
-        } catch (error) {
-            throw new Error('component will not mount');
-        }
-    }
+    // This screen should also allow a user to specify different
+    // attributes of the game they are about to play.
   render() {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.headingView}>
-          <Text style={styles.mainText}>
+            <Text style={styles.mainText}>
               Your group code is {this.props.navigation.state.params.groupID}
             </Text>
             <Text style={styles.mainText}>
@@ -63,34 +52,28 @@ export default class JoinMultiplayerScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  MainContainer: {
-    justifyContent: "center",
-    flex: 1,
-    margin: 10,
-    paddingTop: Platform.OS === "ios" ? 20 : 0
+    mainText: {
+        alignItems: 'center',
+        marginTop: 10,
+        marginBottom: 10,
+        marginLeft: 10,
+        fontSize: 20,
+        color: 'black',
+    },
+    button: {},
+        headingText: {
+        fontWeight: "bold",
+        fontSize: 30
+    },
+    headingView: {
+        alignItems: "center",
+        marginTop: 10,
+        marginBottom: 20
   },
-  button: {},
-  headingText: {
-    fontWeight: "bold",
-    fontSize: 30
-  },
-  mainText: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 10,
-    marginLeft: 10,
-    fontSize: 20,
-    color: 'black',
-},
-  headingView: {
-    alignItems: "center",
-    marginTop: 10,
-    marginBottom: 20
-  },
-  icon: {
-    alignItems: "center",
-    marginTop: 10,
-    marginBottom: 20,
-    fontSize: 80
+    icon: {
+        alignItems: "center",
+        marginTop: 10,
+        marginBottom: 20,
+        fontSize: 80
   }
 });

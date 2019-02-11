@@ -163,33 +163,46 @@ app.use(function(err, req, res, next) {
 	res.sendStatus(err.status);
 //  res.render('error');
 });
-  // Connect to client via ws, log the proxess of receiving and sending messages
- // or client
+
+  // Multiplayer Connection Code
+  // Author: Ezekiel Martinez with assistance from Stephen Macomber
+  // Summary: Allows for Multiplayer Gameplay
+  // Description:
+  // This is the code that allows players to connect and play a game 
+  // with each other via database. This is avheived through the use
+  // of Websockets (ws). Initializes a connection with user/client,
+  // and then has multiple different cases for the types of message
+  // it could receive from a client. The code keeps track of existing group
+  // through a map, and then indexs through the possible groupID in order
+  // to locate the correct group.
+
+  // Initialize variables neccessary for storing player data
   var groups = new Map();
   var groupCode = 0;
   var index = 0;
-  var readyCounter = 0;
+  var readyCounter = 0; // This variable is not sustainable for multiple players at once
+  // Connect to client via ws, log the proxess of receiving and sending messages
+  // or client
   wss.on('connection', (ws, req) => {
     console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''));
     ws.on('message', message => {
       console.log(`Received message: ${message}`);
 
-      // Prototype statement for placing user/client into 
-      // groups based off the code in the message that they send.
       if (message == 'create') {
         var players = [];
         groupCode++; // group code generation function.
         groups.set(groupCode, players)
         index = groups.get(groupCode).push(ws) - 1;
-        newMessage = 'You created a group! Here is the group code: ' + groupCode;
-        groups.get(groupCode)[index].send( newMessage );
-        // send code to client to that causes React to load a new screen
+        groups.get(groupCode)[index].send( groupCode );
+        // send code to client for it to be displayed for other users
       }
       else {
+        //Check to see what group the message is being sent from.
         for (var n = 1;  n <= groupCode; n++) {
           if (message == 'join' + n) {
             index = groups.get(n).push(ws) - 1;
             groups.get(n)[index].send('You are now in a group!');
+            // Alert other players that another player has joined group, unneeded for finished product.
             for (var i = 0; i < groups.get(n).length - 1; i++) {
               groups.get(n)[i] && groups.get(n)[i].send('New player has joined!');
             }
@@ -201,9 +214,9 @@ app.use(function(err, req, res, next) {
               readyCounter = 0;
               for (var i = 0; i < groups.get(n).length; i++) {
                 groups.get(n)[i] && groups.get(n)[i].send('Game is starting!');
-                // Push all of the details about this group into the group table
-                // Start getting words for game and loading Gameplay logic
               }
+              // Push all of the details about this group into the group table
+              // Start getting words for game and loading Gameplay logic
             }
           }
         }

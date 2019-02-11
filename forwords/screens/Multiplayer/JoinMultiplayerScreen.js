@@ -1,21 +1,12 @@
 import React, { Component } from "react";
-import axios from "axios";
-import {
-  AppRegistry,
-  Button,
-  FlatList,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  ActivityIndicator,
-  Platform,
-  ScrollView
-} from "react-native";
-
-import { fullRoutePrefix } from "../../constants/API";
+import { Button, StyleSheet,Text, TextInput, View, Platform,} from "react-native";
 const ws = new WebSocket('ws://172.27.43.141:4000');
 
+// JoinMultiplayerScreen.js 
+// Author: Ezekiel Martinez
+// This screen allows a user to be able to create a new group
+// or join an existing group by entering a code. This accomplished
+// by sending specific messages to the backend via ws.
 
 export default class JoinMultiplayerScreen extends Component {
   static navigationOptions = {
@@ -29,31 +20,24 @@ export default class JoinMultiplayerScreen extends Component {
   }
   joinOnPress() {
     const { navigate } = this.props.navigation;
-    // var people = [];
-    // people.push('Hello');
-    // var groups = new Map();
-    // groups.set(this.state.groupCode, people);
-    // groups.get(this.state.groupCode).push('Oi M8!')
-    // console.log('Map Worked:', groups.get(this.state.groupCode))
-    ws.send( this.state.groupCode )
+    ws.send( 'join' + this.state.groupCode )
     ws.onmessage = e => {
-      console.log('Received message:', e.data) // print on client screen ideally
+      console.log('Received message:', e.data)
     }
-    navigate("Ready", { groupID: this.state.groupCode })
+    navigate("Ready", { groupID: this.state.groupCode, ws: ws })
 }
 createOnPress() {
   const { navigate } = this.props.navigation;
   ws.send('create')
   ws.onmessage = e => {
-    console.log('Received message:', e.data) // print on client screen ideally
-    navigate("Ready", { groupID: e.data })
+    console.log('Received message:', e.data)
+    navigate("Ready", { groupID: e.data, ws: ws })
   }
 }
   render() {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.headingView}>
             <Text style={styles.mainText}>
               Enter an existing group code and join, or create your own group!
@@ -78,19 +62,18 @@ createOnPress() {
             onPress={() => this.createOnPress()} // Ideally this will also lead to this player going to a wait screen.
             color='purple'
           />
-        </ScrollView>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  MainContainer: {
-    justifyContent: "center",
-    flex: 1,
-    margin: 10,
-    paddingTop: Platform.OS === "ios" ? 20 : 0
-  },
+  container: {
+    alignItems: 'center',
+    flex: 10,
+    backgroundColor: '#fff',
+    padding: 10,
+  },  
   button: {},
   headingText: {
     fontWeight: "bold",
