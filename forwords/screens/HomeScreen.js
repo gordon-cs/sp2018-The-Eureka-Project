@@ -40,7 +40,7 @@ export default class HomeScreen extends React.Component {
           </View>
           <Button style={styles.button}
             title='Multi-Player Mode!'
-            onPress={() => navigate('JoinMultiplayer')}
+            onPress={() => navigate('SelectMultiplayer')}
             color='purple'
           />
           <Button style={styles.button}

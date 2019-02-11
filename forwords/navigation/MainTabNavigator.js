@@ -2,7 +2,8 @@ import { createStackNavigator } from 'react-navigation';
 import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/Authentication/LoginScreen';
 import GamePlayScreen from '../screens/GamePlay/GamePlayScreen';
-import JoinMultiplayerScreen from '../screens/Multiplayer/JoinMultiplayerScreen';
+import SelectMultiplayerScreen from '../screens/Multiplayer/SelectMultiplayerScreen';
+import JoinScreen from '../screens/Multiplayer/JoinScreen';
 import ReadyScreen from '../screens/Multiplayer/ReadyScreen';
 import SinglePlayerModeSelectionScreen from '../screens/Selection/SinglePlayerModeSelectionScreen';
 import RegisterScreen from '../screens/Authentication/RegisterScreen';
@@ -29,8 +30,12 @@ const SinglePlayerModeSelectionStack = createStackNavigator({
   SinglePlayerModeSelection: SinglePlayerModeSelectionScreen,
 });
 
-const JoinMultiplayerStack = createStackNavigator({
-  JoinMultiplayer: JoinMultiplayerScreen,
+const SelectMultiplayerStack = createStackNavigator({
+  SelectMultiplayer: SelectMultiplayerScreen,
+});
+
+const JoinStack = createStackNavigator({
+  Join: JoinScreen,
 });
 
 const ReadyStack = createStackNavigator({
@@ -51,7 +56,8 @@ export default createStackNavigator({
   HomeStack,
   ForgotPasswordStack,
   SinglePlayerModeSelectionStack,
-  JoinMultiplayerStack,
+  SelectMultiplayerStack,
+  JoinStack,
   ReadyStack,
   GamePlayScreenStack,
   InstructionStack,
