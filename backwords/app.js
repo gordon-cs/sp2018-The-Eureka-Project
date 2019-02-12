@@ -68,7 +68,7 @@ app.get('/targetLanguage', function (req, res) {
 
 app.get('/lesson-list', function (req, res) {
 	console.log("in /lesson-list route in backend");
-	connection.query('SELECT * FROM Lessons;', function (error, results, fields) {
+	connection.query('SELECT * FROM lesson;', function (error, results, fields) {
 		if (error)
 			throw error;
 		res.json(results);
