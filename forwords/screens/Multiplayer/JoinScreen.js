@@ -14,7 +14,8 @@ export default class JoinScreen extends Component {
     joinOnPress() {
         const { navigate } = this.props.navigation;
         var ws = this.props.navigation.state.params.ws;
-        ws.send( 'join' + this.state.groupCode )
+        var newMessage = [ 'join', this.state.groupCode ]
+        ws.send( newMessage );
         ws.onmessage = e => {
         console.log('Received message:', e.data)
         }

@@ -19,7 +19,8 @@ export default class MultiplayerSetUp extends Component {
   readyOnPress() {
     const { navigate } = this.props.navigation;
     var ws = this.props.navigation.state.params.ws;
-    ws.send('ready' + this.props.navigation.state.params.groupID);
+    var newMessage = [ 'ready', this.props.navigation.state.params.groupID ]
+    ws.send( newMessage );
     ws.onmessage = e => {
       console.log('Received message:', e.data)
     }
