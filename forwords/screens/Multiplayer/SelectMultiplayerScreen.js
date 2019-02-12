@@ -15,7 +15,6 @@ export default class SelectMultiplayerScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      groupCode: '',
     };
   }
   joinOnPress() {

@@ -14,12 +14,25 @@ export default class MultiplayerSetUp extends Component {
   };
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      groupCode: '',
+    };
   }
   readyOnPress() {
     const { navigate } = this.props.navigation;
     var ws = this.props.navigation.state.params.ws;
-    ws.send('ready' + this.props.navigation.state.params.groupID);
+    var newMessage = 'ready' + this.props.navigation.state.params.groupID;
+    ws.send( newMessage );
+    ws.onmessage = e => {
+      console.log('Received message:', e.data)
+    }
+    // Navigate to multiplayer gameplay screen
+  }
+  joinOnPress() {
+    const { navigate } = this.props.navigation;
+    var ws = this.props.navigation.state.params.ws;
+    var newMessage = 'join' + groupCode;
+    ws.send( newMessage );
     ws.onmessage = e => {
       console.log('Received message:', e.data)
     }
