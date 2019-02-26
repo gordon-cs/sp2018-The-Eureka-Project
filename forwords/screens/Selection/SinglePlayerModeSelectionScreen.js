@@ -35,7 +35,6 @@ export default class SinglePlayerModeSelectionScreen extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const titles = this.state.lessonList;
-    console.log("titles: ", this.state.lessonList);
     const buttons = titles.map(element => (
       <Button
         key={element.ID}
