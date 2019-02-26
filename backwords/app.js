@@ -76,7 +76,7 @@ app.get('/word/:lesson/:id', function (req, res) {
   console.log('in /word route in backend');
   var id = req.params.id;
   var lesson = req.params.lesson;
-  connection.query('SELECT * FROM Lesson' + lesson + ' WHERE ID = ' + id + ';', function (error, results, fields) {
+  connection.query('SELECT * FROM word WHERE lesson = ' + lesson + ' WHERE ID = ' + id + ';', function (error, results, fields) {
     if (error)
       throw error;
     res.json(results);
@@ -90,7 +90,7 @@ app.get('/choices/:lesson/:first/:second/:third/:fourth', function (req, res) {
   var second = req.params.second;
   var third = req.params.third;
   var fourth = req.params.fourth;
-  connection.query('SELECT * FROM Lesson' + lesson + ' WHERE ID in (' + first +',' + second + ',' + third + ',' + fourth + ');', function (error, results, fields) {
+  connection.query('SELECT * FROM word WHERE lesson = ' + lesson + ' WHERE ID in (' + first +',' + second + ',' + third + ',' + fourth + ');', function (error, results, fields) {
     if (error)
       throw error;
     res.json(results);
