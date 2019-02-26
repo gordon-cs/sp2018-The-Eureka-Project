@@ -84,7 +84,7 @@ app.get('/lesson-range/:lesson/:extreme', function (req, res) {
   console.log('in /extreme route in backend');
   var lesson = req.params.lesson;
   var extreme = req.params.extreme; // either 'ASC' --> min or 'DESC' --> max
-  connection.query('SELECT * FROM word WHERE lesson = ' + lesson + ' ORDER BY ID ' + extreme + ' LIMIT 1;', function (error, results, fields) {
+  connection.query('SELECT ID FROM word WHERE lesson = ' + lesson + ' ORDER BY ID ' + extreme + ' LIMIT 1;', function (error, results, fields) {
     if (error)
       throw error;
     res.json(results);
