@@ -79,12 +79,24 @@ app.get('/choices/:first/:second/:third/:fourth', function (req, res) {
   });
 })
 
-// Gets either the minimum or maximum ID for a given lesson
-app.get('/lesson-range/:lesson/:extreme', function (req, res) {
-  console.log('in /extreme route in backend');
+// Gets the minimum ID for a given lesson
+app.get('/lesson-min/:lesson', function (req, res) {
+  console.log('in /lesson-min route in backend');
   var lesson = req.params.lesson;
-  var extreme = req.params.extreme; // either 'ASC' --> min or 'DESC' --> max
-  connection.query('SELECT ID FROM word WHERE lesson = ' + lesson + ' ORDER BY ID ' + extreme + ' LIMIT 1;', function (error, results, fields) {
+  var extreme = req.params.extreme; 
+  connection.query('SELECT ID FROM word WHERE lesson = ' + lesson + ' ORDER BY ID ASC LIMIT 1;', function (error, results, fields) {
+    if (error)
+      throw error;
+    res.json(results);
+  });
+})
+
+// Gets the maximum ID for a given lesson
+app.get('/lesson-max/:lesson', function (req, res) {
+  console.log('in /lesson-min route in backend');
+  var lesson = req.params.lesson;
+  var extreme = req.params.extreme; 
+  connection.query('SELECT ID FROM word WHERE lesson = ' + lesson + ' ORDER BY ID DESC LIMIT 1;', function (error, results, fields) {
     if (error)
       throw error;
     res.json(results);
