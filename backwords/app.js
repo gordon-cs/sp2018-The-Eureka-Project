@@ -101,7 +101,7 @@ app.get('/lesson-words/:lesson', function(req, res) {
   console.log('in /lesson-words from backend');
   var lesson = req.params.lesson;
   console.log('url param lesson: ', lesson);
-  connection.query('SELECT * FROM Lesson' + lesson +';', function (error, results, fields) {
+  connection.query('SELECT * FROM word WHERE lesson = ' + lesson +';', function (error, results, fields) {
     if (error)
       throw error;
     res.json(results);
