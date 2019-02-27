@@ -48,7 +48,7 @@ async function quickstart(q) {
   const translate = new Translate({ projectId });
   // The text to translate is the parameter q
   // The target language
-  const target = 'ch';
+  const target = 'zh';
   // Translates some text into Spanish
   const [translation] = await translate.translate(q, target);
   console.log(`Text: ${q}`);
