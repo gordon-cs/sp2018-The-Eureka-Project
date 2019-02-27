@@ -39,8 +39,8 @@ translate
   });
 */
 
-async function quickstart(q) {
-  console.log("in quickstart()!!!!!!!!");
+async function translateText(q) {
+  console.log("in translateText()!!!!!!!!");
   // Imports the Google Cloud client library
   const projectId = 'ceramics-228616'
   const { Translate } = require('@google-cloud/translate');
@@ -58,7 +58,7 @@ async function quickstart(q) {
 
 app.get('/translate/:ChineseText', function (req, res) {
   console.log("in /translate/:ChineseText route in backend!");
-  let translation = quickstart(req.params.q)
+  let translation = translateText(req.params.q)
   res.send(translation);
 });
 
