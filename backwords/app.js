@@ -104,9 +104,9 @@ app.get('/', function (req, res) {
 app.get('/translate/:q', function (req, res) {
   console.log("in /translate/:q route in backend");
   console.log("received as q: ", q);
-  let value = quickstart(q)
-  console.log("value: ", value);
-  res.send(value);
+  // let value = quickstart(q)
+  // console.log("value: ", value);
+  // res.send(value);
 });
 
 
