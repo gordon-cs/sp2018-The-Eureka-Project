@@ -3,15 +3,14 @@ import axios from "axios";
 import TimerMixin from 'react-timer-mixin';
 import Choice from "./components/Choice";
 import Prompt from './components/Prompt';
-import Timer from './components/Timer';
 import {
   Text,
   View,
   StyleSheet,
   Platform,
+  TouchableOpacity,
 } from "react-native";
 import { fullRoutePrefix } from "../../constants/API";
-
 export default class GamePlayScreen extends Component {
   static navigationOptions = {
     header: null
@@ -29,15 +28,22 @@ export default class GamePlayScreen extends Component {
       bottomRightChoice: {},
       promptID: '',
       counter: 1,
-      resetTimer: true, // Default is true, false means  ??
     };
     this.wasAnsweredCorrectly = this.wasAnsweredCorrectly.bind(this);
+  }
+
+  async componentWillMount() {
+    try {
+      this.populateChoices();
+    } catch (error) {
+      throw new Error('component will not mount');
+    }
   }
 
   wasAnsweredCorrectly(choiceIDGiven, prompt) {
     const { navigate } = this.props.navigation;
     if (choiceIDGiven === prompt) {
-      this.setState({ 
+      this.setState({
         answeredCorrectly: [choiceIDGiven, 1],
         counter: (this.state.counter + 1), // count the number of correct answers, up to 10 correct 
       });
@@ -70,10 +76,23 @@ export default class GamePlayScreen extends Component {
     return numList;
   }
 
+  /* Call Google Cloud Translate API to translate the text in the prompt bar
+  *  returns translated text
+  */
+  async translateText(q) {
+    console.log("in translateText(q) with q = ", q);
+    await axios.get(fullRoutePrefix + '/translate/' + q).then(res => {
+      translation = res.data;
+      console.log("translation: ", res.data);
+    });
+    console.log("at the end of translateText(q)!");
+  }
+
   async populateChoices() {
-    console.log("populateChoices();");
-    var lesson = this.props.navigation.state.params.lesson;
-    let length;
+    /* Hardcoding to lesson 5 for testing.
+    var lesson = this.props.navigation.state.params.lesson; 
+    */
+    var lesson = 5;
     await axios.get(fullRoutePrefix + '/lesson-words/' + lesson).then(res => {
       lessonLength = res.data.length;
     });
@@ -90,23 +109,9 @@ export default class GamePlayScreen extends Component {
         promptID: this.randomNumGen(4) // Picks one of the choice ids as the prompt id
       });
     });
-    console.log("after axios, before settingState");
     this.setState({
       answeredCorrectly: [0, 0],
-      resetTimer: true,
     });
-    this.setState({ // Set to false so that the timer does not reset
-      resetTimer: false,
-    });
-    console.log("in end of populateChoices()");
-  }
-
-  async componentWillMount() {
-    try {
-      this.populateChoices();
-    } catch (error) {
-      throw new Error('component will not mount');
-    }
   }
 
   render() {
@@ -116,7 +121,6 @@ export default class GamePlayScreen extends Component {
     const bottomRightChoice = this.state.bottomRightChoice;
     const promptID = this.state.promptID;
     const answeredCorrectly = this.state.answeredCorrectly;
-    const resetTimer = this.state.resetTimer;
 
     let promptObj;
     switch (promptID) {
@@ -131,7 +135,6 @@ export default class GamePlayScreen extends Component {
         break;
       default:
         promptObj = bottomRightChoice.Pinyin;
-
     }
 
     return (
@@ -141,9 +144,16 @@ export default class GamePlayScreen extends Component {
           </Prompt>
         </View>
         <View style={styles.timerContainer}>
-          <Timer
-            resetTimer={resetTimer}>
-          </Timer>
+          <TouchableOpacity
+            style={styles.helpContainer}
+            onPress={() => {
+              console.log("Pressed '?' --> THE PROMPT TEXT RN IS: ", promptObj);
+            }}
+          //onPress={() => {translate(promptObj);}}
+
+          >
+            <Text style={styles.helpText}>?</Text>
+          </TouchableOpacity >
         </View>
         <View style={styles.choicesTopContainer}>
           <Choice
@@ -208,5 +218,18 @@ const styles = StyleSheet.create({
     width: 75,
     height: 75,
     backgroundColor: 'white',
+  },
+  helpContainer: {
+    justifyContent: "center",
+    flex: 1,
+    margin: 10,
+    width: 50,
+    height: 50,
+    borderRadius: 80,
+  },
+  helpText: {
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "bold",
   },
 });
