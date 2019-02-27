@@ -94,7 +94,7 @@ app.get('/lesson-min/:lesson', function (req, res) {
 app.get('/lesson-words-count/:lesson', function (req, res) {
   console.log('in /lesson-words-count/:lesson route in backend');
   var lesson = req.params.lesson;
-  connection.query('SELECT ID FROM word WHERE lesson = ' + lesson + ' ORDER BY ID DESC LIMIT 1;', function (error, results, fields) {
+  connection.query('SELECT COUNT(ID) FROM word WHERE lesson = ' + lesson + ';', function (error, results, fields) {
     if (error)
       throw error;
     res.json(results);

@@ -29,6 +29,8 @@ export default class GamePlayScreen extends Component {
       bottomRightChoice: {},
       promptID: '',
       counter: 1,
+      lessonMinID: 0,
+      lessonWordsCount: 0,
       resetTimer: true, // Default is true, false means  ??
     };
     this.wasAnsweredCorrectly = this.wasAnsweredCorrectly.bind(this);
@@ -49,21 +51,22 @@ export default class GamePlayScreen extends Component {
     }
   }
 
-  // Generate random integer from 1 to lesson length
-  randomNumGen(lessonLength) {
-    let randNum = Math.floor(Math.random() * lessonLength) + 1;
-    return randNum;
+  //Generate a random number between the minimum ID in that lesson and the maximum ID in that lesson
+  randomNumGen(minID, lessonWordsCount) {
+    let maxID = minID + lessonWordsCount;
+    return Math.random() * (maxID - minID) + minID;
   }
 
   /* Create a list of 4 unique numbers
    * If a number is already in the list, then generate a unique number
    */
-  fourWordsPicker(lessonLength) {
+  fourWordsPicker(minID, lessonWordsCount) {
     let numList = [];
     while (numList.length < 4) {
-      let potential = this.randomNumGen(lessonLength);
+      let potential = this.randomNumGen(minID, lessonWordsCount);
+      console.log("potential = ", potential);
       while (numList.includes(potential)) {
-        potential = this.randomNumGen(lessonLength);
+        potential = this.randomNumGen(minID, lessonWordsCount);
       }
       numList.push(potential);
     }
@@ -74,12 +77,29 @@ export default class GamePlayScreen extends Component {
     console.log("populateChoices();");
     var lesson = this.props.navigation.state.params.lesson;
     let length;
-    await axios.get(fullRoutePrefix + '/lesson-words/' + lesson).then(res => {
-      lessonLength = res.data.length;
+
+    // get the first ID of a row in a lesson
+    await axios.get(fullRoutePrefix + '/lesson-min/' + lesson).then(res => {
+      const lessonMinID = res.data[0].ID;
+      this.setState({lessonMinID});
+      console.log("minID for lesson ", lesson, " is: ", this.state.lessonMinID);
     });
-    var fourWords = this.fourWordsPicker(lessonLength); // Array of four words ids, eg. 5,2,17,11
+
+    // get the amount of rows in a lesson
+    await axios.get(fullRoutePrefix + '/lesson-words-count/' + lesson).then(res => {
+      const lessonWordsCount = res.data;
+      this.setState({lessonWordsCount});
+      console.log("lessonWordsCount", lessonWordsCount);
+    });
+
+    console.log("this.state.minID", this.state.lessonMinID)
+    console.log("this.state.lessonWordsCount", this.state.lessonWordsCount)
+    var fourWords = this.fourWordsPicker(this.state.lessonMinID, this.state.lessonWordsCount); // Array of four words ids, eg. 5,2,17,11
+    console.log("made it past line 89");
+
     var shuffleSQLRows = this.fourWordsPicker(4); // Randomize order of fourSQLWordObjects returned
-    await axios.get(fullRoutePrefix + '/choices/' + lesson + '/ ' + fourWords[0] + '/' + fourWords[1] + '/' + fourWords[2] + '/' + fourWords[3]).then(res => {
+
+    await axios.get(fullRoutePrefix + '/choices/' + fourWords[0] + '/' + fourWords[1] + '/' + fourWords[2] + '/' + fourWords[3]).then(res => {
       const fourSQLWordObjects = res.data; // SQL will always return an ordered array, eg. 5,2,17,11 -> SQL -> 2,5,11,17
       this.setState({
         isLoading: false,
