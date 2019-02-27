@@ -62,38 +62,9 @@ async function translateText(ChineseText) {
   }
 }
 
-// app.get('/translate/:ChineseText', function (req, res) {
-//   console.log("in /translate/", req.params.ChineseText, " route");
-//   let translation = translateText(req.params.ChineseText)
-//   console.log("           sending this back: ", translation);
-//   res.send(translation);
-// });
-
 app.get('/translate/:ChineseText', function (req, res) {
   console.log("in /translate/", req.params.ChineseText, " route");
-  let ChineseText = req.params.ChineseText;
-
-  console.log("       in translateText(" + ChineseText + ")");
-
-  // Imports the Google Cloud client library
-  const projectId = 'ceramics-228616'
-  const { Translate } = require('@google-cloud/translate');
-
-  // Instantiates a client
-  const translate = new Translate({ projectId });
-
-  // The target language
-  const target = 'en';
-  try {
-    // The text to translate is the parameter ChineseText, into English
-    const [translation] = await translate.translate(ChineseText, target);
-    console.log(`Text: ${ChineseText}`);
-    console.log(`Translation: ${translation}`);
-  } catch (err) {
-    console.log(`Translation did not work.`);
-  }
-
-
+  let translation = translateText(req.params.ChineseText)
   console.log("           sending this back: ", translation);
   res.send(translation);
 });
