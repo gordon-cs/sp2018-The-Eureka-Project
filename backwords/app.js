@@ -99,6 +99,7 @@ connection.connect(function (err) {
 
 app.get('/', function (req, res) {
   res.send("Welcome to forwords");
+  quickstart("dog");
 });
 
 app.get('/translate/:q', function (req, res) {
