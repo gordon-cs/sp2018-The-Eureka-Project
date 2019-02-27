@@ -39,26 +39,26 @@ translate
   });
 */
 
-async function translateText(q) {
-  console.log("in translateText()!!!!!!!!");
+async function translateText(ChineseText) {
+  console.log("in translateText("+ChineseText+")!!!!!!!!");
   // Imports the Google Cloud client library
   const projectId = 'ceramics-228616'
   const { Translate } = require('@google-cloud/translate');
   // Instantiates a client
   const translate = new Translate({ projectId });
-  // The text to translate is the parameter q
+  // The text to translate is the parameter ChineseText
   // The target language
   const target = 'en';
   // Translates some text into Spanish
-  const [translation] = await translate.translate(q, target);
-  console.log(`Text: ${q}`);
+  const [translation] = await translate.translate(ChineseText, target);
+  console.log(`Text: ${ChineseText}`);
   console.log(`Translation: ${translation}`);
   // Path to private key: ceramics-857511cb22d7.json
 }
 
 app.get('/translate/:ChineseText', function (req, res) {
-  console.log("in /translate/:ChineseText route in backend!");
-  let translation = translateText(req.params.q)
+  console.log("in /translate/:ChineseText route in backend! what is ChineseText?: ", req.params.ChineseText);
+  let translation = translateText(req.params.ChineseText)
   res.send(translation);
 });
 
