@@ -51,8 +51,9 @@ async function quickstart(q) {
   const target = 'es';
   // Translates some text into Spanish
   const [translation] = await translate.translate(q, target);
-  console.log(`Text: ${text}`);
+  console.log(`Text: ${q}`);
   console.log(`Translation: ${translation}`);
+  // API Key: AIzaSyBtrBSJx_Yj3pHP-jgHK6gxhcaWAIYT0xk
 }
 
 app.get('/translate/:q', function (req, res) {
