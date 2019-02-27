@@ -54,11 +54,13 @@ async function translateText(ChineseText) {
   console.log(`Text: ${ChineseText}`);
   console.log(`Translation: ${translation}`);
   // Path to private key: ceramics-857511cb22d7.json
+  return translation;
 }
 
 app.get('/translate/:ChineseText', function (req, res) {
   console.log("in /translate/:ChineseText route in backend! what is ChineseText?: ", req.params.ChineseText);
   let translation = translateText(req.params.ChineseText)
+  console.log("sending this back: ", translation);
   res.send(translation);
 });
 
@@ -95,27 +97,6 @@ connection.connect(function (err) {
   console.log('Connected as id ' + connection.threadId);
 });
 
-
-
-
-app.get('/people', function (req, res) {
-  console.log("in /people route in backend");
-  connection.query('SELECT * FROM Users', function (error, results, fields) {
-    if (error)
-      throw error;
-    res.json(results);
-  });
-})
-
-app.get('/targetLanguage', function (req, res) {
-  console.log("in /targetLanguage route in backend");
-  connection.query('SELECT TargetLanguage FROM Users WHERE FirstName = "Nikki"', function (error, results, fields) {
-    if (error)
-      throw error;
-    res.json(results);
-  });
-})
-
 app.get('/lesson-list', function (req, res) {
   console.log("in /lesson-list route in backend");
   connection.query('SELECT * FROM lesson;', function (error, results, fields) {
@@ -138,7 +119,7 @@ app.get('/word/:lesson/:id', function (req, res) {
 })
 
 app.get('/choices/:lesson/:first/:second/:third/:fourth', function (req, res) {
-  console.log('in /choices route in backend');
+  // console.log('in /choices route in backend');
   var lesson = req.params.lesson;
   var first = req.params.first;
   var second = req.params.second;
