@@ -39,30 +39,34 @@ translate
   });
 */
 
-async function quickstart(
-  projectId = 'ceramics-228616' // Your GCP Project Id
-) {
-
+async function quickstart(q) {
   console.log("in quickstart()!!!!!!!!");
   // Imports the Google Cloud client library
+  const projectId = 'ceramics-228616'
   const { Translate } = require('@google-cloud/translate');
-
   // Instantiates a client
   const translate = new Translate({ projectId });
-
-  // The text to translate
-  const text = 'Hello, world!';
-
+  // The text to translate is the parameter q
   // The target language
   const target = 'es';
-
   // Translates some text into Spanish
-  const [translation] = await translate.translate(text, target);
+  const [translation] = await translate.translate(q, target);
   console.log(`Text: ${text}`);
   console.log(`Translation: ${translation}`);
 }
 
-
+app.get('/translate/:q', function (req, res) {
+  console.log("in /translate/:q route in backend!");
+  let translation = quickstart(req.params.q)
+  console.log("translation: ", translation);
+  res.send(translation);
+  // res.status(status).send("HEllo! q:",  req.params.q);
+  // res.send(value);
+});
+app.get('/', function (req, res) {
+  res.send("Welcome to forwords");
+  quickstart("dog");
+});
 
 // Body Parser Middleware
 app.use(bodyParser.json());
@@ -97,18 +101,7 @@ connection.connect(function (err) {
   console.log('Connected as id ' + connection.threadId);
 });
 
-app.get('/', function (req, res) {
-  res.send("Welcome to forwords");
-  quickstart("dog");
-});
 
-app.get('/translate/:q', function (req, res) {
-  console.log("in /translate/:q route in backend!");
-  // let value = quickstart(q)
-  // console.log("value: ", value);
-  res.status(status).send("HEllo! q:",  req.params.q);
-  // res.send(value);
-});
 
 
 app.get('/people', function (req, res) {
