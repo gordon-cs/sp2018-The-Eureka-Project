@@ -81,9 +81,8 @@ app.get('/choices/:first/:second/:third/:fourth', function (req, res) {
 
 // Gets the minimum ID for a given lesson
 app.get('/lesson-min/:lesson', function (req, res) {
-  console.log('in /lesson-min route in backend');
+  console.log('in /lesson-min/:lesson route in backend');
   var lesson = req.params.lesson;
-  var extreme = req.params.extreme; 
   connection.query('SELECT ID FROM word WHERE lesson = ' + lesson + ' ORDER BY ID ASC LIMIT 1;', function (error, results, fields) {
     if (error)
       throw error;
@@ -91,11 +90,10 @@ app.get('/lesson-min/:lesson', function (req, res) {
   });
 })
 
-// Gets the maximum ID for a given lesson
-app.get('/lesson-max/:lesson', function (req, res) {
-  console.log('in /lesson-min route in backend');
+// Gets the amount of words in a given lesson
+app.get('/lesson-words-count/:lesson', function (req, res) {
+  console.log('in /lesson-words-count/:lesson route in backend');
   var lesson = req.params.lesson;
-  var extreme = req.params.extreme; 
   connection.query('SELECT ID FROM word WHERE lesson = ' + lesson + ' ORDER BY ID DESC LIMIT 1;', function (error, results, fields) {
     if (error)
       throw error;
