@@ -101,7 +101,7 @@ app.get('/', function (req, res) {
   res.send("Welcome to forwords");
 });
 
-app.get('/translate/:q', function (res) {
+app.get('/translate/:q', function (req, res) {
   console.log("in /translate/:q route in backend! q: ", req.params.q);
 
   console.log("received as q: ", q);
