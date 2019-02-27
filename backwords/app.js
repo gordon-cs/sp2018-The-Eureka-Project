@@ -40,7 +40,7 @@ translate
 */
 
 async function translateText(ChineseText) {
-  console.log("       in translateText("+ChineseText+")");
+  console.log("       in translateText(" + ChineseText + ")");
 
   // Imports the Google Cloud client library
   const projectId = 'ceramics-228616'
@@ -51,12 +51,15 @@ async function translateText(ChineseText) {
 
   // The target language
   const target = 'en';
-
-  // The text to translate is the parameter ChineseText, into English
-  const [translation] = await translate.translate(ChineseText, target);
-  console.log(`Text: ${ChineseText}`);
-  console.log(`Translation: ${translation}`);
-  return translation;
+  try {
+    // The text to translate is the parameter ChineseText, into English
+    const [translation] = await translate.translate(ChineseText, target);
+    console.log(`Text: ${ChineseText}`);
+    console.log(`Translation: ${translation}`);
+    return translation;
+  } catch (err) {
+    console.log(`Translation did not work.`);
+  }
 }
 
 app.get('/translate/:ChineseText', function (req, res) {
