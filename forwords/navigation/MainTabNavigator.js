@@ -36,11 +36,11 @@ const InstructionStack = createStackNavigator({
 });
 
 export default createStackNavigator({
+  SinglePlayerModeSelectionStack,
   LoginStack,
   RegisterStack,
   HomeStack,
   ForgotPasswordStack,
-  SinglePlayerModeSelectionStack,
   GamePlayScreenStack,
   InstructionStack,
 });
