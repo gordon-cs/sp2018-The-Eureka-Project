@@ -50,11 +50,8 @@ async function translateText(ChineseText) {
   // The target language
   const target = 'en';
   // Translates some text into English
-  translate
-  .translate(text, target)
-  .then(results => {
+  translate.translate(text, target).then(results => {
     const translation = results[0];
-
     console.log(`Text: ${ChineseText}`);
     console.log(`Translation: ${translation}`);
   })
@@ -72,7 +69,7 @@ async function translateText(ChineseText) {
 
 app.get('/translate/:ChineseText', function (req, res) {
   console.log("in /translate/:ChineseText route in backend! what is ChineseText?: ", req.params.ChineseText);
-  let translation = translateText(req.params.ChineseText)
+  let translation = await translateText(req.params.ChineseText)
   console.log("sending this back: ", translation);
   res.send(translation);
 });
