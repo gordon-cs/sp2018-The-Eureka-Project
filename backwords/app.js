@@ -105,7 +105,7 @@ app.get('/translate/:q', function (req, res) {
   console.log("in /translate/:q route in backend!");
   // let value = quickstart(q)
   // console.log("value: ", value);
-  res.send("HEllo! q:",  req.params.q);
+  res.status(status).send("HEllo! q:",  req.params.q);
   // res.send(value);
 });
 
