@@ -69,7 +69,7 @@ async function translateText(ChineseText) {
 
 app.get('/translate/:ChineseText', function (req, res) {
   console.log("in /translate/:ChineseText route in backend! what is ChineseText?: ", req.params.ChineseText);
-  let translation = await translateText(req.params.ChineseText)
+  let translation = translateText(req.params.ChineseText)
   console.log("sending this back: ", translation);
   res.send(translation);
 });
