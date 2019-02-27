@@ -49,10 +49,23 @@ async function translateText(ChineseText) {
   // The text to translate is the parameter ChineseText
   // The target language
   const target = 'en';
-  // Translates some text into Spanish
-  const [translation] = await translate.translate(ChineseText, target);
-  console.log(`Text: ${ChineseText}`);
-  console.log(`Translation: ${translation}`);
+  // Translates some text into English
+  translate
+  .translate(text, target)
+  .then(results => {
+    const translation = results[0];
+
+    console.log(`Text: ${ChineseText}`);
+    console.log(`Translation: ${translation}`);
+  })
+  .catch(err => {
+    console.error('ERROR:', err);
+  });
+  // const [translation] = await translate.translate(ChineseText, target).then(results => {
+
+  // });
+  // console.log(`Text: ${ChineseText}`);
+  // console.log(`Translation: ${translation}`);
   // Path to private key: ceramics-857511cb22d7.json
   return translation;
 }
