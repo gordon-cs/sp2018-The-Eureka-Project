@@ -37,10 +37,10 @@ export default class SinglePlayerModeSelectionScreen extends Component {
     const titles = this.state.lessonList;
     const buttons = titles.map(element => (
       <Button
-        key={element.Number}
+        key={element.ID}
         style={styles.button}
-        title={'Lesson ' + element.Number + ': ' + element.Title}
-        onPress={() => navigate("Instruction", { lesson: element.Number })}
+        title={'Lesson ' + element.ID + ': ' + element.Title}
+        onPress={() => navigate("Instruction", { lesson: element.ID })}
       />
     ));
 
