@@ -48,25 +48,18 @@ async function quickstart(q) {
   const translate = new Translate({ projectId });
   // The text to translate is the parameter q
   // The target language
-  const target = 'zh';
+  const target = 'en';
   // Translates some text into Spanish
   const [translation] = await translate.translate(q, target);
   console.log(`Text: ${q}`);
   console.log(`Translation: ${translation}`);
-  // API Key: AIzaSyBtrBSJx_Yj3pHP-jgHK6gxhcaWAIYT0xk
+  // Path to private key: ceramics-857511cb22d7.json
 }
 
-app.get('/translate/:q', function (req, res) {
-  console.log("in /translate/:q route in backend!");
+app.get('/translate/:ChineseText', function (req, res) {
+  console.log("in /translate/:ChineseText route in backend!");
   let translation = quickstart(req.params.q)
-  console.log("translation: ", translation);
   res.send(translation);
-  // res.status(status).send("HEllo! q:",  req.params.q);
-  // res.send(value);
-});
-app.get('/', function (req, res) {
-  res.send("Welcome to forwords");
-  quickstart("dog");
 });
 
 // Body Parser Middleware
@@ -159,9 +152,8 @@ app.get('/choices/:lesson/:first/:second/:third/:fourth', function (req, res) {
 })
 
 app.get('/lesson-words/:lesson', function (req, res) {
-  console.log('in /lesson-words from backend');
+  // console.log('in /lesson-words from backend');
   var lesson = req.params.lesson;
-  console.log('url param lesson: ', lesson);
   connection.query('SELECT * FROM Lesson' + lesson + ';', function (error, results, fields) {
     if (error)
       throw error;
