@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
         margin: 10,
         width: 120,
         height: 100,
-        borderRadius: 80,
+        // borderRadius: 80,
         backgroundColor: "white"
     },
     promptText: {

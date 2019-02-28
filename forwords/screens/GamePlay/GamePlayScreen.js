@@ -6,6 +6,7 @@ import Prompt from './components/Prompt';
 import {
   Text,
   View,
+  Image,
   StyleSheet,
   Platform,
   TouchableOpacity,
@@ -28,6 +29,8 @@ export default class GamePlayScreen extends Component {
       bottomRightChoice: {},
       promptID: '',
       counter: 1,
+      hintText: '?',
+      hintUsed: false,
     };
     this.wasAnsweredCorrectly = this.wasAnsweredCorrectly.bind(this);
   }
@@ -77,22 +80,22 @@ export default class GamePlayScreen extends Component {
   }
 
   /* Call Google Cloud Translate API to translate the text in the prompt bar
-  *  returns translated text
+  *  returns - translated text
   */
-  async translateText(q) {
-    console.log("in translateText(q) with q = ", q);
-    await axios.get(fullRoutePrefix + '/translate/' + q).then(res => {
+  async translateText(ChineseText) {
+    this.setState({ hintUsed: true });
+    await axios.get(fullRoutePrefix + '/translate/' + ChineseText).then(res => {
       translation = res.data;
-      console.log("translation: ", res.data);
     });
-    console.log("at the end of translateText(q)!");
+    this.setState({ hintText: translation });
+    TimerMixin.setTimeout(() => { // After a delay, remove the googleTranslate attribution 
+      this.setState({ hintText: '?' }), this.setState({ hintUsed: false });
+    }, 3000);
+    return translation;
   }
 
   async populateChoices() {
-    /* Hardcoding to lesson 5 for testing.
     var lesson = this.props.navigation.state.params.lesson; 
-    */
-    var lesson = 5;
     await axios.get(fullRoutePrefix + '/lesson-words/' + lesson).then(res => {
       lessonLength = res.data.length;
     });
@@ -111,6 +114,8 @@ export default class GamePlayScreen extends Component {
     });
     this.setState({
       answeredCorrectly: [0, 0],
+      hintUsed: false,
+      hintText: '?',
     });
   }
 
@@ -123,37 +128,43 @@ export default class GamePlayScreen extends Component {
     const answeredCorrectly = this.state.answeredCorrectly;
 
     let promptObj;
+    let promptChinese;
     switch (promptID) {
       case 1:
         promptObj = topLeftChoice.Pinyin;
+        promptChinese = topLeftChoice.Chinese;
         break;
       case 2:
         promptObj = topRightChoice.Pinyin;
+        promptChinese = topRightChoice.Chinese;
         break;
       case 3:
         promptObj = bottomLeftChoice.Pinyin;
+        promptChinese = bottomLeftChoice.Chinese;
         break;
       default:
         promptObj = bottomRightChoice.Pinyin;
+        promptChinese = bottomRightChoice.Chinese;
+    }
+    if (this.state.hintUsed) {
+      var attribution = (
+        <Image source={require('./img/color-regular.png')} />
+      )
     }
 
     return (
       <View style={styles.mainContainer}>
-        <View style={styles.choicesTopContainer}>
+        <View style={styles.promptContainer}>
           <Prompt promptObj={promptObj}>
           </Prompt>
         </View>
-        <View style={styles.timerContainer}>
+        <View style={styles.helpAndAttributionContainer}>
           <TouchableOpacity
-            style={styles.helpContainer}
-            onPress={() => {
-              console.log("Pressed '?' --> THE PROMPT TEXT RN IS: ", promptObj);
-            }}
-          //onPress={() => {translate(promptObj);}}
-
-          >
-            <Text style={styles.helpText}>?</Text>
-          </TouchableOpacity >
+            style={styles.helpButton}
+            onPress={() => { this.translateText(promptChinese)}}>
+            <Text style={styles.helpText}>{this.state.hintText}</Text>
+          </TouchableOpacity>
+          {attribution}
         </View>
         <View style={styles.choicesTopContainer}>
           <Choice
@@ -161,7 +172,7 @@ export default class GamePlayScreen extends Component {
             promptID={promptID}
             choiceID={1}
             answeredCorrectly={answeredCorrectly}
-            wasAnsweredCorrectly={this.wasAnsweredCorrectly} // a function
+            wasAnsweredCorrectly={this.wasAnsweredCorrectly}
           >
           </Choice>
           <Choice
@@ -200,6 +211,10 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === "ios" ? 20 : 0,
     backgroundColor: '#5b3b89'
   },
+  promptContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
   choicesTopContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -210,22 +225,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     margin: 10,
   },
-  timerContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 40,
-    borderColor: 'white',
-    width: 75,
-    height: 75,
-    backgroundColor: 'white',
-  },
-  helpContainer: {
-    justifyContent: "center",
+  helpAndAttributionContainer: {
+    alignItems: "center",
+    flexDirection: 'column',
+    // width: 100,
+    // height: 100,
     flex: 1,
-    margin: 10,
-    width: 50,
-    height: 50,
     borderRadius: 80,
+    margin: 10,
+    
+  },
+  helpButton: {
+    justifyContent: "center",
+    flexDirection: 'column',
+    margin: 10,
+    width: 100,
+    height: 100,
+    borderRadius: 80,
+    backgroundColor: "white"
   },
   helpText: {
     textAlign: "center",
