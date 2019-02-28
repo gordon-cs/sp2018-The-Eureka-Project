@@ -55,6 +55,9 @@ export default class GamePlayScreen extends Component {
       }, 750);
     } else {
       this.setState({ answeredCorrectly: [choiceIDGiven, 2] }); // got it incorrect
+      TimerMixin.setTimeout(() => { // After one second the wrong answer selection goes back to a white background
+        this.setState({ answeredCorrectly: [choiceIDGiven, 0] });
+      }, 1000);
     }
   }
 
@@ -97,7 +100,8 @@ export default class GamePlayScreen extends Component {
   }
 
   async populateChoices() {
-    var lesson = this.props.navigation.state.params.lesson; 
+    lesson = 5;
+    // var lesson = this.props.navigation.state.params.lesson; 
     await axios.get(fullRoutePrefix + '/lesson-words/' + lesson).then(res => {
       lessonLength = res.data.length;
     });
