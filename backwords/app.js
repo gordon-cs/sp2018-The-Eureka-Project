@@ -40,8 +40,6 @@ translate
 */
 
 async function translateText(res, ChineseText) {
-  console.log("       in translateText(" + ChineseText + ")");
-
   // Imports the Google Cloud client library
   const projectId = 'ceramics-228616'
   const { Translate } = require('@google-cloud/translate');
@@ -49,24 +47,20 @@ async function translateText(res, ChineseText) {
   // Instantiates a client
   const translate = new Translate({ projectId });
 
-  // The target language
+  // The target language (English)
   const target = 'en';
   try {
     // The text to translate is the parameter ChineseText, into English
     const [translation] = await translate.translate(ChineseText, target);
-    console.log(`Text: ${ChineseText}`);
-    console.log(`Translation: ${translation}`);
     res.send(translation)
   } catch (err) {
-    console.log(`Translation did not work.`);
+    console.log(`Translation did not work`);
   }
 }
 
 app.get('/translate/:ChineseText', function (req, res) {
   console.log("in /translate/", req.params.ChineseText, " route");
-  let translation = translateText(res, req.params.ChineseText);
-  console.log("           sending this back: ", translation);
-  // res.send(translation);
+  translateText(res, req.params.ChineseText);
 });
 
 
