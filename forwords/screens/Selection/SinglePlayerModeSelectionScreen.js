@@ -38,7 +38,7 @@ export default class SinglePlayerModeSelectionScreen extends Component {
     const buttons = titles.map(element => (
       <Button
         key={element.ID}
-        style={styles.button}
+        color="#5b3b89"
         title={'Lesson ' + element.ID + ': ' + element.Title}
         onPress={() => navigate("Instruction", { lesson: element.ID })}
       />
@@ -62,7 +62,7 @@ export default class SinglePlayerModeSelectionScreen extends Component {
               <Text style={styles.headingText}>Single Player Mode</Text>
               <Text style={styles.icon}>👤</Text>
             </View>
-            {buttons}
+              {buttons}
           </View>
         </ScrollView>
       );
@@ -73,12 +73,13 @@ const styles = StyleSheet.create({
   MainContainer: {
     justifyContent: "center",
     flex: 1,
-    margin: 10,
-    paddingTop: Platform.OS === "ios" ? 20 : 0
+    paddingTop: Platform.OS === "ios" ? 20 : 0,
+    backgroundColor: '#fff'
   },
   headingText: {
     fontWeight: "bold",
-    fontSize: 30
+    fontSize: 30,
+    color: '#5b3b89',
   },
   headingView: {
     alignItems: "center",
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
   icon: {
     alignItems: "center",
     marginTop: 10,
-    marginBottom: 20,
-    fontSize: 80
+    marginBottom: 10,
+    fontSize: 80,
   }
 });
