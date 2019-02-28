@@ -39,7 +39,7 @@ translate
   });
 */
 
-async function translateText(ChineseText) {
+async function translateText(res, ChineseText) {
   console.log("       in translateText(" + ChineseText + ")");
 
   // Imports the Google Cloud client library
@@ -56,7 +56,7 @@ async function translateText(ChineseText) {
     const [translation] = await translate.translate(ChineseText, target);
     console.log(`Text: ${ChineseText}`);
     console.log(`Translation: ${translation}`);
-    return translation;
+    res.send(translation)
   } catch (err) {
     console.log(`Translation did not work.`);
   }
@@ -64,7 +64,7 @@ async function translateText(ChineseText) {
 
 app.get('/translate/:ChineseText', function (req, res) {
   console.log("in /translate/", req.params.ChineseText, " route");
-  let translation = translateText(req.params.ChineseText).then(res.send(translation));
+  let translation = translateText(res, req.params.ChineseText);
   console.log("           sending this back: ", translation);
   // res.send(translation);
 });
