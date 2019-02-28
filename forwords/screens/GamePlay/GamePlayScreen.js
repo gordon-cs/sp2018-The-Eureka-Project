@@ -79,19 +79,19 @@ export default class GamePlayScreen extends Component {
     return numList;
   }
 
-  /* Call Google Cloud Translate API to translate the text in the prompt bar
-  *  returns - translated text
-  */
+  /* Call Google Cloud Translate API on the server to translate the text in the prompt bar
+   *  returns - translated text
+   */
   async translateText(ChineseText) {
-    this.setState({ hintUsed: true });
+    this.setState({ hintUsed: true }); 
+    // Call to the backend to use the Google Cloud Translate API with this ChineseText
     await axios.get(fullRoutePrefix + '/translate/' + ChineseText).then(res => {
-      translation = res.data;
+      translation = res.data; // The translation that comes back
     });
-    this.setState({ hintText: translation });
-    TimerMixin.setTimeout(() => { // After a delay, remove the googleTranslate attribution 
+    this.setState({ hintText: translation }); // Change Hint button to the English translation provided by the server
+    TimerMixin.setTimeout(() => { // After a delay, remove the Google Translate attribution 
       this.setState({ hintText: '?' }), this.setState({ hintUsed: false });
     }, 3000);
-    return translation;
   }
 
   async populateChoices() {
