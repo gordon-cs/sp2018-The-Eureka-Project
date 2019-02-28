@@ -7,63 +7,6 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-
-/* Google Translate API 
-// Imports the Google Cloud client library
-const {Translate} = require('@google-cloud/translate');
-
-// Your Google Cloud Platform project ID
-const projectId = 'ceramics-228616';
-
-// Instantiates a client
-const translate = new Translate({
-  projectId: projectId,
-});
-
-// The text to translate
-const text = 'Hello, world!';
-// The target language
-const target = 'es';
-
-// Translates some text into Russian
-translate
-  .translate(text, target)
-  .then(results => {
-    const translation = results[0];
-
-    console.log(`Text: ${text}`);
-    console.log(`Translation: ${translation}`);
-  })
-  .catch(err => {
-    console.error('ERROR:', err);
-  });
-*/
-
-async function translateText(res, ChineseText) {
-  // Imports the Google Cloud client library
-  const projectId = 'ceramics-228616'
-  const { Translate } = require('@google-cloud/translate');
-
-  // Instantiates a client
-  const translate = new Translate({ projectId });
-
-  // The target language (English)
-  const target = 'en';
-  try {
-    // The text to translate is the parameter ChineseText, into English
-    const [translation] = await translate.translate(ChineseText, target);
-    res.send(translation)
-  } catch (err) {
-    console.log(`Translation did not work`);
-  }
-}
-
-app.get('/translate/:ChineseText', function (req, res) {
-  console.log("in /translate/", req.params.ChineseText, " route");
-  translateText(res, req.params.ChineseText);
-});
-
-
 // Body Parser Middleware
 app.use(bodyParser.json());
 
@@ -96,6 +39,52 @@ connection.connect(function (err) {
   }
   console.log('Connected as id ' + connection.threadId);
 });
+
+
+
+
+/** Use Google Cloud Translate API to translate text received from the client
+ *  res - result - param given by '/translate/:ChineseText' route to send result to client
+ *  ChineseText - the Chinese text given by client to be translated
+ *  Result: sends translated text to client
+ */ 
+async function translateText(res, ChineseText) {
+  // Imports the Google Cloud client library
+  const { Translate } = require('@google-cloud/translate');
+  
+  // The project ID that enables these Google Cloud Translate API calls
+  const projectId = 'ceramics-228616' 
+
+  // Instantiates a client
+  const translate = new Translate({ projectId });
+
+  // The target language (English)
+  const target = 'en';
+  try {
+    // The text to translate into English is the parameter ChineseText
+    const [translation] = await translate.translate(ChineseText, target);
+    res.send(translation)
+  } catch (err) {
+    console.log(`Error: Translation did not work`);
+  }
+}
+
+/** Backend Route for translating the text from the client side
+ * Calls the translateText function
+ */
+app.get('/translate/:ChineseText', function (req, res) {
+  translateText(res, req.params.ChineseText);
+});
+
+
+
+
+
+
+
+
+
+
 
 app.get('/lesson-list', function (req, res) {
   console.log("in /lesson-list route in backend");

@@ -79,8 +79,10 @@ export default class GamePlayScreen extends Component {
     return numList;
   }
 
-  /* Call Google Cloud Translate API on the server to translate the text in the prompt bar
-   *  returns - translated text
+  /** 
+   * Call Google Cloud Translate API on the server to translate the text in the prompt bar
+   * ChineseText - the text to be sent to the server and translated
+   * Result: sets state of hintText to be the translated text received from the server
    */
   async translateText(ChineseText) {
     this.setState({ hintUsed: true }); 
