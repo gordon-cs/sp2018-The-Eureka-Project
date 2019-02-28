@@ -49,7 +49,7 @@ export default class Choice extends Component {
                 }}
             >
                 <Text style={styles.choiceText}>{text}</Text>
-            </TouchableOpacity >
+            </TouchableOpacity>
         );
     }
 }

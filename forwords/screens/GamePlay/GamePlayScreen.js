@@ -100,8 +100,7 @@ export default class GamePlayScreen extends Component {
   }
 
   async populateChoices() {
-    lesson = 5;
-    // var lesson = this.props.navigation.state.params.lesson; 
+    var lesson = this.props.navigation.state.params.lesson; 
     await axios.get(fullRoutePrefix + '/lesson-words/' + lesson).then(res => {
       lessonLength = res.data.length;
     });
