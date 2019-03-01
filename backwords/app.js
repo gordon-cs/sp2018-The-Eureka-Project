@@ -53,7 +53,7 @@ async function translateText(res, ChineseText) {
   const { Translate } = require('@google-cloud/translate');
   
   // The project ID that enables these Google Cloud Translate API calls
-  const projectId = 'ceramics-228616' 
+  const projectId = 'predictive-guru-233119' 
 
   // Instantiates a client
   const translate = new Translate({ projectId });
