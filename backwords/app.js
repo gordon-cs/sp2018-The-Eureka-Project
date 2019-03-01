@@ -43,8 +43,9 @@ connection.connect(function (err) {
 
 
 
+
 /** Use Google Cloud Translate API to translate text received from the client
- *  res - result - param given by '/translate/:ChineseText' route to send result to client
+ *  res - response - param given by '/translate/:ChineseText' route to send response to client
  *  ChineseText - the Chinese text given by client to be translated
  *  Result: sends translated text to client
  */ 
@@ -63,6 +64,7 @@ async function translateText(res, ChineseText) {
   try {
     // The text to translate into English is the parameter ChineseText
     const [translation] = await translate.translate(ChineseText, target);
+    console.log('Google Cloud API Translation of ', ChineseText, ': ', translation);
     res.send(translation)
   } catch (err) {
     console.log(`Error: Translation did not work`);
