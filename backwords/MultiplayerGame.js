@@ -9,6 +9,7 @@ export default class MultiplayerGame extends Component {
   };
   constructor(props) {
     super(props);
+    // sets the initial state of these parameters
     this.state = {
         email: '',
         groupCode: '',

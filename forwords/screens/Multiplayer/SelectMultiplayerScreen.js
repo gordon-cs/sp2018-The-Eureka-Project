@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, StyleSheet, Text, View, } from "react-native";
-export { backwordsIP } from '../../constants';
-const ws = new WebSocket('ws://'+backwordsIP+':4000');
+// export { backwordsIP } from '../../constants';
+const ws = new WebSocket('ws://172.20.10.2:4000');
 
 // SelectMultiplayerScreen.js 
 // Author: Ezekiel Martinez

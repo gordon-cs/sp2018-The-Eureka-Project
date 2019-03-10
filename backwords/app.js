@@ -1,3 +1,4 @@
+//  require() method is for load and cache js modules
 var createError = require('http-errors');
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -28,14 +29,14 @@ var server = app.listen(process.env.PORT || 8080, function () {
   var port = server.address().port;
   console.log("App now running on port", port);
 });
-
+// account needed for connecing to our sql database
 var connection = mysql.createConnection({
   host: 'localhost',
-  user: 'root',
-  password: '',
+  user: 'nadevai',
+  password: 'chinese',
   database: 'forwords'
 });
-
+// connection function
 connection.connect(function (err) {
   if (err) {
     console.error('Error connecting: ' + err.stack);
@@ -43,7 +44,9 @@ connection.connect(function (err) {
   }
   console.log('Connected as id ' + connection.threadId);
 });
-
+// get API
+// it only retrieve information only
+// what we would see when we go to our database
 app.get('/', function (req, res) {
   res.send("Welcome to forwords");
 });
@@ -56,7 +59,7 @@ app.get('/people', function (req, res) {
     res.json(results);
   });
 })
-
+// language of what a user wants to study
 app.get('/targetLanguage', function (req, res) {
   console.log("in /targetLanguage route in backend");
   connection.query('SELECT TargetLanguage FROM Users WHERE FirstName = "Nikki"', function (error, results, fields) {
@@ -65,7 +68,7 @@ app.get('/targetLanguage', function (req, res) {
     res.json(results);
   });
 })
-
+// list of lessons
 app.get('/lesson-list', function (req, res) {
   console.log("in /lesson-list route in backend");
   connection.query('SELECT * FROM lesson;', function (error, results, fields) {
@@ -86,7 +89,7 @@ app.get('/word/:lesson/:id', function (req, res) {
     res.json(results);
   });
 })
-
+// Gets 4 choices for users to choose from in the gamePlay
 app.get('/choices/:lesson/:first/:second/:third/:fourth', function (req, res) {
   console.log('in /choices route in backend');
   var lesson = req.params.lesson;

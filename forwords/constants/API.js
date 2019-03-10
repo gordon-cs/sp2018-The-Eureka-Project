@@ -1,3 +1,3 @@
-const port = ':8080';
-const backwordsIP = '172.27.43.141';
+const port = ':8080'; //port number we use to set up connection with the frontend
+const backwordsIP = '192.168.0.17'; // our local IP currently using to connect the backend
 export const fullRoutePrefix = 'http://' + backwordsIP + port;
