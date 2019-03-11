@@ -188,7 +188,7 @@ var readyCounter = 0; // This variable is not sustainable for multiple players a
 // or client
 wss.on('connection', (ws, req) => {
   console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''));
-  ws.on('message', message => {
+  ws.on("message", message => {
     console.log(`Received message: ${message}`);
 
     if (message == 'create') {

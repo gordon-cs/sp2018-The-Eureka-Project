@@ -38,6 +38,7 @@ export default class MultiplayerSetUp extends Component {
     }
     // Navigate to multiplayer gameplay screen
   }
+
   // This screen should also allow a user to specify different
   // attributes of the game they are about to play.
   render() {
@@ -69,14 +70,16 @@ export default class MultiplayerSetUp extends Component {
       );
     }
     else if (this.props.navigation.state.params.playerType == 'host') {
+      let groupId = this.props.navigation.state.params.groupID;
       content = (
         <View style={styles.container}>
           <View style={styles.headingView}>
             <Text style={styles.mainText}>
               You are the game host! Your group code is:
-           {this.props.navigation.state.params.groupID}
+              {groupId} {"\n"}
+
               Your friends can join if they enter this code!
-          </Text>
+            </Text>
             <Text style={styles.mainText}>
               Press the button when you're ready to play!
             </Text>
@@ -86,7 +89,7 @@ export default class MultiplayerSetUp extends Component {
             onPress={() => this.readyOnPress()}
             color='purple'
           />
-          <GameSelection/>
+         
         </View>
       );
     }
