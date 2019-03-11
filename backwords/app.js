@@ -211,7 +211,8 @@ wss.on('connection', (ws, req) => {
         }
         console.log('Current Connections for this group: ' + groups.get(groupID).length);
       }
-      else if (message == 'ready' + groupID) {
+      else if (message.includes('ready')) {
+        groupID = parseInt(message.substr(5, message.length));
         readyCounter++;
         if (readyCounter == groups.get(groupID).length) {
           readyCounter = 0;

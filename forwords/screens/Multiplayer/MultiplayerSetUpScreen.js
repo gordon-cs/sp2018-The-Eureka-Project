@@ -26,6 +26,9 @@ export default class MultiplayerSetUp extends Component {
     ws.onmessage = e => {
       console.log('Received message:', e.data)
     }
+    if (this.props.navigation.state.params.playerType == 'host') {
+      navigate('SinglePlayerModeSelection')
+    }
     // Navigate to multiplayer gameplay screen
   }
   joinOnPress() {
@@ -36,6 +39,7 @@ export default class MultiplayerSetUp extends Component {
     ws.onmessage = e => {
       console.log('Received message:', e.data)
     }
+    //navigate("GamePlayScreen", {ws:ws, play})
     // Navigate to multiplayer gameplay screen
   }
 
@@ -69,6 +73,7 @@ export default class MultiplayerSetUp extends Component {
         </View>
       );
     }
+    // if the PlayerType is host, then render the screen with current groupId that the host created
     else if (this.props.navigation.state.params.playerType == 'host') {
       let groupId = this.props.navigation.state.params.groupID;
       content = (
@@ -89,7 +94,6 @@ export default class MultiplayerSetUp extends Component {
             onPress={() => this.readyOnPress()}
             color='purple'
           />
-         
         </View>
       );
     }

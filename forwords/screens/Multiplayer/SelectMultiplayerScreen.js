@@ -23,6 +23,7 @@ export default class SelectMultiplayerScreen extends Component {
     let playerType = 'member';
     navigate("MultiplayerSetUp", { ws: ws, playerType: playerType})
   }
+  // sending ws msg to create a groupID to backend and send returned groupId to MultiPlaterSetUp to render the next page
   createOnPress() {
     const { navigate } = this.props.navigation;
     let playerType = 'host';
