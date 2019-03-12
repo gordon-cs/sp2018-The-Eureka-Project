@@ -18,6 +18,7 @@ export default class MultiplayerSetUp extends Component {
       groupCode: '',
     };
   }
+  
   readyOnPress() {
     const { navigate } = this.props.navigation;
     var ws = this.props.navigation.state.params.ws;
@@ -25,19 +26,27 @@ export default class MultiplayerSetUp extends Component {
     ws.send( newMessage );
     ws.onmessage = e => {
       console.log('Received message:', e.data)
-    }
-    if (this.props.navigation.state.params.playerType == 'host') {
+      }
+    if (this.props.navigation.state.params.playerType == 'host') 
+      {
       navigate('SinglePlayerModeSelection')
-    }
+      }
+    else if(this.props.navigation.state.params.playerType == 'member') 
+      {
+      navigate('WaitingScreen', {ws:ws, groupID: this.props.navigation.state.params.groupID, playerType: this.props.navigation.state.params.playerType})
+      }
+    
     // Navigate to multiplayer gameplay screen
   }
   joinOnPress() {
     const { navigate } = this.props.navigation;
     var ws = this.props.navigation.state.params.ws;
+    groupCode = this.state.groupCode;
     var newMessage = 'join' + groupCode;
     ws.send( newMessage );
     ws.onmessage = e => {
       console.log('Received message:', e.data)
+      navigate('WaitingScreen', {ws:ws, groupID: groupCode, playerType: this.props.navigation.state.params.playerType})
     }
     //navigate("GamePlayScreen", {ws:ws, play})
     // Navigate to multiplayer gameplay screen
@@ -54,7 +63,7 @@ export default class MultiplayerSetUp extends Component {
           <View style={styles.headingView}>
             <Text style={styles.mainText}>
               Enter an existing group code:
-        </Text>
+            </Text>
           </View>
           <TextInput
             style={{ height: 60, width: 300 }}

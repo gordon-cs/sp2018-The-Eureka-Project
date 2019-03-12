@@ -202,7 +202,7 @@ wss.on('connection', (ws, req) => {
     else {
       //Check to see what group the message is being sent from.
       if (message.includes('join')) {
-        groupID = message.substr(4, message.length);
+        groupID = parseInt(message.substr(4, message.length));
         index = groups.get(groupID).push(ws) - 1;
         groups.get(groupID)[index].send('You are now in a group!');
         // Alert other players that another player has joined group, unneeded for finished product.
