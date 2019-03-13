@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Button, StyleSheet, Text, View, } from 'react-native';
+import { Button, StyleSheet, Text, View, } from "react-native";
 
-export default class WaitingScreen extends React.Component {
+
+export default class WaitingRoom extends Component {
     static navigationOptions = {
       header: null,
     };
@@ -14,27 +15,34 @@ export default class WaitingScreen extends React.Component {
 
         };
     }
+    playOnPress() {
+        const {navigate} = this.props.navigation;
+        let playerType = ('member' || 'host');
+        navigate('gameplay') 
+    }
 
     render() {
-        const {navigate} = this.props.navigaion;
-        
+        const {navigate} = this.props.navigation;
+        return (
         <View>
-            <Text style= {StyleSheet.container}>
+            <Text style= {styles.container}>
                 Waiting for others to join
             </Text>
-            <Button style={StyleSheet.button}
+            <Button style={styles.button}
             title = 'Play'
-            onPress = {() => navigate('GamePlay', {lesson:lesson})}
+            onPress = {() => this.playOnPress()}
             color = 'green'
             />
         </View>
-        if(this.state.isWaiting) {
+        );
+        /*if(this.state.isWaiting) {
             return (
                 <view style = {styles.headingView}>
                 //add the players to the waiting list 
                 </view>
+                
             );
-        }
+        }*/
     }
 };
 
@@ -57,3 +65,5 @@ const styles = StyleSheet.create({
         width: 160,
     },
  });
+
+ 

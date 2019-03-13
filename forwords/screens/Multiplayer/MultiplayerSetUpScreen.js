@@ -19,6 +19,7 @@ export default class MultiplayerSetUp extends Component {
     };
   }
   
+  //function that is fired when host clicks ready button 
   readyOnPress() {
     const { navigate } = this.props.navigation;
     var ws = this.props.navigation.state.params.ws;
@@ -26,29 +27,24 @@ export default class MultiplayerSetUp extends Component {
     ws.send( newMessage );
     ws.onmessage = e => {
       console.log('Received message:', e.data)
-      }
-    if (this.props.navigation.state.params.playerType == 'host') 
-      {
-      navigate('SinglePlayerModeSelection')
-      }
-    else if(this.props.navigation.state.params.playerType == 'member') 
-      {
-      navigate('WaitingScreen', {ws:ws, groupID: this.props.navigation.state.params.groupID, playerType: this.props.navigation.state.params.playerType})
-      }
+    }
+
+    navigate("SinglePlayerModeSelection", {ws:ws, groupId: this.state.groupCode, playerType:'host'});
+      // for now, if it is the host who presses ready, it navigates to lesson selection screen
     
-    // Navigate to multiplayer gameplay screen
+
   }
+  //function that is fired when member joins the group
   joinOnPress() {
     const { navigate } = this.props.navigation;
     var ws = this.props.navigation.state.params.ws;
-    groupCode = this.state.groupCode;
-    var newMessage = 'join' + groupCode;
+    //groupCode = this.state.groupCode;
+    var newMessage = 'join' + this.state.groupCode;
     ws.send( newMessage );
-    ws.onmessage = e => {
-      console.log('Received message:', e.data)
-      navigate('WaitingScreen', {ws:ws, groupID: groupCode, playerType: this.props.navigation.state.params.playerType})
-    }
-    //navigate("GamePlayScreen", {ws:ws, play})
+
+    navigate('WaitingRoom', {ws: ws, groupID: this.state.groupCode, playerType: this.props.navigation.state.params.playerType})
+
+   
     // Navigate to multiplayer gameplay screen
   }
 

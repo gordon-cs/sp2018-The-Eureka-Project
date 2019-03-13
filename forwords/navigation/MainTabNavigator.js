@@ -8,6 +8,7 @@ import SinglePlayerModeSelectionScreen from '../screens/Selection/SinglePlayerMo
 import RegisterScreen from '../screens/Authentication/RegisterScreen';
 import InstructionScreen from '../screens/GamePlay/Instructions/InstructionScreen';
 import ForgotPasswordScreen from '../screens/Authentication/ForgotPasswordScreen';
+import WaitingRoomScreen from '../screens/Multiplayer/WaitingRoomScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -37,6 +38,10 @@ const MultiplayerSetUpStack = createStackNavigator({
   MultiplayerSetUp: MultiplayerSetUpScreen,
 });
 
+const WaitingRoomStack = createStackNavigator({
+  WaitingRoom: WaitingRoomScreen,
+}); 
+
 const GamePlayScreenStack = createStackNavigator({
   GamePlay: GamePlayScreen,
 });
@@ -55,4 +60,5 @@ export default createStackNavigator({
   SinglePlayerModeSelectionStack,
   GamePlayScreenStack,
   InstructionStack,
+  WaitingRoomStack,
 });
