@@ -29,7 +29,7 @@ export default class MultiplayerSetUp extends Component {
       console.log('Received message:', e.data)
     }
 
-    navigate("SinglePlayerModeSelection", {ws:ws, groupId: this.state.groupCode, playerType:'host'});
+    navigate("MultiPlayerModeSelection", {ws:ws, groupId: this.state.groupCode, playerType:'host'});
       // for now, if it is the host who presses ready, it navigates to lesson selection screen
     
 
