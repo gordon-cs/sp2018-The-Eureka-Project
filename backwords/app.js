@@ -10,7 +10,7 @@ var logger = require('morgan');
 // WebSocket
 const WebSocket = require('ws');
 
-var ws = new WebSocket.Server({ port: 5000 })
+const ws = new WebSocket.Server({ port: 5000 })
 
 ws.on('open', function open() {
   ws.send('something');
@@ -48,7 +48,7 @@ function populateChoices() {
     // var results = json(results);
     results = JSON.stringify(results);
     console.log("stringified results", results);
-    ws.send(results);
+    ws.send('results');
   });
   // Choices
   // Store all words from lesson locally in array
