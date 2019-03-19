@@ -20,6 +20,14 @@ ws.on('message', function incoming(data) {
   console.log(data);
 });
 
+ws.on('connection', function connection(ws) {
+  ws.on('message', function incoming(message) {
+    console.log('received: %s', message);
+  });
+
+  ws.send('something');
+});
+
 
 // Body Parser Middleware
 app.use(bodyParser.json()); 
