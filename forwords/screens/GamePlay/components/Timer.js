@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import TimerCountdown from 'react-native-timer-countdown';
 import CountdownCircle from 'react-native-countdown-circle';
 import {
     View,
