@@ -28,7 +28,7 @@ ws.on('connection', function connection(ws, req) {
     console.log(`Received message: ${message}`);
 
     if (message == 'PopulateChoices') {
-      console.log('console log: RECEIVED POPULATECHOICES: ', message);
+      // Pass lesson # into this function
       populateChoices();
     }
   });
@@ -36,8 +36,19 @@ ws.on('connection', function connection(ws, req) {
   ws.send('something');
 });
 
+// make a parameter of this the actual lesson #
 function populateChoices() {
-  console.log("in the FUNCTION populateChoices");
+  // Get words from specific lesson to send to client
+  // Log them ALL in local storage
+
+  connection.query('SELECT * FROM word WHERE lesson = 7;', function (error, results) {
+    if (error)
+      throw error;
+    console.log("results of SQL query: ", results);
+    res.json(results);
+  });
+  console.log('Made it to the end of populateChoices()');
+  ws.send(results);
 }
 
 
