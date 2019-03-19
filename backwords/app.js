@@ -30,7 +30,7 @@ ws.on('connection', function connection(ws, req) {
     if (message == 'PopulateChoices') {
       // Pass lesson # into this function
       ws.send('SENDDDDDY BOI')
-      populateChoices();
+      populateChoices(ws);
     }
   });
 
@@ -38,7 +38,7 @@ ws.on('connection', function connection(ws, req) {
 });
 
 // make a parameter of this the actual lesson #
-function populateChoices() {
+function populateChoices(ws) {
   // Get words from specific lesson to send to client
   // Log them ALL in local storage
   connection.query('SELECT * FROM word WHERE lesson = 7;', function (error, results) {
