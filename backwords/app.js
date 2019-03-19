@@ -7,6 +7,20 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// WebSocket
+const WebSocket = require('ws');
+
+const wss = new WebSocket.Server({ port: 4000 })
+
+ws.on('open', function open() {
+  ws.send('something');
+});
+
+ws.on('message', function incoming(data) {
+  console.log(data);
+});
+
+
 // Body Parser Middleware
 app.use(bodyParser.json()); 
 
@@ -97,6 +111,7 @@ app.get('/lesson-words-count/:lesson', function (req, res) {
   connection.query('SELECT COUNT(ID) FROM word WHERE lesson = ' + lesson + ';', function (error, results, fields) {
     if (error)
       throw error;
+    console.log('lesson-words-count results: ', results);
     res.json(results);
   });
 })
