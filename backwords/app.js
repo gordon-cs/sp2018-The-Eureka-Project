@@ -40,17 +40,25 @@ ws.on('connection', function connection(ws, req) {
 function populateChoices() {
   // Get words from specific lesson to send to client
   // Log them ALL in local storage
-
   connection.query('SELECT * FROM word WHERE lesson = 7;', function (error, results) {
     if (error)
       throw error;
     console.log("results of SQL query: ", results);
+    var results = json(results);
+    console.log("results of SQL query: ", results);
     res.json(results);
   });
+  // Choices
+  // Store all words from lesson locally in array
+  // Send all thsoe words into a helper function that will randomly select 4
+  // Send those 4
+  // 
   console.log('Made it to the end of populateChoices()');
   ws.send(results);
 }
 
+// create function that will select a prompt for a user
+// populatePrompt() {}
 
 // Body Parser Middleware
 app.use(bodyParser.json()); 
