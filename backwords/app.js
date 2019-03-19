@@ -46,9 +46,9 @@ function populateChoices() {
       throw error;
     console.log("results of SQL query: ", results);
     // var results = json(results);
+    results = JSON.stringify(results);
+    console.log("stringified results", results);
     ws.send(results);
-    console.log("results of SQL query: ", results);
-    res.json(results);
   });
   // Choices
   // Store all words from lesson locally in array
