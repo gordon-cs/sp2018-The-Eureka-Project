@@ -23,10 +23,18 @@ ws.on('message', function incoming(data) {
 ws.on('connection', function connection(ws) {
   ws.on('message', function incoming(message) {
     console.log('received: %s', message);
+    if (incoming(message) === 'PopulateChoices') {
+      console.log('console log: RECEIVED POPULATECHOICES: ', message);
+      populateChoices();
+    }
   });
 
   ws.send('something');
 });
+
+function populateChoices() {
+  console.log("in the FUNCTION populateChoices");
+}
 
 
 // Body Parser Middleware
