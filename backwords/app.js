@@ -10,7 +10,7 @@ var logger = require('morgan');
 // WebSocket
 const WebSocket = require('ws');
 
-const wss = new WebSocket.Server({ port: 4000 })
+const ws = new WebSocket.Server({ port: 4000 })
 
 ws.on('open', function open() {
   ws.send('something');
