@@ -29,6 +29,7 @@ ws.on('connection', function connection(ws, req) {
 
     if (message == 'PopulateChoices') {
       // Pass lesson # into this function
+      ws.send('SENDDDDDY BOI')
       populateChoices();
     }
   });
