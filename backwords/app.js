@@ -46,16 +46,15 @@ function populateChoices(ws) {
       throw error;
     console.log("results of SQL query: ", results);
     // var results = json(results);
-    results = JSON.stringify(results);
-    console.log("stringified results", results);
-    ws.send('results');
+    // results = JSON.stringify(results);
+    // console.log("stringified results", results);
+    ws.send(results);
   });
   // Choices
   // Store all words from lesson locally in array
   // Send all thsoe words into a helper function that will randomly select 4
   // Send those 4
   // 
-  console.log('Made it to the end of populateChoices()');
 }
 
 // create function that will select a prompt for a user
