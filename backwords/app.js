@@ -20,10 +20,14 @@ ws.on('message', function incoming(data) {
   console.log(data);
 });
 
-ws.on('connection', function connection(ws) {
+ws.on('connection', function connection(ws, req) {
+
+
+  console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''));
   ws.on('message', function incoming(message) {
-    console.log('received: %s', message);
-    if (incoming(message) === 'PopulateChoices') {
+    console.log(`Received message: ${message}`);
+
+    if (message == 'PopulateChoices') {
       console.log('console log: RECEIVED POPULATECHOICES: ', message);
       populateChoices();
     }
