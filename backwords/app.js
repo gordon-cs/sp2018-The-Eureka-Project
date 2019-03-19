@@ -26,6 +26,7 @@ ws.on('connection', function connection(ws) {
     if (incoming(message) === 'PopulateChoices') {
       console.log('console log: RECEIVED POPULATECHOICES: ', message);
       populateChoices();
+      break;
     }
   });
 
