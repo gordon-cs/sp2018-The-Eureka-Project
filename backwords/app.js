@@ -44,7 +44,8 @@ function populateChoices() {
     if (error)
       throw error;
     console.log("results of SQL query: ", results);
-    var results = json(results);
+    // var results = json(results);
+    ws.send(results);
     console.log("results of SQL query: ", results);
     res.json(results);
   });
@@ -54,11 +55,21 @@ function populateChoices() {
   // Send those 4
   // 
   console.log('Made it to the end of populateChoices()');
-  ws.send(results);
 }
 
 // create function that will select a prompt for a user
 // populatePrompt() {}
+
+
+
+app.get('/lesson-list', function (req, res) {
+	console.log("in /lesson-list route in backend");
+	connection.query('SELECT * FROM lesson;', function (error, results, fields) {
+		if (error)
+			throw error;
+		res.json(results);
+	});
+})
 
 // Body Parser Middleware
 app.use(bodyParser.json()); 
@@ -97,14 +108,6 @@ app.get('/', function(req, res) {
 	res.send("Welcome to forwords");
 });
 
-app.get('/lesson-list', function (req, res) {
-	console.log("in /lesson-list route in backend");
-	connection.query('SELECT * FROM lesson;', function (error, results, fields) {
-		if (error)
-			throw error;
-		res.json(results);
-	});
-})
 
 // Gets a single word, for multiplayer
 app.get('/word/:lesson/:id', function (req, res) {
