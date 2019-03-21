@@ -22,9 +22,6 @@ export default class InstructionScreen extends React.Component {
                 <Text style={styles.bulletText}>
                     2.  Select the correct answer from the choices at the bottom
                 </Text>
-                <Text style={styles.bulletText}>
-                    3.  If you get stuck, click the Hint ('?') button for the English translation
-                </Text>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         style={styles.button}
