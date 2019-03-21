@@ -7,18 +7,25 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// WebSocket
+const WebSocket = require('ws');
+const ws = new WebSocket.Server({ port: 5000 })
+
+// Global variables
+var allWordsInLesson = [];
+
 // Body Parser Middleware
-app.use(bodyParser.json()); 
+app.use(bodyParser.json());
 
 //CORS Middleware
 app.use(function (req, res, next) {
-    //Enabling CORS 
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, contentType,Content-Type, Accept, Authorization");
-    next();
-   });
-   
+  //Enabling CORS 
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, contentType,Content-Type, Accept, Authorization");
+  next();
+});
+
 //Setting up server
 var server = app.listen(process.env.PORT || 8080, function () {
   var port = server.address().port;
@@ -26,49 +33,108 @@ var server = app.listen(process.env.PORT || 8080, function () {
 });
 
 var connection = mysql.createConnection({
-  host : 'localhost',
-  user : 'root',
-  password : '',
-  database : 'forwords'
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'forwords'
 });
 
-connection.connect(function(err) {
-	if (err) {
-		console.error('Error connecting: ' + err.stack);
-		return;
-	}
-	console.log ('Connected as id ' + connection.threadId);
+connection.connect(function (err) {
+  if (err) {
+    console.error('Error connecting: ' + err.stack);
+    return;
+  }
+  console.log('Connected as id ' + connection.threadId);
 });
 
-app.get('/', function(req, res) {
-	res.send("Welcome to forwords");
+// WebSocket
+ws.on('connection', function connection(ws, req) {
+  console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''));
+  ws.on('message', function incoming(message) {
+    // Turn every received message into a JSON immediately to access it!
+    let receivedMessage = JSON.parse(message);
+
+    // If the client is requesting choices and a prompt
+    if (receivedMessage[0].request == 'choicesAndPrompts') {
+      let lesson = receivedMessage[0].lesson;
+      populateChoicesAndPrompt(ws, lesson);
+    }
+  });
 });
 
-app.get('/people', function (req, res) {
-	console.log("in /people route in backend");
-	connection.query('SELECT * FROM Users', function (error, results, fields) {
-		if (error)
-			throw error;
-		res.json(results);
-	});
-})
+// Send choices and prompt to client
+function populateChoicesAndPrompt(ws, lesson) {
+  connection.query('SELECT * FROM word WHERE lesson = ' + lesson + ';', function (error, results) {
+    if (error)
+      throw error;
+    let minID = results[0].ID;
+    let numList = fourWordsPicker(minID, (results.length - 1)); // return an array of 4 unique numbers
 
-app.get('/targetLanguage', function (req, res) {
-	console.log("in /targetLanguage route in backend");
-	connection.query('SELECT TargetLanguage FROM Users WHERE FirstName = "Nikki"', function (error, results, fields) {
-		if (error)
-			throw error;
-		res.json(results);
-	});
-})
+    // Get a random int between 1 and 4 to use that as the index of the word that will be the prompt
+    var randomInt = Math.floor(Math.random() * 4)+1;
+    // Get full objects of these choices and prompt and put them in an array
+    var objects = [];
+    for (var i = 0; i < results.length; i++) {
+      for (var j = 0; j < numList.length; j++) {
+        if (results[i].ID == numList[j]) {
+          objects.push(results[i])
+        }
+      }
+    }
+    // Add send header of "choicesAndPrompt" at element 0
+    objects.unshift("choicesAndPrompt");
 
+    // Put prompt at the end of the array
+    objects.push(objects[randomInt]);
+    
+    // Stringify the objects to send them to the client
+    var choicesAndPrompt = JSON.stringify(objects);
+
+    // Send it to the client
+    ws.send(choicesAndPrompt);
+
+    // Reset all of the arrays
+    choicesAndPrompt = [];
+  });
+}
+
+//Generate a random number between the minimum ID in that lesson and the maximum ID in that lesson
+function randomNumGen(minID, lessonWordsCount) {
+  let maxID = minID + lessonWordsCount;
+  return Math.floor(Math.random() * (maxID - minID) + minID);
+}
+
+/* Create a list of 4 unique numbers
+   * If a number is already in the list, then generate a unique number
+   */
+function fourWordsPicker(minID, lessonWordsCount) {
+  let numList = [];
+  while (numList.length < 4) {
+    let potential = Math.floor(randomNumGen(minID, lessonWordsCount));
+    while (numList.includes(potential)) {
+      potential = randomNumGen(minID, lessonWordsCount);
+    }
+    numList.push(potential);
+  }
+  return numList; // should be 4 random numbers between minID and maxID
+}
+
+
+// HTTP
+
+// Display welcome message 
+app.get('/', function (req, res) {
+  res.send("Welcome to forwords");
+});
+
+// returns the list of lessons
 app.get('/lesson-list', function (req, res) {
-	console.log("in /lesson-list route in backend");
-	connection.query('SELECT * FROM lesson;', function (error, results, fields) {
-		if (error)
-			throw error;
-		res.json(results);
-	});
+  console.log("in /lesson-list route in backend");
+  connection.query('SELECT * FROM lesson;', function (error, results, fields) {
+    if (error)
+      throw error;
+    res.json(results);
+  });
 })
 
 // Gets a single word, for multiplayer
@@ -76,63 +142,27 @@ app.get('/word/:lesson/:id', function (req, res) {
   console.log('in /word route in backend');
   var id = req.params.id;
   var lesson = req.params.lesson;
-  connection.query('SELECT * FROM Lesson' + lesson + ' WHERE ID = ' + id + ';', function (error, results, fields) {
+  connection.query('SELECT * FROM word WHERE lesson = ' + lesson + ' WHERE ID = ' + id + ';', function (error, results, fields) {
     if (error)
       throw error;
     res.json(results);
   });
 })
 
-app.get('/choices/:lesson/:first/:second/:third/:fourth', function (req, res) {
+app.get('/choices/:first/:second/:third/:fourth', function (req, res) {
   console.log('in /choices route in backend');
   var lesson = req.params.lesson;
   var first = req.params.first;
   var second = req.params.second;
   var third = req.params.third;
   var fourth = req.params.fourth;
-  connection.query('SELECT * FROM Lesson' + lesson + ' WHERE ID in (' + first +',' + second + ',' + third + ',' + fourth + ');', function (error, results, fields) {
+  connection.query('SELECT * FROM word WHERE ID in (' + first + ',' + second + ',' + third + ',' + fourth + ');', function (error, results, fields) {
     if (error)
       throw error;
     res.json(results);
   });
 })
 
-app.get('/lesson-words/:lesson', function(req, res) {
-  console.log('in /lesson-words from backend');
-  var lesson = req.params.lesson;
-  console.log('url param lesson: ', lesson);
-  connection.query('SELECT * FROM word WHERE lesson = ' + lesson +';', function (error, results, fields) {
-    if (error)
-      throw error;
-    res.json(results);
-  });
-})
-
-//POST API
-// app.post('/user', data);
-app.post('/user', function(req , res){
-  // res.sendStatus(200);
-  // res.send('Post request sent');
-  // console.log(res.data);
-  var query = "INSERT INTO Users (FirstName,LastName, TargetLanguage) VALUES ('Russ','Tuck','CN'); SELECT * FROM Users;" 
-  connection.query (query, function (error, results) {
-    if (error)
-			throw error;
-		res.json(results);
-  });
-});
-
-//PUT API
-app.put('/api/user/:id', function(req , res){
-  var query = "UPDATE Users SET LastName = Bjork WHERE FirstName = Russ;"
-//   executeQuery (res, query);
-});
-
-// DELETE API
-app.delete('/user /:id', function(req , res){
-  var query = "DELETE FROM Users WHERE FirstName=Russ;"
-//   executeQuery (res, query);
-});
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -144,20 +174,20 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
   res.sendStatus(err.status || 500);
-	res.sendStatus(err.status);
-//  res.render('error');
+  res.sendStatus(err.status);
+  //  res.render('error');
 });
 
 module.exports = app;
