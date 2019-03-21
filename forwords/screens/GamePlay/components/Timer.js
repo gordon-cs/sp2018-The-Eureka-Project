@@ -20,7 +20,7 @@ export default class Timer extends Component {
                     seconds={seconds}
                     radius={30}
                     borderWidth={8}
-                    color="#ff003f"
+                    color="#000"
                     bgColor="#fff"
                     textStyle={{ fontSize: 20 }}
                     onTimeElapsed={() => console.log('Elapsed!')}

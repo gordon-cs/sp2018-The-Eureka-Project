@@ -1,11 +1,9 @@
 import React, { Component } from "react";
-import axios from "axios";
 import TimerMixin from 'react-timer-mixin';
 import Choice from "./components/Choice";
 import Prompt from './components/Prompt';
 import Timer from './components/Timer';
 import {
-  Button,
   View,
   StyleSheet,
   Platform,
