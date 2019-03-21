@@ -106,7 +106,6 @@ export default class GamePlayScreen extends Component {
     const promptID = this.state.promptObj.ID;
     const answeredCorrectly = this.state.answeredCorrectly;
     const resetTimer = this.state.resetTimer;
-    console.log("answeredCorrectly: ", this.state.answeredCorrectly);
     return (
       <View style={styles.mainContainer}>
         <View style={styles.choicesTopContainer}>
