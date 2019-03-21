@@ -5,12 +5,13 @@ import Choice from "./components/Choice";
 import Prompt from './components/Prompt';
 import Timer from './components/Timer';
 import {
-  Text,
+  Button,
   View,
   StyleSheet,
   Platform,
 } from "react-native";
 import { fullRoutePrefix } from "../../constants/API";
+var webSocket = new WebSocket("ws://172.27.43.141:5000");
 
 export default class GamePlayScreen extends Component {
   static navigationOptions = {
@@ -21,143 +22,97 @@ export default class GamePlayScreen extends Component {
 
     this.state = {
       isLoading: true,
-      lessonList: [],
       answeredCorrectly: [0, 0], // [choiceIDGiven, correct=1/wrong=2]
       topLeftChoice: {},
       topRightChoice: {},
       bottomLeftChoice: {},
       bottomRightChoice: {},
-      promptID: '',
+      promptObj: {},
       counter: 1,
-      lessonMinID: 0,
-      lessonWordsCount: 0,
       resetTimer: true, // Default is true, false means  ??
     };
     this.wasAnsweredCorrectly = this.wasAnsweredCorrectly.bind(this);
   }
 
   wasAnsweredCorrectly(choiceIDGiven, prompt) {
-    const { navigate } = this.props.navigation;
     if (choiceIDGiven === prompt) {
-      this.setState({ 
+      this.setState({
         answeredCorrectly: [choiceIDGiven, 1],
         counter: (this.state.counter + 1), // count the number of correct answers, up to 10 correct 
       });
       TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
-        this.populateChoices();
+        this.populateChoicesAndPrompt();
       }, 750);
     } else {
       this.setState({ answeredCorrectly: [choiceIDGiven, 2] }); // got it incorrect
+      TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
+        this.setState({
+          answeredCorrectly: [choiceIDGiven, 0]
+        });
+      }, 750);
     }
   }
 
-  //Generate a random number between the minimum ID in that lesson and the maximum ID in that lesson
-  randomNumGen(minID, lessonWordsCount) {
-    let maxID = minID + lessonWordsCount;
-    return Math.random() * (maxID - minID) + minID;
-  }
 
-  /* Create a list of 4 unique numbers
-   * If a number is already in the list, then generate a unique number
-   */
-  fourWordsPicker(minID, lessonWordsCount) {
-    let numList = [];
-    while (numList.length < 4) {
-      let potential = this.randomNumGen(minID, lessonWordsCount);
-      console.log("potential = ", potential);
-      while (numList.includes(potential)) {
-        potential = this.randomNumGen(minID, lessonWordsCount);
-      }
-      numList.push(potential);
-    }
-    return numList;
-  }
 
-  async populateChoices() {
-    console.log("populateChoices();");
+
+  async populateChoicesAndPrompt() {
     var lesson = this.props.navigation.state.params.lesson;
-    let length;
 
-    // get the first ID of a row in a lesson
-    await axios.get(fullRoutePrefix + '/lesson-min/' + lesson).then(res => {
-      const lessonMinID = res.data[0].ID;
-      this.setState({lessonMinID});
-      console.log("minID for lesson ", lesson, " is: ", this.state.lessonMinID);
-    });
+    // Request to send to the server - must be stringified.
+    var stringifiedRequest = JSON.stringify(
+      [{
+        'request': 'choicesAndPrompts',
+        'lesson': '' + lesson + ''
+      }]
+    );
+    webSocket.send(stringifiedRequest);
 
-    // get the amount of rows in a lesson
-    await axios.get(fullRoutePrefix + '/lesson-words-count/' + lesson).then(res => {
-      const lessonWordsCount = res.data;
-      this.setState({lessonWordsCount});
-      console.log("lessonWordsCount", lessonWordsCount);
-    });
-
-    console.log("this.state.minID", this.state.lessonMinID)
-    console.log("this.state.lessonWordsCount", this.state.lessonWordsCount)
-    var fourWords = this.fourWordsPicker(this.state.lessonMinID, this.state.lessonWordsCount); // Array of four words ids, eg. 5,2,17,11
-    console.log("made it past line 89");
-
-    var shuffleSQLRows = this.fourWordsPicker(4); // Randomize order of fourSQLWordObjects returned
-
-    await axios.get(fullRoutePrefix + '/choices/' + fourWords[0] + '/' + fourWords[1] + '/' + fourWords[2] + '/' + fourWords[3]).then(res => {
-      const fourSQLWordObjects = res.data; // SQL will always return an ordered array, eg. 5,2,17,11 -> SQL -> 2,5,11,17
-      this.setState({
-        isLoading: false,
-        topLeftChoice: fourSQLWordObjects[shuffleSQLRows[0] - 1],
-        topRightChoice: fourSQLWordObjects[shuffleSQLRows[1] - 1],
-        bottomLeftChoice: fourSQLWordObjects[shuffleSQLRows[2] - 1],
-        bottomRightChoice: fourSQLWordObjects[shuffleSQLRows[3] - 1],
-        promptID: this.randomNumGen(4) // Picks one of the choice ids as the prompt id
-      });
-    });
-    console.log("after axios, before settingState");
     this.setState({
       answeredCorrectly: [0, 0],
       resetTimer: true,
     });
-    this.setState({ // Set to false so that the timer does not reset
-      resetTimer: false,
-    });
-    console.log("in end of populateChoices()");
   }
 
   async componentWillMount() {
     try {
-      this.populateChoices();
+      this.populateChoicesAndPrompt();
     } catch (error) {
       throw new Error('component will not mount');
     }
   }
 
   render() {
+    // What to do when receiving a message
+    webSocket.onmessage = event => {
+      // Turn every received message into a JSON immediately to access it
+      let receivedMessage = JSON.parse(event.data);
+
+      if (receivedMessage[0] == "choicesAndPrompt") {
+        this.setState({
+          isLoading: false,
+          topLeftChoice: receivedMessage[1],
+          topRightChoice: receivedMessage[2],
+          bottomLeftChoice: receivedMessage[3],
+          bottomRightChoice: receivedMessage[4],
+          promptObj: receivedMessage[5] // Picks one of the choice ids as the prompt id
+        });
+      }
+    }
+
     const topLeftChoice = this.state.topLeftChoice;
     const topRightChoice = this.state.topRightChoice;
     const bottomLeftChoice = this.state.bottomLeftChoice;
     const bottomRightChoice = this.state.bottomRightChoice;
-    const promptID = this.state.promptID;
+    const promptObj = this.state.promptObj;
+    const promptID = this.state.promptObj.ID;
     const answeredCorrectly = this.state.answeredCorrectly;
     const resetTimer = this.state.resetTimer;
-
-    let promptObj;
-    switch (promptID) {
-      case 1:
-        promptObj = topLeftChoice.Pinyin;
-        break;
-      case 2:
-        promptObj = topRightChoice.Pinyin;
-        break;
-      case 3:
-        promptObj = bottomLeftChoice.Pinyin;
-        break;
-      default:
-        promptObj = bottomRightChoice.Pinyin;
-
-    }
-
+    console.log("answeredCorrectly: ", this.state.answeredCorrectly);
     return (
       <View style={styles.mainContainer}>
         <View style={styles.choicesTopContainer}>
-          <Prompt promptObj={promptObj}>
+          <Prompt promptObj={promptObj.pinyin}>
           </Prompt>
         </View>
         <View style={styles.timerContainer}>
@@ -165,11 +120,12 @@ export default class GamePlayScreen extends Component {
             resetTimer={resetTimer}>
           </Timer>
         </View>
+
         <View style={styles.choicesTopContainer}>
           <Choice
             text={topLeftChoice.Chinese}
             promptID={promptID}
-            choiceID={1}
+            choiceID={topLeftChoice.ID}
             answeredCorrectly={answeredCorrectly}
             wasAnsweredCorrectly={this.wasAnsweredCorrectly} // a function
           >
@@ -177,7 +133,7 @@ export default class GamePlayScreen extends Component {
           <Choice
             text={topRightChoice.Chinese}
             promptID={promptID}
-            choiceID={2}
+            choiceID={topRightChoice.ID}
             answeredCorrectly={answeredCorrectly}
             wasAnsweredCorrectly={this.wasAnsweredCorrectly}>
           </Choice>
@@ -186,14 +142,14 @@ export default class GamePlayScreen extends Component {
           <Choice
             text={bottomLeftChoice.Chinese}
             promptID={promptID}
-            choiceID={3}
+            choiceID={bottomLeftChoice.ID}
             answeredCorrectly={answeredCorrectly}
             wasAnsweredCorrectly={this.wasAnsweredCorrectly}>
           </Choice>
           <Choice
             text={bottomRightChoice.Chinese}
             promptID={promptID}
-            choiceID={4}
+            choiceID={bottomRightChoice.ID}
             answeredCorrectly={answeredCorrectly}
             wasAnsweredCorrectly={this.wasAnsweredCorrectly}>
           </Choice>
