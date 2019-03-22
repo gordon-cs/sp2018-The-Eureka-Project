@@ -6,8 +6,8 @@ var app = express();
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var wsPort = 6000;
-var httpPort = 7777;
+var wsPort = 4000;
+var httpPort = 8080;
 
 // WebSocket
 const WebSocket = require('ws');
