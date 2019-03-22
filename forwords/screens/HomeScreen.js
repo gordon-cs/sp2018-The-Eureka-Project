@@ -30,7 +30,6 @@ export default class HomeScreen extends React.Component {
             onPress={() => navigate('SinglePlayerModeSelection')}
             color='purple'
           />
-
           <View style={styles.headingView}>
             <Image source={require('../assets/images/people.png')} />
           </View>
