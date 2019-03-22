@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { Button, StyleSheet, Text, View, ActivityIndicator, Platform, ScrollView, } from "react-native";
+import { Button, StyleSheet, Text, View, Image, ActivityIndicator, Platform, ScrollView, } from "react-native";
 import { httpRoute } from "../../constants/API";
 
 export default class SinglePlayerModeSelectionScreen extends Component {
@@ -46,11 +46,17 @@ export default class SinglePlayerModeSelectionScreen extends Component {
 
     if (this.state.isLoading) {
       return (
-        <View style={styles.headingView}>
-          <Text style={styles.headingText}>Single Player Mode</Text>
-          <Text style={styles.icon}>👤</Text>
-          <View style={{ flex: 1, paddingTop: 20 }}>
-            <ActivityIndicator />
+        <View style={styles.MainContainer}>
+          <View style={styles.headingView}>
+            <Text style={styles.headingText}>Single Player Mode</Text>
+
+            <Image
+              style={{ width: 30, height: 55 }}
+              source={require("../../assets/images/person.png")}
+            />
+            <View style={{ flex: 1, paddingTop: 20 }}>
+              <ActivityIndicator />
+            </View>
           </View>
         </View>
       );
@@ -60,9 +66,12 @@ export default class SinglePlayerModeSelectionScreen extends Component {
           <View style={styles.MainContainer}>
             <View style={styles.headingView}>
               <Text style={styles.headingText}>Single Player Mode</Text>
-              <Text style={styles.icon}>👤</Text>
+              <Image
+              style={{ width: 30, height: 55, marginTop: 10, }}
+              source={require("../../assets/images/person.png")}
+            />
             </View>
-              {buttons}
+            {buttons}
           </View>
         </ScrollView>
       );
@@ -71,7 +80,6 @@ export default class SinglePlayerModeSelectionScreen extends Component {
 
 const styles = StyleSheet.create({
   MainContainer: {
-    justifyContent: "center",
     flex: 1,
     paddingTop: Platform.OS === "ios" ? 20 : 0,
     backgroundColor: '#fff'
@@ -79,7 +87,7 @@ const styles = StyleSheet.create({
   headingText: {
     fontWeight: "bold",
     fontSize: 30,
-    color: '#5b3b89',
+    color: 'black',
   },
   headingView: {
     alignItems: "center",
