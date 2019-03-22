@@ -8,8 +8,8 @@ import {
   StyleSheet,
   Platform,
 } from "react-native";
-import { fullRoutePrefix } from "../../constants/API";
-var webSocket = new WebSocket("ws://172.27.43.141:5000");
+import { wsRoute } from "../../constants/API";
+var webSocket = new WebSocket(wsRoute);
 
 export default class GamePlayScreen extends Component {
   static navigationOptions = {

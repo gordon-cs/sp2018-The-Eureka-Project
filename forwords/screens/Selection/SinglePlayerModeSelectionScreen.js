@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Button, StyleSheet, Text, View, ActivityIndicator, Platform, ScrollView, } from "react-native";
-import { fullRoutePrefix } from "../../constants/API";
+import { httpRoute } from "../../constants/API";
 
 export default class SinglePlayerModeSelectionScreen extends Component {
   static navigationOptions = {
@@ -19,7 +19,7 @@ export default class SinglePlayerModeSelectionScreen extends Component {
   async componentWillMount() {
     try {
       axios
-        .get(fullRoutePrefix + "/lesson-list")
+        .get(httpRoute + "/lesson-list")
         .then(res => {
           const lessons = res.data;
           this.setState({
