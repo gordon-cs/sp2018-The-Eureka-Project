@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, ScrollView, StyleSheet, Text, View, } from 'react-native';
+import { Button, ScrollView, StyleSheet, Text, View, Image } from 'react-native';
 import * as firebase from 'firebase';
 
 export default class HomeScreen extends React.Component {
@@ -23,9 +23,7 @@ export default class HomeScreen extends React.Component {
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.headingView}>
-            <Text style={styles.icon}>
-              👤
-          </Text>
+            <Image source={require('../assets/images/person.png')} />
           </View>
           <Button style={styles.button}
             title='Single Player Mode!'
@@ -34,9 +32,7 @@ export default class HomeScreen extends React.Component {
           />
 
           <View style={styles.headingView}>
-            <Text style={styles.icon}>
-              👥
-          </Text>
+            <Image source={require('../assets/images/people.png')} />
           </View>
           <Button style={styles.button}
             title='Multiplayer Mode!'
