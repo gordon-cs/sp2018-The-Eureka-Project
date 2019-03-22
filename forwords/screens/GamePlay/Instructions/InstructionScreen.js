@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         marginBottom: 50,
         marginLeft: 50,
         fontSize: 50,
-        color: '#5b3b89',
+        color: 'black',
         fontWeight: "bold",
     },
     bulletText: {
