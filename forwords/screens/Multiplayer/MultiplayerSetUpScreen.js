@@ -15,29 +15,44 @@ export default class MultiplayerSetUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      groupCode: '',
+      groupID: '',
     };
   }
+  
+  //function that is fired when host clicks ready button 
   readyOnPress() {
     const { navigate } = this.props.navigation;
     var ws = this.props.navigation.state.params.ws;
     var newMessage = 'ready' + this.props.navigation.state.params.groupID;
     ws.send( newMessage );
     ws.onmessage = e => {
-      console.log('Received message:', e.data)
+
+      console.log('MultiplayerSetUpScreenReady:Received message:', e.data)
     }
-    // Navigate to multiplayer gameplay screen
+
+    navigate("MultiPlayerModeSelection", {ws:ws, groupID: this.state.groupID, playerType:'host'});
+      // for now, if it is the host who presses ready, it navigates to lesson selection screen
+      // groupID is this.state.groupID because there is nothing more to be sent since this is the function 
+      // for the host
+
   }
+  //function that is fired when member joins the group
   joinOnPress() {
     const { navigate } = this.props.navigation;
     var ws = this.props.navigation.state.params.ws;
-    var newMessage = 'join' + groupCode;
+    //var groupID = this.props.navigation.state.params.groupID;
+    //let playerType = "member";
+    var newMessage = 'join' + this.state.groupCode;
     ws.send( newMessage );
     ws.onmessage = e => {
-      console.log('Received message:', e.data)
+      console.log('MultiplayerSetUpScreenJoin:Received message:', e.data)
     }
+    navigate('WaitingRoom', {ws: ws, groupID: this.props.navigation.state.params.groupID, playerType: 'member'});
+    // groupID is different here because this is a function for the member
+   
     // Navigate to multiplayer gameplay screen
   }
+
   // This screen should also allow a user to specify different
   // attributes of the game they are about to play.
   render() {
@@ -49,7 +64,7 @@ export default class MultiplayerSetUp extends Component {
           <View style={styles.headingView}>
             <Text style={styles.mainText}>
               Enter an existing group code:
-        </Text>
+            </Text>
           </View>
           <TextInput
             style={{ height: 60, width: 300 }}
@@ -68,15 +83,18 @@ export default class MultiplayerSetUp extends Component {
         </View>
       );
     }
+    // if the PlayerType is host, then render the screen with current groupId that the host created
     else if (this.props.navigation.state.params.playerType == 'host') {
+      let groupId = this.props.navigation.state.params.groupID;
       content = (
         <View style={styles.container}>
           <View style={styles.headingView}>
             <Text style={styles.mainText}>
               You are the game host! Your group code is:
-           {this.props.navigation.state.params.groupID}
+              {groupId} {"\n"}
+
               Your friends can join if they enter this code!
-          </Text>
+            </Text>
             <Text style={styles.mainText}>
               Press the button when you're ready to play!
             </Text>
@@ -86,7 +104,6 @@ export default class MultiplayerSetUp extends Component {
             onPress={() => this.readyOnPress()}
             color='purple'
           />
-          <GameSelection/>
         </View>
       );
     }

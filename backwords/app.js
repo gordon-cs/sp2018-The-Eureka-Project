@@ -1,3 +1,4 @@
+//  require() method is for load and cache js modules
 var createError = require('http-errors');
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -28,14 +29,14 @@ var server = app.listen(process.env.PORT || 8080, function () {
   var port = server.address().port;
   console.log("App now running on port", port);
 });
-
+// account needed for connecing to our sql database
 var connection = mysql.createConnection({
   host: 'localhost',
-  user: 'root',
-  password: '',
+  user: 'nadevai',
+  password: 'chinese',
   database: 'forwords'
 });
-
+// connection function
 connection.connect(function (err) {
   if (err) {
     console.error('Error connecting: ' + err.stack);
@@ -43,7 +44,9 @@ connection.connect(function (err) {
   }
   console.log('Connected as id ' + connection.threadId);
 });
-
+// get API
+// it only retrieve information only
+// what we would see when we go to our database
 app.get('/', function (req, res) {
   res.send("Welcome to forwords");
 });
@@ -56,7 +59,7 @@ app.get('/people', function (req, res) {
     res.json(results);
   });
 })
-
+// language of what a user wants to study
 app.get('/targetLanguage', function (req, res) {
   console.log("in /targetLanguage route in backend");
   connection.query('SELECT TargetLanguage FROM Users WHERE FirstName = "Nikki"', function (error, results, fields) {
@@ -65,7 +68,7 @@ app.get('/targetLanguage', function (req, res) {
     res.json(results);
   });
 })
-
+// list of lessons
 app.get('/lesson-list', function (req, res) {
   console.log("in /lesson-list route in backend");
   connection.query('SELECT * FROM lesson;', function (error, results, fields) {
@@ -86,7 +89,7 @@ app.get('/word/:lesson/:id', function (req, res) {
     res.json(results);
   });
 })
-
+// Gets 4 choices for users to choose from in the gamePlay
 app.get('/choices/:lesson/:first/:second/:third/:fourth', function (req, res) {
   console.log('in /choices route in backend');
   var lesson = req.params.lesson;
@@ -185,7 +188,7 @@ var readyCounter = 0; // This variable is not sustainable for multiple players a
 // or client
 wss.on('connection', (ws, req) => {
   console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''));
-  ws.on('message', message => {
+  ws.on("message", message => {
     console.log(`Received message: ${message}`);
 
     if (message == 'create') {
@@ -199,7 +202,7 @@ wss.on('connection', (ws, req) => {
     else {
       //Check to see what group the message is being sent from.
       if (message.includes('join')) {
-        groupID = message.substr(4, message.length);
+        groupID = parseInt(message.substr(4, message.length));
         index = groups.get(groupID).push(ws) - 1;
         groups.get(groupID)[index].send('You are now in a group!');
         // Alert other players that another player has joined group, unneeded for finished product.
@@ -208,12 +211,13 @@ wss.on('connection', (ws, req) => {
         }
         console.log('Current Connections for this group: ' + groups.get(groupID).length);
       }
-      else if (message == 'ready' + groupID) {
+      else if (message.includes('ready')) {
+        groupID = parseInt(message.substr(5, message.length));
         readyCounter++;
         if (readyCounter == groups.get(groupID).length) {
           readyCounter = 0;
           for (var i = 0; i < groups.get(groupID).length; i++) {
-            groups.get(groupID)[i] && groups.get(groupID)[i].send('Game is starting!');
+            groups.get(groupID)[i] && groups.get(groupID)[i].send('Game is about to start!');
           }
           // Push all of the details about this group into the group table
           // Start getting words for game and loading Gameplay logic

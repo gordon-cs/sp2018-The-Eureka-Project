@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Button, StyleSheet, Text, View, } from "react-native";
-export { backwordsIP } from '../../constants';
-const ws = new WebSocket('ws://'+backwordsIP+':4000');
-
+// export { backwordsIP } from '../../constants';
+const ws = new WebSocket('ws://172.20.10.2:4000');
+// const ws = new WebSocket('ws://192.168.0.17:4000');
 // SelectMultiplayerScreen.js 
 // Author: Ezekiel Martinez
 // This screen allows a user to be able to create a new group
@@ -23,15 +23,22 @@ export default class SelectMultiplayerScreen extends Component {
     let playerType = 'member';
     navigate("MultiplayerSetUp", { ws: ws, playerType: playerType})
   }
+  // sending ws msg to create a groupID to backend and send returned groupId to MultiPlaterSetUp to render the next page
   createOnPress() {
     const { navigate } = this.props.navigation;
     let playerType = 'host';
-    ws.send('create')
-    ws.onmessage = e => {
-      console.log('Received message:', e.data)
-      navigate("MultiplayerSetUp", { groupID: e.data, ws: ws, playerType: playerType });
-      // Navigate to create screen that allows you to specify attributes of a game?
+    var newMessage = 'create';
+    ws.send(newMessage);
+    
+    let groupId ;
+    ws.onmessage = function(e) {
+      groupId = e.data;
+      console.log('Received message:', groupId)
+      navigate("MultiplayerSetUp", { ws: ws, groupID: groupId ,playerType: playerType });
+
     }
+      // Navigate to create screen that allows you to specify attributes of a game?
+      
   }
   render() {
     const { navigate } = this.props.navigation;

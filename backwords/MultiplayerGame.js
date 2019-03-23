@@ -9,6 +9,7 @@ export default class MultiplayerGame extends Component {
   };
   constructor(props) {
     super(props);
+    // sets the initial state of these parameters
     this.state = {
         email: '',
         groupCode: '',
@@ -29,7 +30,7 @@ export default class MultiplayerGame extends Component {
   // Connect to client via ws, log the proxess of receiving and sending messages
   wss.on('connection', (ws, req) => {
     console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''), req.headers['user-agent']);
-    ws.on('message', message => {
+    ws.onmessage(message => {
       console.log(`Received message: ${message}`);
       // Prototype statement for placing user/client into 
       // groups based off the code in the message that they send.

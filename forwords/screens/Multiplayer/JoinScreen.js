@@ -17,7 +17,7 @@ export default class JoinScreen extends Component {
         var newMessage = 'join' + this.state.groupCode;
         ws.send( newMessage );
         ws.onmessage = e => {
-        console.log('Received message:', e.data)
+        console.log('JoinScreen:Received message:', e.data)
         }
         //if (e.data != '' || e.data != '0') { caused error
             navigate("Ready", { groupID: this.state.groupCode, ws: ws })
