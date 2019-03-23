@@ -33,6 +33,7 @@ app.use(function (req, res, next) {
 var server = app.listen(process.env.PORT || httpPort, function () {
   var port = server.address().port;
   console.log("App now running on port", port);
+  console.log("WebSocket running on port", wsPort);
 });
 // account needed for connecing to our sql database
 var connection = mysql.createConnection({
