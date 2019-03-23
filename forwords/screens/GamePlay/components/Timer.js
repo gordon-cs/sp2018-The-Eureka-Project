@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import TimerCountdown from 'react-native-timer-countdown';
 import CountdownCircle from 'react-native-countdown-circle';
 import {
     View,
@@ -13,7 +12,7 @@ export default class Timer extends Component {
         const reset = this.props.resetTimer;
         let seconds;
         if (reset) {
-            seconds = 8;
+            seconds = 60;
         }
         return (
             <View>
@@ -21,7 +20,7 @@ export default class Timer extends Component {
                     seconds={seconds}
                     radius={30}
                     borderWidth={8}
-                    color="#ff003f"
+                    color="#000"
                     bgColor="#fff"
                     textStyle={{ fontSize: 20 }}
                     onTimeElapsed={() => console.log('Elapsed!')}

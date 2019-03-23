@@ -38,7 +38,6 @@ export default class SinglePlayerModeSelectionScreen extends Component {
     const buttons = titles.map(element => (
       <Button
         key={element.ID}
-        style={styles.button}
         title={'Lesson ' + element.ID + ': ' + element.Title}
         onPress={() => navigate("Instruction", { lesson: element.ID })}
       />
@@ -90,5 +89,5 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 20,
     fontSize: 80
-  }
+  },
 });
