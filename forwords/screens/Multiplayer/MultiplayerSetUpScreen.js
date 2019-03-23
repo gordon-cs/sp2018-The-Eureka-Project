@@ -15,7 +15,7 @@ export default class MultiplayerSetUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      groupCode: '',
+      groupID: '',
     };
   }
   
@@ -26,24 +26,29 @@ export default class MultiplayerSetUp extends Component {
     var newMessage = 'ready' + this.props.navigation.state.params.groupID;
     ws.send( newMessage );
     ws.onmessage = e => {
-      console.log('Received message:', e.data)
+
+      console.log('MultiplayerSetUpScreenReady:Received message:', e.data)
     }
 
-    navigate("MultiPlayerModeSelection", {ws:ws, groupId: this.state.groupCode, playerType:'host'});
+    navigate("MultiPlayerModeSelection", {ws:ws, groupID: this.state.groupID, playerType:'host'});
       // for now, if it is the host who presses ready, it navigates to lesson selection screen
-    
+      // groupID is this.state.groupID because there is nothing more to be sent since this is the function 
+      // for the host
 
   }
   //function that is fired when member joins the group
   joinOnPress() {
     const { navigate } = this.props.navigation;
     var ws = this.props.navigation.state.params.ws;
-    //groupCode = this.state.groupCode;
+    //var groupID = this.props.navigation.state.params.groupID;
+    //let playerType = "member";
     var newMessage = 'join' + this.state.groupCode;
     ws.send( newMessage );
-
-    navigate('WaitingRoom', {ws: ws, groupID: this.state.groupCode, playerType: this.props.navigation.state.params.playerType})
-
+    ws.onmessage = e => {
+      console.log('MultiplayerSetUpScreenJoin:Received message:', e.data)
+    }
+    navigate('WaitingRoom', {ws: ws, groupID: this.props.navigation.state.params.groupID, playerType: 'member'});
+    // groupID is different here because this is a function for the member
    
     // Navigate to multiplayer gameplay screen
   }

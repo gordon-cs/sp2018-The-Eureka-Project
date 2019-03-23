@@ -25,7 +25,9 @@ export default class MultiPlayerModeSelectionScreen extends Component {
           const lessons = res.data;
           this.setState({
             isLoading: false,
-            lessonList: lessons
+            lessonList: lessons,
+            // added to set groupID
+            groupID: this.groupID
           });
         });
     } catch (err) {
@@ -35,6 +37,7 @@ export default class MultiPlayerModeSelectionScreen extends Component {
 
   render() {
     const { navigate } = this.props.navigation;
+    var ws = this.props.navigation.state.params.ws;
     const titles = this.state.lessonList;
     const buttons = titles.map(element => (
       <Button

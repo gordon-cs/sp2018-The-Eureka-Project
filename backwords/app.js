@@ -217,7 +217,7 @@ wss.on('connection', (ws, req) => {
         if (readyCounter == groups.get(groupID).length) {
           readyCounter = 0;
           for (var i = 0; i < groups.get(groupID).length; i++) {
-            groups.get(groupID)[i] && groups.get(groupID)[i].send('Game is starting!');
+            groups.get(groupID)[i] && groups.get(groupID)[i].send('Game is about to start!');
           }
           // Push all of the details about this group into the group table
           // Start getting words for game and loading Gameplay logic
