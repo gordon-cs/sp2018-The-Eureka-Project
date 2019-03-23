@@ -225,7 +225,7 @@ var index = 0;
 var readyCounter = 0; // This variable is not sustainable for multiple players at once
 // Connect to client via ws, log the proxess of receiving and sending messages
 // or client
-wss.on('connection', (ws, req) => {
+ws.on('connection', (ws, req) => {
   console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''));
   ws.on("message", message => {
     console.log(`Received message: ${message}`);
