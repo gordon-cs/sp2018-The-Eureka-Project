@@ -41,7 +41,7 @@ export default class HomeScreen extends React.Component {
             >
               <Image
                 style={{ width: 80, height: 146 }}
-                source={require("../assets/images/person.png")}
+                source={require("../../assets/images/person.png")}
               />
             </TouchableOpacity>
           </View>
@@ -49,11 +49,11 @@ export default class HomeScreen extends React.Component {
             <Text style={styles.headingText}>Multiplayer Mode</Text>
             <TouchableOpacity
               style={styles.imageContainer}
-              onPress={() => navigate("SinglePlayerModeSelection")}
+              onPress={() => navigate("SelectMultiplayer")}
             >
               <Image
                 style={{ width: 310, height: 240 }}
-                source={require("../assets/images/people.png")}
+                source={require("../../assets/images/people.png")}
               />
             </TouchableOpacity>
           </View>

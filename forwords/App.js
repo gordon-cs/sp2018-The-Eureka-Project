@@ -5,7 +5,7 @@ import AppNavigator from './navigation/AppNavigator';
 import MainTabNavigator from './navigation/MainTabNavigator';
 import ApiKeys from './constants/ApiKeys';
 import * as firebase from 'firebase';
-import HomeScreen from './screens/HomeScreen';
+import HomeScreen from './screens/Launch/HomeScreen';
 
 export default class App extends React.Component {
   constructor(props) {

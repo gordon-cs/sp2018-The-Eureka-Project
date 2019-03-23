@@ -1,11 +1,15 @@
 import { createStackNavigator } from 'react-navigation';
-import HomeScreen from '../screens/HomeScreen';
+import HomeScreen from '../screens/Launch/HomeScreen';
 import LoginScreen from '../screens/Authentication/LoginScreen';
 import GamePlayScreen from '../screens/GamePlay/GamePlayScreen';
+import SelectMultiplayerScreen from '../screens/Multiplayer/SelectMultiplayerScreen';
+import MultiplayerSetUpScreen from '../screens/Multiplayer/MultiplayerSetUpScreen';
 import SinglePlayerModeSelectionScreen from '../screens/Selection/SinglePlayerModeSelectionScreen';
+import MultiPlayerModeSelectionScreen from "../screens/Selection/MultiPlayerModeSelectionScreen";
 import RegisterScreen from '../screens/Authentication/RegisterScreen';
 import InstructionScreen from '../screens/GamePlay/Instructions/InstructionScreen';
 import ForgotPasswordScreen from '../screens/Authentication/ForgotPasswordScreen';
+import WaitingRoomScreen from '../screens/Multiplayer/WaitingRoomScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -27,6 +31,22 @@ const SinglePlayerModeSelectionStack = createStackNavigator({
   SinglePlayerModeSelection: SinglePlayerModeSelectionScreen,
 });
 
+const MultiPlayerModeSelectionStack = createStackNavigator({
+  MultiPlayerModeSelection: MultiPlayerModeSelectionScreen,
+});
+
+const SelectMultiplayerStack = createStackNavigator({
+  SelectMultiplayer: SelectMultiplayerScreen,
+});
+
+const MultiplayerSetUpStack = createStackNavigator({
+  MultiplayerSetUp: MultiplayerSetUpScreen,
+});
+
+const WaitingRoomStack = createStackNavigator({
+  WaitingRoom: WaitingRoomScreen,
+}); 
+
 const GamePlayScreenStack = createStackNavigator({
   GamePlay: GamePlayScreen,
 });
@@ -36,11 +56,15 @@ const InstructionStack = createStackNavigator({
 });
 
 export default createStackNavigator({
+  HomeStack,
+  SelectMultiplayerStack,
+  MultiplayerSetUpStack,
   LoginStack,
   RegisterStack,
-  HomeStack,
   ForgotPasswordStack,
   SinglePlayerModeSelectionStack,
+  MultiPlayerModeSelectionStack,
   GamePlayScreenStack,
   InstructionStack,
+  WaitingRoomStack,
 });
