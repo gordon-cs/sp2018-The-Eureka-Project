@@ -49,7 +49,7 @@ export default class HomeScreen extends React.Component {
             <Text style={styles.headingText}>Multiplayer Mode</Text>
             <TouchableOpacity
               style={styles.imageContainer}
-              onPress={() => navigate("SinglePlayerModeSelection")}
+              onPress={() => navigate("SelectMultiplayer")}
             >
               <Image
                 style={{ width: 310, height: 240 }}

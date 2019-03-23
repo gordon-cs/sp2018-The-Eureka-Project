@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Button, StyleSheet, Text, View, } from "react-native";
-// export { backwordsIP } from '../../constants';
-const ws = new WebSocket('ws://172.20.10.2:4000');
-// const ws = new WebSocket('ws://192.168.0.17:4000');
+import { wsRoute } from "../../constants/API";
+const ws = new WebSocket('ws://172.27.43.141:4444');
 // SelectMultiplayerScreen.js 
 // Author: Ezekiel Martinez
 // This screen allows a user to be able to create a new group

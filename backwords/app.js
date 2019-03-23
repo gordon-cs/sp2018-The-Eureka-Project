@@ -7,8 +7,8 @@ var app = express();
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var wsPort = 4000;
-var httpPort = 8080;
+var wsPort = 4444;
+var httpPort = 6666;
 
 // WebSocket
 const WebSocket = require('ws');
@@ -88,8 +88,20 @@ ws.on('connection', function connection(ws, req) {
       let lesson = receivedMessage[0].lesson;
       populateChoicesAndPrompt(ws, lesson);
     }
+    if (receivedMessage[0].request == 'create') {
+      // createGame()
+    }
+
   });
 });
+
+
+// Create game object and send to client
+function createGame() {
+  
+}
+
+
 
 // Send choices and prompt to client
 function populateChoicesAndPrompt(ws, lesson) {
