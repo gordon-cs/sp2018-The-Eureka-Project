@@ -6,10 +6,12 @@ var app = express();
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var wsPort = 4000;
+var httpPort = 8080;
 
 // WebSocket
 const WebSocket = require('ws');
-const ws = new WebSocket.Server({ port: 5000 })
+const ws = new WebSocket.Server({ port: wsPort })
 
 // Global variables
 var allWordsInLesson = [];
@@ -27,7 +29,7 @@ app.use(function (req, res, next) {
 });
 
 //Setting up server
-var server = app.listen(process.env.PORT || 8080, function () {
+var server = app.listen(process.env.PORT || httpPort, function () {
   var port = server.address().port;
   console.log("App now running on port", port);
 });
@@ -72,6 +74,7 @@ function populateChoicesAndPrompt(ws, lesson) {
 
     // Get a random int between 1 and 4 to use that as the index of the word that will be the prompt
     var randomInt = Math.floor(Math.random() * 4)+1;
+
     // Get full objects of these choices and prompt and put them in an array
     var objects = [];
     for (var i = 0; i < results.length; i++) {
