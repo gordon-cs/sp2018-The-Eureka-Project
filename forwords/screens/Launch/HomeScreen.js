@@ -18,12 +18,26 @@ export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
   }
-
   onSignOutPress = () => {
     const { navigate } = this.props.navigation;
     firebase.auth().signOut();
     navigate("Login");
   };
+
+// User wants to play solo
+  onPressSinglePlayerMode = () => {
+    const { navigate } = this.props.navigation;
+
+    let playerType = 'host';
+    global.ws.send('create');
+
+    global.ws.onmessage = event => {
+      console.log("HomeScreen: Received message: ", event.data);
+      let groupID = event.data;
+      console.log('HomeScreen: groupID: ', groupID)
+      navigate("GameSetUp", { groupID: groupID, playerType: playerType, isSinglePlayer: true });
+    }
+  }
 
   render() {
     const { navigate } = this.props.navigation;
@@ -37,7 +51,7 @@ export default class HomeScreen extends React.Component {
             <Text style={styles.headingText}>Single Player Mode</Text>
             <TouchableOpacity
               style={styles.imageContainer}
-              onPress={() => navigate("SinglePlayerModeSelection")}
+              onPress={() => this.onPressSinglePlayerMode()}
             >
               <Image
                 style={{ width: 80, height: 146 }}
@@ -49,7 +63,7 @@ export default class HomeScreen extends React.Component {
             <Text style={styles.headingText}>Multiplayer Mode</Text>
             <TouchableOpacity
               style={styles.imageContainer}
-              onPress={() => navigate("SelectMultiplayer")}
+              onPress={() => navigate("JoinOrCreate", {isSinglePlayer: false})}
             >
               <Image
                 style={{ width: 310, height: 240 }}
