@@ -9,8 +9,6 @@ import InstructionsScreen from '../screens/GamePlay/Instructions/InstructionsScr
 import ForgotPasswordScreen from '../screens/Authentication/ForgotPasswordScreen';
 import LobbyScreen from '../screens/GameSetUp/Multiplayer/LobbyScreen';
 
-import SinglePlayerModeSelectionScreen from '../screens/Selection/SinglePlayerModeSelectionScreen';
-
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
 });
@@ -39,10 +37,6 @@ const LobbyStack = createStackNavigator({
   Lobby: LobbyScreen,
 }); 
 
-const SinglePlayerModeSelectionStack = createStackNavigator({
-  SinglePlayerModeSelection: SinglePlayerModeSelectionScreen,
-});
-
 const GamePlayStack = createStackNavigator({
   GamePlay: GamePlayScreen,
 });
@@ -57,11 +51,8 @@ export default createStackNavigator({
   JoinOrCreateStack,
   RegisterStack,
   ForgotPasswordStack,
-
   GamePlayStack,
   GameSetUpStack,
   InstructionsStack,
   LobbyStack,
-
-  SinglePlayerModeSelectionStack,
 });

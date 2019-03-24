@@ -18,10 +18,10 @@ export default class JoinOrCreateScreen extends Component {
     let groupID = this.state.groupID; // First time it is set as 'member'     
     console.log("JoinOrCreateScreen: props: isSinglePlayer: ", isSinglePlayer, "playerType: ", playerType);
     // Can't press 'Join Game!' without entering in a valid groupID 
-    if (groupID !== '') {
+    if (groupID !== '') { 
       navigate("Lobby", { isSinglePlayer: isSinglePlayer, playerType: playerType, groupID: groupID })
     } 
-    else {
+    else { // have to make check for whether the group exists or not yet. will have to do ws!
       Alert.alert('Invalid Group ID', 'Please enter the ID of a group that already exists.');
     }
   }
