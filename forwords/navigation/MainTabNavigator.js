@@ -2,14 +2,14 @@ import { createStackNavigator } from 'react-navigation';
 import HomeScreen from '../screens/Launch/HomeScreen';
 import LoginScreen from '../screens/Authentication/LoginScreen';
 import GamePlayScreen from '../screens/GamePlay/GamePlayScreen';
-import SelectMultiplayerScreen from '../screens/Multiplayer/SelectMultiplayerScreen';
-import MultiplayerSetUpScreen from '../screens/Multiplayer/MultiplayerSetUpScreen';
-import SinglePlayerModeSelectionScreen from '../screens/Selection/SinglePlayerModeSelectionScreen';
-import MultiPlayerModeSelectionScreen from "../screens/Selection/MultiPlayerModeSelectionScreen";
+import JoinOrCreateScreen from '../screens/GameSetUp/Multiplayer/JoinOrCreateScreen';
+import GameSetUpScreen from '../screens/GameSetUp/GameSetUpScreen';
 import RegisterScreen from '../screens/Authentication/RegisterScreen';
-import InstructionScreen from '../screens/GamePlay/Instructions/InstructionScreen';
+import InstructionsScreen from '../screens/GamePlay/Instructions/InstructionsScreen';
 import ForgotPasswordScreen from '../screens/Authentication/ForgotPasswordScreen';
-import WaitingRoomScreen from '../screens/Multiplayer/WaitingRoomScreen';
+import LobbyScreen from '../screens/GameSetUp/Multiplayer/LobbyScreen';
+
+import SinglePlayerModeSelectionScreen from '../screens/Selection/SinglePlayerModeSelectionScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -27,44 +27,41 @@ const RegisterStack = createStackNavigator({
   Register: RegisterScreen,
 });
 
+const JoinOrCreateStack = createStackNavigator({
+  JoinOrCreate: JoinOrCreateScreen,
+});
+
+const GameSetUpStack = createStackNavigator({
+  GameSetUp: GameSetUpScreen,
+});
+
+const LobbyStack = createStackNavigator({
+  Lobby: LobbyScreen,
+}); 
+
 const SinglePlayerModeSelectionStack = createStackNavigator({
   SinglePlayerModeSelection: SinglePlayerModeSelectionScreen,
 });
 
-const MultiPlayerModeSelectionStack = createStackNavigator({
-  MultiPlayerModeSelection: MultiPlayerModeSelectionScreen,
-});
-
-const SelectMultiplayerStack = createStackNavigator({
-  SelectMultiplayer: SelectMultiplayerScreen,
-});
-
-const MultiplayerSetUpStack = createStackNavigator({
-  MultiplayerSetUp: MultiplayerSetUpScreen,
-});
-
-const WaitingRoomStack = createStackNavigator({
-  WaitingRoom: WaitingRoomScreen,
-}); 
-
-const GamePlayScreenStack = createStackNavigator({
+const GamePlayStack = createStackNavigator({
   GamePlay: GamePlayScreen,
 });
 
-const InstructionStack = createStackNavigator({
-  Instruction: InstructionScreen,
+const InstructionsStack = createStackNavigator({
+  Instructions: InstructionsScreen,
 });
 
 export default createStackNavigator({
-  HomeStack,
-  SelectMultiplayerStack,
-  MultiplayerSetUpStack,
   LoginStack,
+  HomeStack,
+  JoinOrCreateStack,
   RegisterStack,
   ForgotPasswordStack,
+
+  GamePlayStack,
+  GameSetUpStack,
+  InstructionsStack,
+  LobbyStack,
+
   SinglePlayerModeSelectionStack,
-  MultiPlayerModeSelectionStack,
-  GamePlayScreenStack,
-  InstructionStack,
-  WaitingRoomStack,
 });
