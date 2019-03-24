@@ -57,26 +57,8 @@ app.get('/', function (req, res) {
   res.send("Welcome to forwords");
 });
 
-app.get('/people', function (req, res) {
-  console.log("in /people route in backend");
-  connection.query('SELECT * FROM Users', function (error, results, fields) {
-    if (error)
-      throw error;
-    res.json(results);
-  });
-})
-// language of what a user wants to study
-app.get('/targetLanguage', function (req, res) {
-  console.log("in /targetLanguage route in backend");
-  connection.query('SELECT TargetLanguage FROM Users WHERE FirstName = "Nikki"', function (error, results, fields) {
-    if (error)
-      throw error;
-    res.json(results);
-  });
-})
-// list of lessons
-
 // WebSocket
+/*
 ws.on('connection', function connection(ws, req) {
   console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''));
   ws.on('message', function incoming(message) {
@@ -95,16 +77,13 @@ ws.on('connection', function connection(ws, req) {
 
   });
 });
-
+*/
 
 // Create game object and send to client
 function createGame() {
-  
 }
 
-
-
-// Send choices and prompt to client
+/// Send choices and prompt to client
 function populateChoicesAndPrompt(ws, lesson) {
   connection.query('SELECT * FROM word WHERE lesson = ' + lesson + ';', function (error, results) {
     if (error)
@@ -123,6 +102,24 @@ function populateChoicesAndPrompt(ws, lesson) {
           objects.push(results[i])
         }
       }
+    }
+    // Add send header of "choicesAndPrompt" at element 0
+    objects.unshift("choicesAndPrompt");
+
+    // Put prompt at the end of the array
+    objects.push(objects[randomInt]);
+    
+    // Stringify the objects to send them to the client
+    var choicesAndPrompt = JSON.stringify(objects);
+
+    // Send it to the client
+    ws.send(choicesAndPrompt);
+
+    // Reset all of the arrays
+    choicesAndPrompt = [];
+  });
+}
+
 class Player {
   constructor(ID, name, choices, prompt) {
     this.ID = ID;
@@ -130,10 +127,10 @@ class Player {
     this.choices = choices;
     this.prompt = prompt;
   }
-  constructor(ID, name) {
-    this.ID = ID;
-    this.name = name;
-  }
+  // constructor(ID, name) {
+  //   this.ID = ID;
+  //   this.name = name;
+  // }
   setPromptChoices(choices) {
     this.choices = choices;
     this.prompt = choices[Math.random() * 4];
@@ -251,7 +248,6 @@ class Game {
 
   // returns the list of lessons
   app.get('/lesson-list', function (req, res) {
-    console.log("in /lesson-list route in backend");
     connection.query('SELECT * FROM lesson;', function (error, results, fields) {
       if (error)
         throw error;
@@ -350,7 +346,7 @@ ws.on('connection', (ws, req) => {
       }
     }
   }
-  );
+  );/*
 ws.on('close', () => {
   console.log(`Client #${index} has disconnected`);
   delete clients[index];
@@ -360,5 +356,6 @@ ws.on('close', () => {
     i--;
   }
 })
+*/
 })
 module.exports = app;
