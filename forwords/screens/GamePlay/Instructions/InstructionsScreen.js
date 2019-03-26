@@ -18,6 +18,8 @@ export default class InstructionScreen extends React.Component {
     const { navigate } = this.props.navigation;
     const { lesson } = this.props.navigation.state.params;
     const isSinglePlayer = this.props.navigation.state.params.isSinglePlayer;
+    const groupID = this.props.navigation.state.params.groupID;
+    const playerType = this.props.navigation.state.params.playerType;
     if (isSinglePlayer) {
       return (
         <View style={styles.mainContainer}>
@@ -29,7 +31,7 @@ export default class InstructionScreen extends React.Component {
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigate("GamePlay", { lesson: lesson })}
+              onPress={() => navigate("GamePlay", { lesson: lesson, isSinglePlayer: isSinglePlayer, groupID: groupID })}
             >
               <Text style={styles.buttonText}>Proceed</Text>
             </TouchableOpacity>
@@ -55,7 +57,7 @@ export default class InstructionScreen extends React.Component {
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigate("GamePlay", { lesson: lesson })}
+              onPress={() => navigate("GamePlay", { lesson: lesson.ID, isSinglePlayer: isSinglePlayer, playerType: playerType, groupID: groupID })}
             >
               <Text style={styles.buttonText}>Proceed</Text>
             </TouchableOpacity>

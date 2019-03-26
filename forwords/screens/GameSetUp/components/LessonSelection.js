@@ -50,7 +50,7 @@ export default class LessonSelection extends Component {
           key={lesson.ID}
           color="#5b3b89"
           title={'Lesson ' + lesson.ID + ': ' + lesson.Title}
-          onPress={() => navigate("Instructions", { lesson: lesson.ID, isSinglePlayer: isSinglePlayer, groupID: groupID })}
+          onPress={() => navigate("Instructions", { lesson: lesson.ID, isSinglePlayer: isSinglePlayer, groupID: groupID, playerType: playerType })}
         />
       ));
     }

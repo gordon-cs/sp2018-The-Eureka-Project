@@ -11,9 +11,9 @@ export default class GameSetUpScreen extends Component {
   }
 
   render() {
-    const playerType = this.props.navigation.state.params.playerType; // host or member
     const isSinglePlayer = this.props.navigation.state.params.isSinglePlayer;
-    var groupID = this.props.navigation.state.params.groupID;
+    const groupID = this.props.navigation.state.params.groupID;
+    const playerType = this.props.navigation.state.params.playerType; // host or member
     let content;
 
     // If the user is playing solo

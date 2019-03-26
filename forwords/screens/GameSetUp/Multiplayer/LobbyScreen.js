@@ -31,7 +31,7 @@ export default class LobbyScreenRoom extends Component {
         console.log("                    groupID: ", groupID);
         console.log("                    lesson: ", lesson);
         console.log(' ');
-        navigate('GamePlay', { groupID: groupID, playerType: playerType, lesson: lesson, isSinglePlayer: isSinglePlayer });
+        navigate('Instructions', { groupID: groupID, playerType: playerType, lesson: lesson, isSinglePlayer: isSinglePlayer });
     };
 
     render() {
