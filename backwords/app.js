@@ -59,18 +59,16 @@ class Player {
   setPromptChoices(choices) {
     this.choices = choices;
     this.prompt = choices[Math.floor(Math.random() * 4)];
-    console.log("player: ",this.choices[0]);
-    console.log("player: ",this.choices[1]);
-    console.log("player: ",this.choices[2]);
-    console.log("player: ",this.choices[3]);
-    console.log("player: ",this.prompt)
+    console.log("PlayerChoices ",choices);
+
   }
 }
 
 class Game {
-  constructor(lesson, players) {
+  constructor(lesson, players, numList) {
     this.lesson = lesson;
     this.players = players;
+    this.numList
   } 
 }
 // WebSocket
@@ -81,9 +79,15 @@ ws.on('connection', function connection(ws, req) {
     let receivedMessage = JSON.parse(message);
     var newGame = startGame();
     for (let i = 0; i < newGame.players.length; i++) {
-      console.log("Player ",i);
-      getChoices(newGame.lesson, newGame.players[i]);
+      getChoices(newGame.lesson, newGame.players[i], newGame.numList);
     }
+    // console.log("Player ",0,": Choice 0 ",newGame.players[0].choices[0]);
+    // for (let i = 0; i < newGame.players.length; i++) {
+    //   console.log("Player ",i,": Choice 1 ",newGame.players[i].choices[1]);
+    //   console.log("Player ",i,": Choice 2 ",newGame.players[i].choices[2]);
+    //   console.log("Player ",i,": Choice 3 ",newGame.players[i].choices[3]);
+    //   console.log("Player ",i,": Promp ",newGame.players[i].prompt)
+    // }
     // If the client is requesting choices and a prompt
     if (receivedMessage[0].request == 'choicesAndPrompts') {
       let lesson = receivedMessage[0].lesson;
@@ -98,12 +102,13 @@ ws.on('connection', function connection(ws, req) {
     p2 = new Player(2, "Nikki");
     lesson = 7;
     let players = [p1, p2];
-    let newGame = new Game(lesson, players);
+    let choiceNums = [];
+    let newGame = new Game(lesson, players, choiceNums);
     return newGame;
   }
-
+  // Can be possibly made a class function of Game.
   // Send choices and prompt to client
-  function getChoices(lesson, player) {
+  function getChoices(lesson, player, choiceNums) {
     console.log("getChoices() called");
     connection.query('SELECT * FROM word WHERE lesson = ' + lesson + ';', function (error, results) {
       if (error)
@@ -122,24 +127,8 @@ ws.on('connection', function connection(ws, req) {
           }
         }
       }
-      // console.log("getChoices choices[]: ", choices);
-      // Add send header of "choicesAndPrompt" at element 0
-      // choices.unshift("choicesAndPrompt");
-
-      // Put prompt at the end of the array
-      // choices.push(choices[randomInt]);
-
-      // Stringify the choices to send them to the client
-      // var choicesAndPrompt = JSON.stringify(choices);
-      // Send it to the client
-      // ws.send(choicesAndPrompt);
-      // console.log(choices);
-      // Reset all of the arrays
-      // choicesAndPrompt = [];
-      // console.log("startGame(): players[]: ", players);
-      // console.log('');
-      // console.log('');
       player.setPromptChoices(choices);
+
 
 
     });
