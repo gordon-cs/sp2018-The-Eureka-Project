@@ -8,8 +8,8 @@ import {
   StyleSheet,
   Platform,
 } from "react-native";
-import { fullRoutePrefix } from "../../constants/API";
-var webSocket = new WebSocket("ws://172.27.43.141:5000");
+import { wsRoute } from "../../constants/API";
+var webSocket = new WebSocket(wsRoute);
 
 export default class GamePlayScreen extends Component {
   static navigationOptions = {
@@ -32,6 +32,14 @@ export default class GamePlayScreen extends Component {
     this.wasAnsweredCorrectly = this.wasAnsweredCorrectly.bind(this);
   }
 
+  async componentWillMount() {
+    try {
+      this.populateChoicesAndPrompt();
+    } catch (error) {
+      throw new Error('component will not mount');
+    }
+  }
+
   wasAnsweredCorrectly(choiceIDGiven, prompt) {
     if (choiceIDGiven === prompt) {
       this.setState({
@@ -52,16 +60,24 @@ export default class GamePlayScreen extends Component {
   }
 
 
-
-
   async populateChoicesAndPrompt() {
     var lesson = this.props.navigation.state.params.lesson;
+    var groupID = this.props.navigation.state.params.groupID;
+    var playerType = this.props.navigation.state.params.playerType;
+    var isSinglePlayer = this.props.navigation.state.params.isSinglePlayer;
+    console.log("GamePlayScreen: props: isSinglePlayer: ", isSinglePlayer);
+    console.log("                    playerType: ", playerType);
+    console.log("                    groupID: ", groupID);
+    console.log("                    lesson: ", lesson);
+    console.log(' ');
 
     // Request to send to the server - must be stringified.
     var stringifiedRequest = JSON.stringify(
       [{
-        'request': 'choicesAndPrompts',
-        'lesson': '' + lesson + ''
+        'request': 'choicesAndPrompt',
+        'lesson': lesson,
+        'groupID': groupID,
+        'playerType': playerType,
       }]
     );
     webSocket.send(stringifiedRequest);
@@ -70,14 +86,6 @@ export default class GamePlayScreen extends Component {
       answeredCorrectly: [0, 0],
       resetTimer: true,
     });
-  }
-
-  async componentWillMount() {
-    try {
-      this.populateChoicesAndPrompt();
-    } catch (error) {
-      throw new Error('component will not mount');
-    }
   }
 
   render() {

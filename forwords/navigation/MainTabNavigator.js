@@ -1,11 +1,13 @@
 import { createStackNavigator } from 'react-navigation';
-import HomeScreen from '../screens/HomeScreen';
+import HomeScreen from '../screens/Launch/HomeScreen';
 import LoginScreen from '../screens/Authentication/LoginScreen';
 import GamePlayScreen from '../screens/GamePlay/GamePlayScreen';
-import SinglePlayerModeSelectionScreen from '../screens/Selection/SinglePlayerModeSelectionScreen';
+import JoinOrCreateScreen from '../screens/GameSetUp/Multiplayer/JoinOrCreateScreen';
+import GameSetUpScreen from '../screens/GameSetUp/GameSetUpScreen';
 import RegisterScreen from '../screens/Authentication/RegisterScreen';
-import InstructionScreen from '../screens/GamePlay/Instructions/InstructionScreen';
+import InstructionsScreen from '../screens/GamePlay/Instructions/InstructionsScreen';
 import ForgotPasswordScreen from '../screens/Authentication/ForgotPasswordScreen';
+import LobbyScreen from '../screens/GameSetUp/Multiplayer/LobbyScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -23,24 +25,34 @@ const RegisterStack = createStackNavigator({
   Register: RegisterScreen,
 });
 
-const SinglePlayerModeSelectionStack = createStackNavigator({
-  SinglePlayerModeSelection: SinglePlayerModeSelectionScreen,
+const JoinOrCreateStack = createStackNavigator({
+  JoinOrCreate: JoinOrCreateScreen,
 });
 
-const GamePlayScreenStack = createStackNavigator({
+const GameSetUpStack = createStackNavigator({
+  GameSetUp: GameSetUpScreen,
+});
+
+const LobbyStack = createStackNavigator({
+  Lobby: LobbyScreen,
+}); 
+
+const GamePlayStack = createStackNavigator({
   GamePlay: GamePlayScreen,
 });
 
-const InstructionStack = createStackNavigator({
-  Instruction: InstructionScreen,
+const InstructionsStack = createStackNavigator({
+  Instructions: InstructionsScreen,
 });
 
 export default createStackNavigator({
-  LoginStack,
-  RegisterStack,
   HomeStack,
+  LoginStack,
+  JoinOrCreateStack,
+  RegisterStack,
   ForgotPasswordStack,
-  SinglePlayerModeSelectionStack,
-  GamePlayScreenStack,
-  InstructionStack,
+  GamePlayStack,
+  GameSetUpStack,
+  InstructionsStack,
+  LobbyStack,
 });
