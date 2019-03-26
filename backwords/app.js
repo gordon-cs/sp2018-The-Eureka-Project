@@ -57,6 +57,39 @@ app.get('/', function (req, res) {
   res.send("Welcome to forwords");
 });
 
+class Player {
+  constructor(ID, name, choices, prompt) {
+    this.ID = ID;
+    this.name = name;
+    this.choices = choices;
+    this.prompt = prompt;
+  }
+  setPromptChoices(choices) {
+    this.choices = choices;
+    // this.prompt = choices[Math.floor(Math.random() * 4)];
+    this.prompt = choices;
+
+  }
+}
+
+class Game {
+  constructor(lesson, players) {
+    this.lesson = lesson;
+    this.players = players;
+  }
+  initGame() {
+    for (var n = 0; n < 2; n++) {
+
+      this.players[n].setPromptChoices(getChoices(this.lesson));
+      console.log(this.players[n].choices[0]);
+      console.log(this.players[n].choices[1]);
+      console.log(this.players[n].choices[2]);
+      console.log(this.players[n].choices[3]);
+      console.log(this.players[n].prompt)
+    }
+  }
+}
+
 // WebSocket
 /*
 ws.on('connection', function connection(ws, req) {
@@ -79,45 +112,15 @@ ws.on('connection', function connection(ws, req) {
 });
 */
 
-// Create game object and send to client
-function createGame() {
-}
-
-/// Send choices and prompt to client
-function populateChoicesAndPrompt(ws, lesson) {
-  connection.query('SELECT * FROM word WHERE lesson = ' + lesson + ';', function (error, results) {
-    if (error)
-      throw error;
-    let minID = results[0].ID;
-    let numList = fourWordsPicker(minID, (results.length - 1)); // return an array of 4 unique numbers
-
-    // Get a random int between 1 and 4 to use that as the index of the word that will be the prompt
-    var randomInt = Math.floor(Math.random() * 4)+1;
-
-    // Get full objects of these choices and prompt and put them in an array
-    var objects = [];
-    for (var i = 0; i < results.length; i++) {
-      for (var j = 0; j < numList.length; j++) {
-        if (results[i].ID == numList[j]) {
-          objects.push(results[i])
-        }
-      }
-    }
-    // Add send header of "choicesAndPrompt" at element 0
-    objects.unshift("choicesAndPrompt");
-
-    // Put prompt at the end of the array
-    objects.push(objects[randomInt]);
-    
-    // Stringify the objects to send them to the client
-    var choicesAndPrompt = JSON.stringify(objects);
-
-    // Send it to the client
-    ws.send(choicesAndPrompt);
-
-    // Reset all of the arrays
-    choicesAndPrompt = [];
-  });
+function startGame() {
+  //connection established, assume moving on from Jake's screen.
+  initList = [];
+  p1 = new Player(1, "Jake", initList, 'init');
+  p2 = new Player(2, "Nikki", initList, 'init');
+  lesson = 11;
+  let players = [p1, p2];
+  let newGame = new Game(lesson, players);
+  newGame.initGame();
 }
 
 class Player {
@@ -174,119 +177,135 @@ class Game {
   }
 }
 
-  function startGame() {
-    //connection established, assume moving on from Jake's screen.
-    p1 = new Player(1, Jake);
-    p2 = new Player(2, Nikki);
-    lesson = 11;
-    let players = [p1, p2];
-    let newGame = new Game(lesson, players);
-    newGame.initGame();
+//Generate a random number between the minimum ID in that lesson and the maximum ID in that lesson
+function randomNumGen(minID, lessonWordsCount) {
+  let maxID = minID + lessonWordsCount;
+  return Math.floor(Math.random() * (maxID - minID) + minID);
+}
+
+/* Create a list of 4 unique numbers
+ * If a number is already in the list, then generate a unique number
+ */
+function fourWordsPicker(minID, lessonWordsCount) {
+  let numList = [];
+  while (numList.length < 4) {
+    let potential = Math.floor(randomNumGen(minID, lessonWordsCount));
+    while (numList.includes(potential)) {
+      potential = randomNumGen(minID, lessonWordsCount);
+    }
+    numList.push(potential);
   }
+  return numList; // should be 4 random numbers between minID and maxID
+}
 
-  // Send choices and prompt to client
-  function getChoices(lesson) {
-    connection.query('SELECT * FROM word WHERE lesson = ' + lesson + ';', function (error, results) {
-      if (error)
-        throw error;
-      let minID = results[0].ID;
-      let numList = fourWordsPicker(minID, (results.length - 1)); // return an array of 4 unique numbers
+function startGame() {
+  //connection established, assume moving on from Jake's screen.
+  p1 = new Player(1, Jake);
+  p2 = new Player(2, Nikki);
+  lesson = 11;
+  let players = [p1, p2];
+  let newGame = new Game(lesson, players);
+  newGame.initGame();
+}
 
-      // Get full choices of these choices and put them in an array
-      var choices = [];
-      for (var i = 0; i < results.length; i++) {
-        for (var j = 0; j < numList.length; j++) {
-          if (results[i].ID == numList[j]) {
-            choices.push(results[i])
-          }
+// Send choices and prompt to client
+function getChoices(lesson) {
+  connection.query('SELECT * FROM word WHERE lesson = ' + lesson + ';', function (error, results) {
+    if (error)
+      throw error;
+    let minID = results[0].ID;
+    let numList = fourWordsPicker(minID, (results.length - 1)); // return an array of 4 unique numbers
+
+    // Get full choices of these choices and put them in an array
+    var choices = [];
+    for (var i = 0; i < results.length; i++) {
+      for (var j = 0; j < numList.length; j++) {
+        if (results[i].ID == numList[j]) {
+          choices.push(results[i])
         }
       }
-      // Add send header of "choicesAndPrompt" at element 0
-      // choices.unshift("choicesAndPrompt");
-
-      // Put prompt at the end of the array
-      // choices.push(choices[randomInt]);
-
-      // Stringify the choices to send them to the client
-      // var choicesAndPrompt = JSON.stringify(choices);
-      // Send it to the client
-      // ws.send(choicesAndPrompt);
-      return choices;
-      // Reset all of the arrays
-      // choicesAndPrompt = [];
-    });
-  }
-
-  //Generate a random number between the minimum ID in that lesson and the maximum ID in that lesson
-  function randomNumGen(minID, lessonWordsCount) {
-    let maxID = minID + lessonWordsCount;
-    return Math.floor(Math.random() * (maxID - minID) + minID);
-  }
-
-  /* Create a list of 4 unique numbers
-   * If a number is already in the list, then generate a unique number
-   */
-  function fourWordsPicker(minID, lessonWordsCount) {
-    let numList = [];
-    while (numList.length < 4) {
-      let potential = Math.floor(randomNumGen(minID, lessonWordsCount));
-      while (numList.includes(potential)) {
-        potential = randomNumGen(minID, lessonWordsCount);
-      }
-      numList.push(potential);
     }
-    return numList; // should be 4 random numbers between minID and maxID
-  }
+    // Add send header of "choicesAndPrompt" at element 0
+    // choices.unshift("choicesAndPrompt");
 
+    // Put prompt at the end of the array
+    // choices.push(choices[randomInt]);
 
-  // HTTP
-
-  // Display welcome message 
-  app.get('/', function (req, res) {
-    res.send("Welcome to forwords");
+    // Stringify the choices to send them to the client
+    // var choicesAndPrompt = JSON.stringify(choices);
+    // Send it to the client
+    // ws.send(choicesAndPrompt);
+    return choices;
+    // Reset all of the arrays
+    // choicesAndPrompt = [];
   });
+}
 
-  // returns the list of lessons
-  app.get('/lesson-list', function (req, res) {
-    connection.query('SELECT * FROM lesson;', function (error, results, fields) {
-      if (error)
-        throw error;
-      res.json(results);
-    });
-  })
+//Generate a random number between the minimum ID in that lesson and the maximum ID in that lesson
+function randomNumGen(minID, lessonWordsCount) {
+  let maxID = minID + lessonWordsCount;
+  return Math.floor(Math.random() * (maxID - minID) + minID);
+}
+
+/* Create a list of 4 unique numbers
+ * If a number is already in the list, then generate a unique number
+ */
+function fourWordsPicker(minID, lessonWordsCount) {
+  let numList = [];
+  while (numList.length < 4) {
+    let potential = Math.floor(randomNumGen(minID, lessonWordsCount));
+    while (numList.includes(potential)) {
+      potential = randomNumGen(minID, lessonWordsCount);
+    }
+    numList.push(potential);
+  }
+  return numList; // should be 4 random numbers between minID and maxID
+}
+
+// HTTP
+// Display welcome message 
+app.get('/', function (req, res) {
+  res.send("Welcome to forwords");
+});
+
+// returns the list of lessons
+app.get('/lesson-list', function (req, res) {
+  console.log("in /lesson-list route in backend");
+  connection.query('SELECT * FROM lesson;', function (error, results, fields) {
+    if (error)
+      throw error;
+    res.json(results);
+  });
+})
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-  // view engine setup
-  app.set('views', path.join(__dirname, 'views'));
-  app.set('view engine', 'jade');
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({
+  extended: false
+}));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
-  app.use(logger('dev'));
-  app.use(express.json());
-  app.use(express.urlencoded({
-    extended: false
-  }));
-  app.use(cookieParser());
-  app.use(express.static(path.join(__dirname, 'public')));
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  next(createError(404));
+});
 
-  // catch 404 and forward to error handler
-  app.use(function (req, res, next) {
-    next(createError(404));
-  });
+// error handler
+app.use(function (err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // error handler
-  app.use(function (err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-    // render the error page
-    res.sendStatus(err.status || 500);
-    res.sendStatus(err.status);
-    //  res.render('error');
-  });
+  // render the error page
+  res.sendStatus(err.status || 500);
+  res.sendStatus(err.status);
+  //  res.render('error');
+});
 
 // Multiplayer Connection Code
 // Author: Ezekiel Martinez with assistance from Stephen Macomber
@@ -345,17 +364,17 @@ ws.on('connection', (ws, req) => {
         }
       }
     }
-  }
-  );/*
+  })
+});
+
 ws.on('close', () => {
-  console.log(`Client #${index} has disconnected`);
-  delete clients[index];
-  var i = clients.length - 1;
-  while (clients[i] === undefined && i >= 0) {
-    clients.pop();
-    i--;
-  }
+console.log(`Client #${index} has disconnected`);
+delete clients[index];
+var i = clients.length - 1;
+while (clients[i] === undefined && i >= 0) {
+clients.pop();
+i--;
+}
 })
-*/
-})
+
 module.exports = app;
