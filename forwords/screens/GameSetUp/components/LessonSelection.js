@@ -35,10 +35,13 @@ export default class LessonSelection extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const lessons = this.state.lessonList;
-    const isSinglePlayer = (this.props.navigation.state.params.isSinglePlayer);
-    const groupID = (this.props.navigation.state.params.groupID);
+    const isSinglePlayer = this.props.navigation.state.params.isSinglePlayer;
+    const groupID = this.props.navigation.state.params.groupID;
     const playerType = this.props.navigation.state.params.playerType; // host or member
-    console.log("lessonSelection: props: isSinglePlayer: ", isSinglePlayer, "playerType: ", playerType);
+    console.log("LessonSelection: props: isSinglePlayer: ", isSinglePlayer);
+    console.log("                    playerType: ", playerType);
+    console.log("                    groupID: ", groupID);
+    console.log(' ');
     let buttons;
     // If the user is playing solo
     if (isSinglePlayer && playerType == 'host') {

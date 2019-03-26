@@ -46,8 +46,8 @@ const InstructionsStack = createStackNavigator({
 });
 
 export default createStackNavigator({
-  LoginStack,
   HomeStack,
+  LoginStack,
   JoinOrCreateStack,
   RegisterStack,
   ForgotPasswordStack,

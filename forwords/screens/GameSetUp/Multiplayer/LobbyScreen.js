@@ -9,15 +9,29 @@ export default class LobbyScreenRoom extends Component {
     constructor(props) {
         super(props);
     }
-    playOnPress() {
+    startGameOnPress() {
         const { navigate } = this.props.navigation;
-        var newMessage = 'waiting' + this.props.navigation.state.params.groupID;
-        console.log("Lobby: newMessage: ", newMessage);
-        global.ws.send(newMessage);
+        var groupID = this.props.navigation.state.params.groupID;
+        var playerType = this.props.navigation.state.params.playerType;
+        var isSinglePlayer = this.props.navigation.state.params.isSinglePlayer;
+        var lesson = this.props.navigation.state.params.lesson;
+        // Request to send to the server - must be stringified.
+        var stringifiedRequest = JSON.stringify(
+            [{
+                'request': 'startGame',
+                'lesson': '' + lesson + ''
+            }]
+        );
+        global.ws.send(stringifiedRequest);
         global.ws.onmessage = e => {
             console.log('LobbyScreen:Received message:', e.data)
         }
-        navigate('gameplay', { ws: ws, groupID: this.props.navigation.state.params.groupID, playerType: 'member' && 'host' });
+        console.log("LobbyScreen: props: isSinglePlayer: ", isSinglePlayer);
+        console.log("                    playerType: ", playerType);
+        console.log("                    groupID: ", groupID);
+        console.log("                    lesson: ", lesson);
+        console.log(' ');
+        navigate('GamePlay', { groupID: groupID, playerType: playerType, lesson: lesson, isSinglePlayer: isSinglePlayer });
     };
 
     render() {
@@ -25,7 +39,6 @@ export default class LobbyScreenRoom extends Component {
         const playerType = this.props.navigation.state.params.playerType; // host or member
         const isSinglePlayer = this.props.navigation.state.params.isSinglePlayer;
         var groupID = this.props.navigation.state.params.groupID;
-        console.log("lobbyScreen: props: isSinglePlayer: ", isSinglePlayer, "playerType: ", playerType, "groupID: ", groupID);
         let content;
         // If the user is a HOST (playing with others)
         if (!isSinglePlayer && playerType == 'host') {
@@ -41,7 +54,7 @@ export default class LobbyScreenRoom extends Component {
 
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => this.playOnPress()}
+                        onPress={() => this.startGameOnPress()}
                     >
                         <Text style={styles.buttonText}>Start Game</Text>
                     </TouchableOpacity>
@@ -50,9 +63,9 @@ export default class LobbyScreenRoom extends Component {
         }
         // If the user is a member (not the game creator, just someone who joined)
         else if (playerType == 'member') {
-        // show list of players who are waiting in the room 
-        // let host enter the room with the same GroupID
-        // then host clicks play when eveyone is ready 
+            // show list of players who are waiting in the room 
+            // let host enter the room with the same GroupID
+            // then host clicks play when eveyone is ready 
             content = (
                 <View style={styles.headingView}>
                     <Text style={styles.headingText}> You are a member of Group {groupID}</Text>
@@ -86,12 +99,6 @@ const styles = StyleSheet.create({
     headingView: {
         alignItems: "center",
     },
-    button: {
-        alignItems: 'center',
-        color: '#800080',
-        borderRadius: 50,
-        width: 160,
-    },
     mainText: {
         alignItems: 'center',
         marginTop: 10,
@@ -119,13 +126,13 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
     },
     button: {
-      justifyContent: "center",
-      flexDirection: "column",
-      margin: 10,
-      width: 120,
-      height: 120,
-      borderRadius: 80,
-      backgroundColor: "#5b3b89"
+        justifyContent: "center",
+        flexDirection: "column",
+        margin: 10,
+        width: 120,
+        height: 120,
+        borderRadius: 80,
+        backgroundColor: "#5b3b89"
     },
     buttonText: {
         textAlign: "center",

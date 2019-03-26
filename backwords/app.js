@@ -14,9 +14,6 @@ var httpPort = 6666;
 const WebSocket = require('ws');
 const ws = new WebSocket.Server({ port: wsPort })
 
-// Global variables
-var allWordsInLesson = [];
-
 // Body Parser Middleware
 app.use(bodyParser.json());
 
@@ -50,13 +47,8 @@ connection.connect(function (err) {
   }
   console.log('Connected as id ' + connection.threadId);
 });
-// get API
-// it only retrieve information only
-// what we would see when we go to our database
-app.get('/', function (req, res) {
-  res.send("Welcome to forwords");
-});
 
+// Player Class
 class Player {
   constructor(ID, name, choices, prompt) {
     this.ID = ID;
@@ -67,36 +59,35 @@ class Player {
   setPromptChoices(choices) {
     this.choices = choices;
     this.prompt = choices[Math.floor(Math.random() * 4)];
-    console.log("player: ",this.choices[0]);
-    console.log("player: ",this.choices[1]);
-    console.log("player: ",this.choices[2]);
-    console.log("player: ",this.choices[3]);
-    console.log("player: ",this.prompt)
+    console.log("in setPromptChoices(", choices, ");");
+    console.log("");
+    // console.log("player: ",this.choices[1]);
+    // console.log("player: ",this.choices[2]);
+    // console.log("player: ",this.choices[3]);
+    // console.log("player: ",this.prompt)
   }
 }
-
+// Game Class
 class Game {
   constructor(lesson, players) {
     this.lesson = lesson;
     this.players = players;
-  } 
+  }
 }
 // WebSocket
 /*
 ws.on('connection', function connection(ws, req) {
   console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''));
+  
+  // If a message is received
   ws.on('message', function incoming(message) {
     // Turn every received message into a JSON immediately to access it!
     let receivedMessage = JSON.parse(message);
-    var newGame = startGame();
-    for (let i = 0; i < newGame.players.length; i++) {
-      console.log("Player ",i);
-      getChoices(newGame.lesson, newGame.players[i]);
-    }
+
     // If the client is requesting choices and a prompt
-    if (receivedMessage[0].request == 'choicesAndPrompts') {
+    if (receivedMessage[0].request == 'choicesAndPrompt') {
       let lesson = receivedMessage[0].lesson;
-      populateChoicesAndPrompt(ws, lesson);
+      // call function to set up choices/prompt, passing in lesson
     }
     if (receivedMessage[0].request == 'create') {
       // createGame()
@@ -106,149 +97,30 @@ ws.on('connection', function connection(ws, req) {
 });
 */
 
-function startGame() {
-  //connection established, assume moving on from Jake's screen.
-  initList = [];
-  p1 = new Player(1, "Jake", initList, 'init');
-  p2 = new Player(2, "Nikki", initList, 'init');
-  lesson = 11;
-  let players = [p1, p2];
-  let newGame = new Game(lesson, players);
-  newGame.initGame();
-}
-
-  function startGame() {
-    //connection established, assume moving on from Jake's screen.
-    p1 = new Player(1, "Jake");
-    p2 = new Player(2, "Nikki");
-    lesson = 7;
-    let players = [p1, p2];
-    let newGame = new Game(lesson, players);
-    return newGame;
-  }
-
-  // Send choices and prompt to client
-  function getChoices(lesson, player) {
-    console.log("getChoices() called");
-    connection.query('SELECT * FROM word WHERE lesson = ' + lesson + ';', function (error, results) {
-      if (error)
-        throw error;
-      // console.log("results: ", results[0]);
-      let minID = results[0].ID;
-      let numList = fourWordsPicker(minID, (results.length - 1)); // return an array of 4 unique numbers
-
-      // Get full choices of these choices and put them in an array
-      var choices = [];
-      // var choices = [results[numList[0]], results[numList[1]], results[numList[2]], results[numList[3]]];
-      for (var i = 0; i < results.length; i++) {
-        for (var j = 0; j < numList.length; j++) {
-          if (results[i].ID == numList[j]) {
-            choices.push(results[i])
-          }
-        }
-      }
-      // console.log("getChoices choices[]: ", choices);
-      // Add send header of "choicesAndPrompt" at element 0
-      // choices.unshift("choicesAndPrompt");
-
-      // Put prompt at the end of the array
-      // choices.push(choices[randomInt]);
-
-      // Stringify the choices to send them to the client
-      // var choicesAndPrompt = JSON.stringify(choices);
-      // Send it to the client
-      // ws.send(choicesAndPrompt);
-      // console.log(choices);
-      // Reset all of the arrays
-      // choicesAndPrompt = [];
-      // console.log("startGame(): players[]: ", players);
-      // console.log('');
-      // console.log('');
-      player.setPromptChoices(choices);
-
-
-    });
-  }
-}
-
-class Game {
-  constructor(lesson, players) {
-    this.lesson = lesson;
-    this.players = players;
-  }
-  initGame() {
-    for (n = 0; n < 2; n++) {
-      // connection.query('SELECT * FROM word WHERE lesson = ' + this.lesson + ';', function (error, results) {
-      //   if (error)
-      //     throw error;
-      //   let minID = results[0].ID;
-      //   let numList = fourWordsPicker(minID, (results.length - 1)); // return an array of 4 unique numbers
-
-      //   // Get a random int between 1 and 4 to use that as the index of the word that will be the prompt
-      //   // Get a random int between 1 and 4 to use that as the index of the word that will be the prompt
-      //   var randomInt = Math.floor(Math.random() * 4) + 1;
-      //   // Get full choices of these choices and prompt and put them in an array
-      //   var choices = [];
-      //   for (var i = 0; i < results.length; i++) {
-      //     for (var j = 0; j < numList.length; j++) {
-      //       if (results[i].ID == numList[j]) {
-      //         choices.push(results[i]);
-      //       }
-      //     }
-      //   }
-      //   players[n].setPromptChoices(choices);
-      // }
-      players[n].setPromptChoices(getChoices);
-      console.log(players[n].choices[0]);
-      console.log(players[n].choices[1]);
-      console.log(players[n].choices[2]);
-      console.log(players[n].choices[3]);
-      console.log(players[n].prompt)
-    }
-  }
-}
-
-//Generate a random number between the minimum ID in that lesson and the maximum ID in that lesson
-function randomNumGen(minID, lessonWordsCount) {
-  let maxID = minID + lessonWordsCount;
-  return Math.floor(Math.random() * (maxID - minID) + minID);
-}
-
-/* Create a list of 4 unique numbers
- * If a number is already in the list, then generate a unique number
- */
-function fourWordsPicker(minID, lessonWordsCount) {
-  let numList = [];
-  while (numList.length < 4) {
-    let potential = Math.floor(randomNumGen(minID, lessonWordsCount));
-    while (numList.includes(potential)) {
-      potential = randomNumGen(minID, lessonWordsCount);
-    }
-    numList.push(potential);
-  }
-  return numList; // should be 4 random numbers between minID and maxID
-}
 
 function startGame() {
   //connection established, assume moving on from Jake's screen.
-  p1 = new Player(1, Jake);
-  p2 = new Player(2, Nikki);
-  lesson = 11;
+  p1 = new Player(1, "Jake");
+  p2 = new Player(2, "Nikki");
+  lesson = 7;
   let players = [p1, p2];
   let newGame = new Game(lesson, players);
-  newGame.initGame();
+  return newGame;
 }
 
 // Send choices and prompt to client
-function getChoices(lesson) {
+function getChoices(lesson, player) {
+  console.log("getChoices() called");
   connection.query('SELECT * FROM word WHERE lesson = ' + lesson + ';', function (error, results) {
     if (error)
       throw error;
+    // console.log("results: ", results[0]);
     let minID = results[0].ID;
     let numList = fourWordsPicker(minID, (results.length - 1)); // return an array of 4 unique numbers
 
     // Get full choices of these choices and put them in an array
     var choices = [];
+    // var choices = [results[numList[0]], results[numList[1]], results[numList[2]], results[numList[3]]];
     for (var i = 0; i < results.length; i++) {
       for (var j = 0; j < numList.length; j++) {
         if (results[i].ID == numList[j]) {
@@ -256,6 +128,7 @@ function getChoices(lesson) {
         }
       }
     }
+    // console.log("getChoices choices[]: ", choices);
     // Add send header of "choicesAndPrompt" at element 0
     // choices.unshift("choicesAndPrompt");
 
@@ -266,9 +139,15 @@ function getChoices(lesson) {
     // var choicesAndPrompt = JSON.stringify(choices);
     // Send it to the client
     // ws.send(choicesAndPrompt);
-    return choices;
+    // console.log(choices);
     // Reset all of the arrays
     // choicesAndPrompt = [];
+    // console.log("startGame(): players[]: ", players);
+    // console.log('');
+    // console.log('');
+    player.setPromptChoices(choices);
+
+
   });
 }
 
@@ -292,6 +171,8 @@ function fourWordsPicker(minID, lessonWordsCount) {
   }
   return numList; // should be 4 random numbers between minID and maxID
 }
+
+
 
 // HTTP
 // Display welcome message 
@@ -397,15 +278,15 @@ ws.on('connection', (ws, req) => {
     }
   })
 });
-
+/*
 ws.on('close', () => {
-console.log(`Client #${index} has disconnected`);
-delete clients[index];
-var i = clients.length - 1;
-while (clients[i] === undefined && i >= 0) {
-clients.pop();
-i--;
-}
+  console.log(`Client #${index} has disconnected`);
+  delete clients[index];
+  var i = clients.length - 1;
+  while (clients[i] === undefined && i >= 0) {
+    clients.pop();
+    i--;
+  }
 })
-
+*/
 module.exports = app;
