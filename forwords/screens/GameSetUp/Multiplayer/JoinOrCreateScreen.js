@@ -7,77 +7,116 @@ export default class JoinOrCreateScreen extends Component {
   };
   constructor(props) {
     super(props);
+
     this.state = {
       groupID: '',
-    };
-  }
-  joinOnPress() {
-    const { navigate } = this.props.navigation;
-    const isSinglePlayer = this.props.navigation.state.params.isSinglePlayer;
-    let playerType = 'member'; // First time it is set as 'member' 
-    let groupID = this.state.groupID; // First time it is set as 'member'     
-    console.log("JoinOrCreateScreen: props: isSinglePlayer: ", isSinglePlayer);
-    console.log("                           playerType: ", playerType);
-    console.log(' ');
-    // Can't press 'Join Game!' without entering in a valid groupID 
-    if (groupID !== '') { 
-      navigate("Lobby", { isSinglePlayer: isSinglePlayer, playerType: playerType, groupID: groupID })
-    } 
-    else { // have to make check for whether the group exists or not yet. will have to do ws!
-      Alert.alert('Invalid Group ID', 'Please enter the ID of a group that already exists.');
     }
   }
+
   // sending ws msg to create a groupID to backend and send returned groupID to MultiPlayerSetUp to render the next page
   createOnPress() {
     const { navigate } = this.props.navigation;
     let playerType = 'host';
-    let isSinglePlayer = false;   
-    console.log("JoinOrCreateScreen: props: isSinglePlayer: ", isSinglePlayer);
-    console.log("                           playerType: ", playerType);
+    console.log("JoinOrCreateScreen:  playerType: ", playerType);
     console.log(' ');
-    global.ws.send('create');
-
-    // Navigate to GameSetUpScreen that allows you to specify lesson of a game
-    global.ws.onmessage = event => {
-      console.log("JoinOrCreateScreen: Received message: ", event.data);
-      console.log(" ");
-      let groupID = event.data;
-      navigate("GameSetUp", { groupID: groupID, playerType: playerType, isSinglePlayer: isSinglePlayer });
-    }
-
-  }
-  render() {
-    return (
-      <View style={styles.MainContainer}>
-        <View style={styles.headingView}>
-          <Text style={styles.headingText}>Multiplayer Mode</Text>
-        </View>
-        <Text style={styles.mainText}>Create your own group or join an existing one!</Text>
-        <View style={styles.headingView}>
-          <Button style={styles.button}
-            title='Create Game!'
-            onPress={() => this.createOnPress()} // Ideally this will also lead to this player going to a wait screen.
-            color='purple'
-          />
-          <TextInput
-            style={{ height: 60, width: 300 }}
-            alignItems='center'
-            placeholder="Group Code"
-            onChangeText={(groupID) => this.setState({ groupID })}
-            autoCorrect={false}
-            autoCapitalize="none"
-            returnKeyType="done"
-          />
-          <Button style={styles.button}
-            title='Join Game!'
-            onPress={() => this.joinOnPress()}
-            color='purple'
-          />
-
-        </View>
-      </View>
+    console.log(' ');
+    // Request to send to the server - must be stringified.
+    var stringifiedRequest = JSON.stringify(
+      [{
+        'request': 'create',  // only a host can send 'create'
+        // should also send in email or some other unique identifier, perhaps (if IP is not enough)
+      }]
     );
+
+    global.ws.send(stringifiedRequest);
+
+    // Receive a message from the server about what your groupID is
+    global.ws.onmessage = event => {
+      /* If successful, going to receive something like this back:
+      [{
+        'groupID': 1234,
+      }]
+      */
+      let receivedMessage = JSON.parse(event.data);
+      let groupID = receivedMessage[0].groupID;
+      console.log("JoinOrCreateScreen: Received message: (event.data):", event.data);
+      console.log(" ");
+      navigate("GameSetUp", { groupID: groupID, playerType: playerType });
+    }
   }
+
+  joinOnPress() {
+    const { navigate } = this.props.navigation;
+    let playerType = 'member'; // First time it is set as 'member'   
+    var userInputGroupID = this.state.groupID;
+    console.log("JoinOrCreateScreen:  playerType: ", playerType);
+    console.log(' ');
+    console.log(' ');
+    // Request to join a certain group
+    if (userInputGroupID !== '') { // Only send it if it is not null
+      // Request to send to the server - must be stringified.
+      var stringifiedRequest = JSON.stringify(
+        [{
+          'request': 'join',
+          'groupID': userInputGroupID,  // only a host can send 'create'
+          // should also send in email or some other unique identifier, perhaps (if IP is not enough)
+        }]
+      );
+      global.ws.send(stringifiedRequest);
+
+      // Receive a message from the server about validity of groupID user sent in
+      global.ws.onmessage = event => {
+        /* If successful, going to receive something like this back:
+      [{
+        'isValidGroupID': true,
+      }]
+      */
+        let receivedMessage = JSON.parse(event.data);
+        console.log("JoinOrCreateScreen: joinOnPress receivedMessage:", receivedMessage);
+        if (receivedMessage[0].isValidGroupID) {
+          navigate("Lobby", { groupID: userInputGroupID, playerType: playerType });
+        }
+        else {
+          Alert.alert('Invalid Group ID', 'Please enter the ID of a group that was already created.');
+        }
+      }
+    } else if (userInputGroupID == '') {
+      Alert.alert('Invalid Group ID', 'Please enter the ID of a group that was already created.');
+    }
+  }
+
+render() {
+  return (
+    <View style={styles.MainContainer}>
+      <View style={styles.headingView}>
+        <Text style={styles.headingText}>Multiplayer Mode</Text>
+      </View>
+      <Text style={styles.mainText}>Create your own group or join an existing one!</Text>
+      <View style={styles.headingView}>
+        <Button style={styles.button}
+          title='Create Game!'
+          onPress={() => this.createOnPress()} // Ideally this will also lead to this player going to a wait screen.
+          color='purple'
+        />
+        <TextInput
+          style={{ height: 60, width: 300 }}
+          alignItems='center'
+          placeholder="Group Code"
+          onChangeText={(groupID) => this.setState({ groupID })}
+          autoCorrect={false}
+          autoCapitalize="none"
+          returnKeyType="done"
+        />
+        <Button style={styles.button}
+          title='Join Game!'
+          onPress={() => this.joinOnPress()}
+          color='purple'
+        />
+
+      </View>
+    </View>
+  );
+}
 }
 
 const styles = StyleSheet.create({

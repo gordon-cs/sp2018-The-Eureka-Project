@@ -11,13 +11,12 @@ export default class GameSetUpScreen extends Component {
   }
 
   render() {
-    const isSinglePlayer = this.props.navigation.state.params.isSinglePlayer;
-    const groupID = this.props.navigation.state.params.groupID;
-    const playerType = this.props.navigation.state.params.playerType; // host or member
+    const groupID = this.props.navigation.state.params.groupID; // does not exist for solo playerTypes yet, should we set it as null in the parent component, or is it fine?
+    const playerType = this.props.navigation.state.params.playerType; // host, member, or solo
     let content;
 
     // If the user is playing solo
-    if (isSinglePlayer) {
+    if (playerType == 'solo') {
       content = (
         <ScrollView>
           <View style={styles.MainContainer}>
@@ -30,7 +29,7 @@ export default class GameSetUpScreen extends Component {
             </View>
             <LessonSelection
               navigation={this.props.navigation}
-              isSinglePlayer={this.props.navigation.state.params.isSinglePlayer}
+              playerType={playerType}
             />
           </View>
         </ScrollView>
@@ -54,7 +53,6 @@ export default class GameSetUpScreen extends Component {
 
             <LessonSelection
               navigation={this.props.navigation}
-              isSinglePlayer={isSinglePlayer}
               playerType={playerType}
               groupID={groupID}
             />

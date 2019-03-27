@@ -35,22 +35,20 @@ export default class LessonSelection extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const lessons = this.state.lessonList;
-    const isSinglePlayer = this.props.navigation.state.params.isSinglePlayer;
     const groupID = this.props.navigation.state.params.groupID;
-    const playerType = this.props.navigation.state.params.playerType; // host or member
-    console.log("LessonSelection: props: isSinglePlayer: ", isSinglePlayer);
-    console.log("                    playerType: ", playerType);
+    const playerType = this.props.navigation.state.params.playerType; // host, member, or solo
+    console.log("LessonSelection: props: playerType: ", playerType);
     console.log("                    groupID: ", groupID);
     console.log(' ');
     let buttons;
     // If the user is playing solo
-    if (isSinglePlayer && playerType == 'host') {
+    if (playerType == 'solo') {
       buttons = lessons.map(lesson => (
         <Button
           key={lesson.ID}
           color="#5b3b89"
           title={'Lesson ' + lesson.ID + ': ' + lesson.Title}
-          onPress={() => navigate("Instructions", { lesson: lesson.ID, isSinglePlayer: isSinglePlayer, groupID: groupID, playerType: playerType })}
+          onPress={() => navigate("Instructions", { lesson: lesson.ID, playerType: playerType, groupID: groupID })}
         />
       ));
     }
@@ -61,7 +59,7 @@ export default class LessonSelection extends Component {
           key={lesson.ID}
           color="#5b3b89"
           title={'Lesson ' + lesson.ID + ': ' + lesson.Title}
-          onPress={() => navigate("Lobby", { lesson: lesson.ID, isSinglePlayer: isSinglePlayer, playerType: playerType, groupID: groupID })}
+          onPress={() => navigate("Lobby", { lesson: lesson.ID, playerType: playerType, groupID: groupID })}
         />
       ));
     }

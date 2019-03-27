@@ -35,6 +35,7 @@ export default class GamePlayScreen extends Component {
   async componentWillMount() {
     try {
       this.populateChoicesAndPrompt();
+    
     } catch (error) {
       throw new Error('component will not mount');
     }
@@ -63,11 +64,7 @@ export default class GamePlayScreen extends Component {
   async populateChoicesAndPrompt() {
     var lesson = this.props.navigation.state.params.lesson;
     var groupID = this.props.navigation.state.params.groupID;
-    var playerType = this.props.navigation.state.params.playerType;
-    var isSinglePlayer = this.props.navigation.state.params.isSinglePlayer;
-    console.log("GamePlayScreen: props: isSinglePlayer: ", isSinglePlayer);
-    console.log("                    playerType: ", playerType);
-    console.log("                    groupID: ", groupID);
+    console.log("GamePlayScreen: props: groupID: ", groupID);
     console.log("                    lesson: ", lesson);
     console.log(' ');
 
@@ -77,7 +74,6 @@ export default class GamePlayScreen extends Component {
         'request': 'choicesAndPrompt',
         'lesson': lesson,
         'groupID': groupID,
-        'playerType': playerType,
       }]
     );
     webSocket.send(stringifiedRequest);
@@ -89,22 +85,28 @@ export default class GamePlayScreen extends Component {
   }
 
   render() {
-    // What to do when receiving a message
-    webSocket.onmessage = event => {
-      // Turn every received message into a JSON immediately to access it
-      let receivedMessage = JSON.parse(event.data);
+      // What to do when receiving a message
+      webSocket.onmessage = event => {
+        // Turn every received message into a JSON immediately to access it
+        console.log(`GamePlayScreen: receivedMessage: ${event.data}`); 
+        // the choiceAndPrompts from backend are coming in as [object ArrayBuffer] for some reason,
+        // even though in the backend i check the type and it says "string"
+        let receivedMessage = JSON.stringify(event.data);
+        console.log(`GamePlayScreen: stringify arraybuffeR?: ${receivedMessage}`); // returns {}
 
-      if (receivedMessage[0] == "choicesAndPrompt") {
-        this.setState({
-          isLoading: false,
-          topLeftChoice: receivedMessage[1],
-          topRightChoice: receivedMessage[2],
-          bottomLeftChoice: receivedMessage[3],
-          bottomRightChoice: receivedMessage[4],
-          promptObj: receivedMessage[5] // Picks one of the choice ids as the prompt id
-        });
+        let parseStringifiedMessage = JSON.parse(event.data);
+  
+        if (parseStringifiedMessage[0] == "choicesAndPrompt") {
+          this.setState({
+            isLoading: false,
+            topLeftChoice: parseStringifiedMessage[1],
+            topRightChoice: parseStringifiedMessage[2],
+            bottomLeftChoice: parseStringifiedMessage[3],
+            bottomRightChoice: parseStringifiedMessage[4],
+            promptObj: parseStringifiedMessage[5] // Picks one of the choice ids as the prompt id
+          });
+        }
       }
-    }
 
     const topLeftChoice = this.state.topLeftChoice;
     const topRightChoice = this.state.topRightChoice;

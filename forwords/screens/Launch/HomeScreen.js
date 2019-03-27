@@ -27,26 +27,8 @@ export default class HomeScreen extends React.Component {
 // User wants to play solo
   onPressSinglePlayerMode = () => {
     const { navigate } = this.props.navigation;
-    const isSinglePlayer = true;
-    let playerType = 'host';
-
-    // Request to send to the server - must be stringified.
-    var stringifiedRequest = JSON.stringify(
-      [{
-        'request': 'create',
-        'isSinglePlayer': isSinglePlayer,
-        
-      }]
-    );
-    global.ws.send(stringifiedRequest);
-
-
-    global.ws.onmessage = event => {
-      console.log("HomeScreen: Received message: ", event.data);
-      let groupID = event.data;
-      console.log('HomeScreen: groupID: ', groupID)
-      navigate("GameSetUp", { groupID: groupID, playerType: playerType, isSinglePlayer: isSinglePlayer });
-    }
+    const playerType = 'solo';
+    navigate("GameSetUp", { playerType: playerType});
   }
 
   render() {
@@ -73,7 +55,7 @@ export default class HomeScreen extends React.Component {
             <Text style={styles.headingText}>Multiplayer Mode</Text>
             <TouchableOpacity
               style={styles.imageContainer}
-              onPress={() => navigate("JoinOrCreate", {isSinglePlayer: false})}
+              onPress={() => navigate("JoinOrCreate")}
             >
               <Image
                 style={{ width: 310, height: 240 }}
