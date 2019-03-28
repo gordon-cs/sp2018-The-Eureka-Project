@@ -8,8 +8,6 @@ import {
   StyleSheet,
   Platform,
 } from "react-native";
-import { wsRoute } from "../../constants/API";
-var webSocket = new WebSocket(wsRoute);
 
 export default class GamePlayScreen extends Component {
   static navigationOptions = {
@@ -35,7 +33,6 @@ export default class GamePlayScreen extends Component {
   async componentWillMount() {
     try {
       this.populateChoicesAndPrompt();
-    
     } catch (error) {
       throw new Error('component will not mount');
     }
@@ -76,7 +73,7 @@ export default class GamePlayScreen extends Component {
         'groupID': groupID,
       }]
     );
-    webSocket.send(stringifiedRequest);
+    global.ws.send(stringifiedRequest);
 
     this.setState({
       answeredCorrectly: [0, 0],
@@ -85,25 +82,41 @@ export default class GamePlayScreen extends Component {
   }
 
   render() {
-      // What to do when receiving a message
-      webSocket.onmessage = event => {
-        // Turn every received message into a JSON immediately to access it
-        console.log(`GamePlayScreen: receivedMessage: ${event.data}`); 
-        // the choiceAndPrompts from backend are coming in as [object ArrayBuffer] for some reason,
-        // even though in the backend i check the type and it says "string"
-        let receivedMessage = JSON.stringify(event.data);
-        console.log(`GamePlayScreen: stringify arraybuffeR?: ${receivedMessage}`); // returns {}
+    Array.prototype.shuffle = function() {
+      var input = this;
+        
+      for (var i = input.length-1; i >=0; i--) {
+        
+          var randomIndex = Math.floor(Math.random()*(i+1)); 
+          var itemAtIndex = input[randomIndex]; 
+            
+          input[randomIndex] = input[i]; 
+          input[i] = itemAtIndex;
+      }
+      return input;
+    }
 
-        let parseStringifiedMessage = JSON.parse(event.data);
-  
-        if (parseStringifiedMessage[0] == "choicesAndPrompt") {
+      // What to do when receiving a message
+      global.ws.onmessage = event => {
+        // Turn every received message into a JSON immediately to access it
+        let receivedMessage = JSON.parse(event.data); 
+        console.log("GamePlayScreen: receivedMessage", receivedMessage);
+        if (receivedMessage[0] == "choicesAndPrompt") {
+          // Set prompt first, then remove it
+          this.setState({
+            promptObj: receivedMessage[5] // Picks one of the choice ids as the prompt id
+          });
+          receivedMessage.pop();
+          // Remove first element which is string, 
+          receivedMessage.shift(); // just an array of choices
+          // Shuffle choices
+          receivedMessage.shuffle();
           this.setState({
             isLoading: false,
-            topLeftChoice: parseStringifiedMessage[1],
-            topRightChoice: parseStringifiedMessage[2],
-            bottomLeftChoice: parseStringifiedMessage[3],
-            bottomRightChoice: parseStringifiedMessage[4],
-            promptObj: parseStringifiedMessage[5] // Picks one of the choice ids as the prompt id
+            topLeftChoice: receivedMessage[0],
+            topRightChoice: receivedMessage[1],
+            bottomLeftChoice: receivedMessage[2],
+            bottomRightChoice: receivedMessage[3]
           });
         }
       }
@@ -116,6 +129,7 @@ export default class GamePlayScreen extends Component {
     const promptID = this.state.promptObj.ID;
     const answeredCorrectly = this.state.answeredCorrectly;
     const resetTimer = this.state.resetTimer;
+    
     return (
       <View style={styles.mainContainer}>
         <View style={styles.choicesTopContainer}>
