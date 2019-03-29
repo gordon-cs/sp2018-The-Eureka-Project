@@ -14,14 +14,19 @@ export default class LobbyScreenRoom extends Component {
   };
   constructor(props) {
     super(props);
+
+    this.state = {
+      numberOfPlayers: 0,
+    };
   }
+
   startGameOnPress() {
     const { navigate } = this.props.navigation;
     var gameID = this.props.navigation.state.params.gameID;
     var lesson = this.props.navigation.state.params.lesson;
-    console.log("LobbyScreen: props: playerType: ", playerType);
-    console.log("                    gameID: ", gameID);
-    console.log("                    lesson: ", lesson);
+    // console.log("LobbyScreen: props: playerType: ", playerType);
+    console.log("LobbyScreen                    gameID: ", gameID);
+    console.log("LobbyScreen                    lesson: ", lesson);
     console.log(" ");
     // Request to send to the server - must be stringified.
     var stringifiedRequest = JSON.stringify([
@@ -33,16 +38,16 @@ export default class LobbyScreenRoom extends Component {
     ]);
     global.ws.send(stringifiedRequest);
     global.ws.onmessage = event => {
-    /* If successful, going to receive something like this back:
-        [{
-        'isGameInitialized': true,
-        }]
-    */
-    let receivedMessage = JSON.parse(event.data);
-    console.log("LobbyScreen:Received message:", receivedMessage);
-    if (receivedMessage[0].isGameInitialized) {
+      /* If successful, going to receive something like this back:
+          [{
+          'isGameInitialized': true,
+          }]
+      */
+      let receivedMessage = JSON.parse(event.data);
+      console.log("LobbyScreen:Received message:", receivedMessage);
+      if (receivedMessage[0].isGameInitialized) {
         navigate("Instructions", { gameID: gameID, lesson: lesson });
-    }
+      }
     };
   }
 
@@ -50,6 +55,33 @@ export default class LobbyScreenRoom extends Component {
     const playerType = this.props.navigation.state.params.playerType; // host, member, or solo
     var gameID = this.props.navigation.state.params.gameID;
     let content;
+
+
+
+    // What to do when receiving a message
+    global.ws.onmessage = event => {
+      /* If successful, going to receive something like this back:
+       [{
+       'isGameInitialized': true,
+       }]
+      */
+      /* If successful, going to receive something like this back:
+              [{
+              'numberOfPlayers': 3,
+              }]
+      */
+      let receivedMessage = JSON.parse(event.data);
+      console.log("LobbyScreen: Received message:", receivedMessage);
+      let numberOfPlayers = receivedMessage[0].numberOfPlayers;
+      this.setState({ numberOfPlayers })
+      console.log(this.setState.numberOfPlayers);
+
+
+      if (receivedMessage[0].isGameInitialized) {
+        navigate("Instructions", { gameID: gameID, lesson: lesson });
+      }
+    };
+
     // If the user is a HOST (playing with others)
     if (playerType == "host") {
       content = (
@@ -66,7 +98,9 @@ export default class LobbyScreenRoom extends Component {
             style={styles.singlePlayerImage}
             source={require("../../../assets/images/person.png")}
           />
-
+          {/*Array.from(Array(this.state.numberOfPlayers)).map(() =>
+            <Text>💆</Text>
+          )*/}
           <TouchableOpacity
             style={styles.button}
             onPress={() => this.startGameOnPress()}
@@ -91,10 +125,9 @@ export default class LobbyScreenRoom extends Component {
             {" "}
             Waiting for the host to start the game once everyone is in!
           </Text>
-          <Image
-            style={styles.singlePlayerImage}
-            source={require("../../../assets/images/person.png")}
-          />
+          {/*Array.from(Array(this.state.numberOfPlayers)).map(() =>
+            <Text>💆</Text>
+          )*/}
         </View>
       );
     }
