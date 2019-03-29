@@ -35,10 +35,12 @@ export default class LessonSelection extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const lessons = this.state.lessonList;
-    const groupID = this.props.navigation.state.params.groupID;
+    const gameID = this.props.navigation.state.params.gameID;
     const playerType = this.props.navigation.state.params.playerType; // host, member, or solo
     console.log("LessonSelection: props: playerType: ", playerType);
-    console.log("                    groupID: ", groupID);
+    if (playerType !== 'solo') {
+      console.log("                    gameID: ", gameID);
+    }
     console.log(' ');
     let buttons;
     // If the user is playing solo
@@ -48,7 +50,7 @@ export default class LessonSelection extends Component {
           key={lesson.ID}
           color="#5b3b89"
           title={'Lesson ' + lesson.ID + ': ' + lesson.Title}
-          onPress={() => navigate("Instructions", { lesson: lesson.ID, playerType: playerType, groupID: groupID })}
+          onPress={() => navigate("Instructions", { lesson: lesson.ID, playerType: playerType})}
         />
       ));
     }
@@ -59,7 +61,7 @@ export default class LessonSelection extends Component {
           key={lesson.ID}
           color="#5b3b89"
           title={'Lesson ' + lesson.ID + ': ' + lesson.Title}
-          onPress={() => navigate("Lobby", { lesson: lesson.ID, playerType: playerType, groupID: groupID })}
+          onPress={() => navigate("Lobby", { lesson: lesson.ID, playerType: playerType, gameID: gameID })}
         />
       ));
     }

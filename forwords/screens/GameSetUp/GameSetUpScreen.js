@@ -11,7 +11,7 @@ export default class GameSetUpScreen extends Component {
   }
 
   render() {
-    const groupID = this.props.navigation.state.params.groupID; // does not exist for solo playerTypes yet, should we set it as null in the parent component, or is it fine?
+    const gameID = this.props.navigation.state.params.gameID; // does not exist for solo playerTypes yet, should we set it as null in the parent component, or is it fine?
     const playerType = this.props.navigation.state.params.playerType; // host, member, or solo
     let content;
 
@@ -46,7 +46,7 @@ export default class GameSetUpScreen extends Component {
                 style={styles.multiplayerImage}
                 source={require("../../assets/images/people.png")}
               />
-              <Text style={styles.mainText}>Your Group Code is: {groupID}</Text>
+              <Text style={styles.mainText}>Your Group Code is: {gameID}</Text>
               <Text style={styles.subheadingText}>Invite others to your group using this unique code!</Text>
               <Text style={styles.subheadingText}>Select a lesson for your group to play with!</Text>
             </View>
@@ -54,7 +54,7 @@ export default class GameSetUpScreen extends Component {
             <LessonSelection
               navigation={this.props.navigation}
               playerType={playerType}
-              groupID={groupID}
+              gameID={gameID}
             />
           </View>
         </ScrollView>

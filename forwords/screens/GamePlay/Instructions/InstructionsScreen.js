@@ -23,28 +23,29 @@ export default class InstructionScreen extends React.Component {
   proceedOnPress() {
     const { navigate } = this.props.navigation;
     const lesson = this.props.navigation.state.params.lesson;
+    
     // Request to send to the server - must be stringified.
     var stringifiedRequest = JSON.stringify(
       [{
-        'request': 'soloCreate',  // only a single user can send 'solocreate'
+        'request': 'create',
         'lesson': lesson
-        // should also send in email or some other unique identifier, perhaps (if IP is not enough)
       }]
     );
     console.log(`InstructionsScreen: Sent message: ${stringifiedRequest}`);
     global.ws.send(stringifiedRequest);
-    // Receive a message from the server about what your groupID is
+    
+    // Receive a message from the server about what your gameID is
     global.ws.onmessage = event => {
       /* If successful, going to receive something like this back:
       [{
-        'groupID': 1234,
+        'gameID': 1234,
       }]
       */
       if (this.state.openToReceivingMessages) {
         console.log(`InstructionsScreen: receivedMessage: ${event.data}`);
         let receivedMessage = JSON.parse(event.data);
-        let groupID = receivedMessage[0].groupID;
-        navigate("GamePlay", { lesson: lesson, groupID: groupID })
+        let gameID = receivedMessage[0].gameID;
+        navigate("GamePlay", { lesson: lesson, gameID: gameID })
         this.setState({ openToReceivingMessages: false });
       }
     }
@@ -54,7 +55,7 @@ export default class InstructionScreen extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
     const lesson = this.props.navigation.state.params;
-    const groupID = this.props.navigation.state.params.groupID;
+    const gameID = this.props.navigation.state.params.gameID;
     const playerType = this.props.navigation.state.params.playerType;
     if (playerType == 'solo') {
       return (
@@ -93,7 +94,7 @@ export default class InstructionScreen extends React.Component {
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigate("GamePlay", { lesson: lesson.ID, groupID: groupID })}
+              onPress={() => navigate("GamePlay", { lesson: lesson.ID, gameID: gameID })}
             >
               <Text style={styles.buttonText}>Proceed</Text>
             </TouchableOpacity>

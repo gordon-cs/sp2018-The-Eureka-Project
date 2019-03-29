@@ -60,8 +60,8 @@ export default class GamePlayScreen extends Component {
 
   async populateChoicesAndPrompt() {
     var lesson = this.props.navigation.state.params.lesson;
-    var groupID = this.props.navigation.state.params.groupID;
-    console.log("GamePlayScreen: props: groupID: ", groupID);
+    var gameID = this.props.navigation.state.params.gameID;
+    console.log("GamePlayScreen: props: gameID: ", gameID);
     console.log("                    lesson: ", lesson);
     console.log(' ');
 
@@ -70,7 +70,7 @@ export default class GamePlayScreen extends Component {
       [{
         'request': 'choicesAndPrompt',
         'lesson': lesson,
-        'groupID': groupID,
+        'gameID': gameID,
       }]
     );
     global.ws.send(stringifiedRequest);
