@@ -6,6 +6,7 @@ import {
   Platform,
   TouchableOpacity
 } from "react-native";
+import TimerMixin from 'react-timer-mixin';
 
 export default class InstructionScreen extends React.Component {
   static navigationOptions = {
@@ -17,6 +18,23 @@ export default class InstructionScreen extends React.Component {
     this.state = {
       openToReceivingMessages: true,
     }
+  }
+
+  async componentWillMount() {
+    const { navigate } = this.props.navigation;
+    const lesson = this.props.navigation.state.params;
+    const gameID = this.props.navigation.state.params.gameID;
+    const playerType = this.props.navigation.state.params.playerType;
+    if (playerType !='solo') {
+      try {
+        TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
+          navigate("GamePlay", { lesson: lesson.ID, gameID: gameID })
+        }, 10000);
+  
+      } catch (error) {
+        throw new Error('component will not mount');
+      }
+    }    
   }
 
   // For solo users only
@@ -53,9 +71,6 @@ export default class InstructionScreen extends React.Component {
 
 
   render() {
-    const { navigate } = this.props.navigation;
-    const lesson = this.props.navigation.state.params;
-    const gameID = this.props.navigation.state.params.gameID;
     const playerType = this.props.navigation.state.params.playerType;
     if (playerType == 'solo') {
       return (
@@ -91,6 +106,7 @@ export default class InstructionScreen extends React.Component {
             3. Say your prompt out loud in Chinese in order for them to click
             the right option on their screen.
           </Text>
+          {/*
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               style={styles.button}
@@ -99,6 +115,7 @@ export default class InstructionScreen extends React.Component {
               <Text style={styles.buttonText}>Proceed</Text>
             </TouchableOpacity>
           </View>
+          */}
         </View>
       );
     }
