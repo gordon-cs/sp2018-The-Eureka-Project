@@ -103,7 +103,7 @@ ws.on('connection', function connection(ws, req) {
     if (message[0].request == 'create') {
       // Set up game  
       var gameID = await getGameID(); // should return an int that is the next ID available in the Game table
-      game.lesson = message[0].lesson;
+      game.lesson = message[0].lesson; // does not exist for multiplayer, only single player
       game.gameID = gameID;
       game.players = [player];
 
@@ -116,11 +116,25 @@ ws.on('connection', function connection(ws, req) {
       ws.send(gameIDMessage);
     } 
     console.log(" ");   
-    console.log("         OUTSIDE OF IF STATEMENT: Check object values: player:", player.IP,"should have ws and ip, game:",game.lesson);
+    console.log("         OUTSIDE OF IF STATEMENT: Check object values: player.ip:", player.IP,"should have ws and ip, game.lesson:",game.lesson);
     console.log(" ");
+    // how to figure out who the request is actually coming from ?
+    if (message[0].request == 'initGame') {
+      var lesson = message[0].lesson;
+      gameMap.get(message[0].gameID).lesson = lesson;
+      var gameID = parseInt(message[0].gameID);
+      if (gameMap.get(gameID).players.length > 1) {
+        let initGameMessage = JSON.stringify([{ 'isGameInitialized': true }]); // Convert JSON to string inorder to send
+        console.log("---------->>>>>>>>>>Sent message",initGameMessage);
+        ws.send(initGameMessage);
+      }
+    }
 
     if (message[0].request == 'choicesAndPrompt') {
-      // game.lesson = message[0].lesson;
+      var gameID = parseInt(message[0].gameID);
+      // get lesson ID from the actual map
+      // let lesson = gameMap.get(gameID).lesson;
+      // game.lesson = lesson;
       // game.gameID = message[0].gameID;
       let allMessages = await getChoicesAndPrompt(game); // returns a promise of an array of messages
       console.log("---------->>>>>>>>>>Sent message 'choicesAndPrompt'");
@@ -133,15 +147,10 @@ ws.on('connection', function connection(ws, req) {
      */
     if (message[0].request == 'join') {
       var gameID = parseInt(message[0].gameID);
-      console.log("         in 'join': Check gameID value that came in:", gameID, "typeOf gameID:", (typeof gameID));
-      // var joinGameIDMessage = JSON.stringify([{ 'isValidGameID': isValidGameID }]); // Convert JSON to string inorder to send
       // look up in the map and see if any key equals that gameID they requested
       if (gameMap.has(gameID)) {
-        // console.log("         in 'join': Check object values: game:", game,"should have ws and ip, game.lesson:",game.lesson);
-        // get it, then set it
-        let game = gameMap.get(gameID)
-        // push player into that game
-        game.players.push(player); 
+        // Get game at that gameID in the map, add the player to it
+        gameMap.get(gameID).players.push(player);
         let joinGameIDMessage = JSON.stringify([{ 'isValidGameID': true }]); // Convert JSON to string inorder to send
         console.log("---------->>>>>>>>>>Sent message",joinGameIDMessage);
         ws.send(joinGameIDMessage);

@@ -47,7 +47,7 @@ export default class JoinOrCreateScreen extends Component {
 
   joinOnPress() {
     const { navigate } = this.props.navigation;
-    let playerType = 'member'; // First time it is set as 'member'   
+    var playerType = 'member'; // First time it is set as 'member'   
     var userInputGameID = this.state.gameID;
     console.log("JoinOrCreateScreen:  playerType: ", playerType);
     console.log(' ');
@@ -81,7 +81,7 @@ export default class JoinOrCreateScreen extends Component {
         }
       }
     } else if (userInputGameID == '') {
-      Alert.alert('Invalid Group ID', 'Please enter the ID of a group that was already created.');
+      Alert.alert('Invalid Group ID', 'You left the "Game ID" slot blank! Please enter the ID of a group that was already created.');
     }
   }
 
