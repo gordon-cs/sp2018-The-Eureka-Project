@@ -38,16 +38,43 @@ export default class GamePlayScreen extends Component {
     }
   }
 
-  wasAnsweredCorrectly(choiceIDGiven, prompt) {
-    if (choiceIDGiven === prompt) {
+  wasAnsweredCorrectly(choiceIDGiven) {
+    var gameID = parseInt(this.props.navigation.state.params.gameID);
+    // send up the input: choice, gameID
+
+    // Request to send to the server - must be stringified.
+    var stringifiedRequest = JSON.stringify(
+      [{
+        'request': 'input',
+        'gameID': gameID,
+        'input': choiceIDGiven
+      }]
+    );
+    console.log("GamePlayScreen: sentRequest", stringifiedRequest);
+    global.ws.send(stringifiedRequest);
+     // What to do when receiving a message
+    global.ws.onmessage = event => {
+    /* If successful, going to receive something like this back:
+    [{
+      'isCorrect': true,
+    }]
+    */
+    // Turn every received message into a JSON immediately to access it
+    let receivedMessage = JSON.parse(event.data); 
+  
+    console.log("GamePlayScreen: receivedMessage", receivedMessage);
+    if (receivedMessage[0].isCorrect) {
+      // console.log("GamePlayScreen: receivedMessage for isCorrect", receivedMessage[0]);
+      // tell choice component that it is correct!
       this.setState({
-        answeredCorrectly: [choiceIDGiven, 1],
-        counter: (this.state.counter + 1), // count the number of correct answers, up to 10 correct 
+        answeredCorrectly: [choiceIDGiven, 1]
       });
       TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
         this.populateChoicesAndPrompt();
       }, 750);
-    } else {
+    }
+    else {
+      // tell choice component that it is incorrect!
       this.setState({ answeredCorrectly: [choiceIDGiven, 2] }); // got it incorrect
       TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
         this.setState({
@@ -56,6 +83,7 @@ export default class GamePlayScreen extends Component {
       }, 750);
     }
   }
+}
 
 
   async populateChoicesAndPrompt() {
@@ -75,6 +103,8 @@ export default class GamePlayScreen extends Component {
     );
     global.ws.send(stringifiedRequest);
 
+
+    
     this.setState({
       answeredCorrectly: [0, 0],
       resetTimer: true,

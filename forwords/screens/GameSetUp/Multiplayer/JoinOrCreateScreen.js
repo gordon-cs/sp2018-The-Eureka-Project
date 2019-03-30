@@ -59,7 +59,6 @@ export default class JoinOrCreateScreen extends Component {
         [{
           'request': 'join',
           'gameID': userInputGameID,  // only a host can send 'create'
-          // should also send in email or some other unique identifier, perhaps (if IP is not enough)
         }]
       );
       global.ws.send(stringifiedRequest);
@@ -67,10 +66,10 @@ export default class JoinOrCreateScreen extends Component {
       // Receive a message from the server about validity of gameID user sent in
       global.ws.onmessage = event => {
         /* If successful, going to receive something like this back:
-      [{
-        'isValidGameID': true,
-      }]
-      */
+        [{
+          'isValidGameID': true,
+        }]
+        */
         let receivedMessage = JSON.parse(event.data);
         console.log("JoinOrCreateScreen: joinOnPress receivedMessage:", receivedMessage);
         if (receivedMessage[0].isValidGameID) {

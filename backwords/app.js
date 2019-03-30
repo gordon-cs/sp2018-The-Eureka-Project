@@ -169,6 +169,33 @@ ws.on("connection", function connection(ws, req) {
         ws.send(joinGameIDMessage);
       }
     }
+
+    // case to check and see if the answer was correct when a user presses a button
+    if (message[0].request == "input") {
+      var isCorrect = false;
+      var input = message[0].input;
+      var inputGameID = message[0].gameID;
+      var inputGame = gameMap.get(inputGameID);
+      console.log("In input, this is the game it is working with: inputGame.gammID", inputGame.gameID);
+      // var isCorrectMessage = JSON.stringify([{ isCorrect: isCorrect }]);
+
+      // loop through array of players to see if anyone had the right answer
+      for (let i = 0; i < inputGame.players.length; i++ ) {
+        console.log("In input, everybody's prompt.ID: ", inputGame.players[i].prompt.ID);
+        if (input == inputGame.players[i].prompt.ID) {
+
+          isCorrect = true; // the button press was correct
+          let isCorrectMessage = JSON.stringify([{ isCorrect: isCorrect }]);
+          //send message to the player with prompt saying that their word was answered
+          console.log("         >>>>>>>>>>Sent message (in if statement)", isCorrectMessage);
+          inputGame.player[i].ws.send(isCorrectMessage);
+        }
+      }
+      let isIncorrectMessage = JSON.stringify([{ isCorrect: isCorrect }]);
+      // If the button press was wrong
+      console.log("         >>>>>>>>>>Sent message (after if statement)", isIncorrectMessage);
+      ws.send(isIncorrectMessage);
+    }
   });
 });
 
@@ -334,64 +361,6 @@ app.use(function (err, req, res, next) {
   //  res.render('error');
 });
 
-// Multiplayer Connection Code
-// Author: Ezekiel Martinez with assistance from Stephen Macomber
-// Summary: Allows for Multiplayer Gameplay
-// Description:
-// This is the code that allows players to connect and play a game
-// with each other via database. This is avheived through the use
-// of Websockets (ws). Initializes a connection with user/client,
-// and then has multiple different cases for the types of message
-// it could receive from a client. The code keeps track of existing group
-// through a map, and then indexs through the possible gameID in order
-// to locate the correct group.
-
-// Initialize variables neccessary for storing player data
-/*
-var groups = new Map();
-var groupCode = 0;
-var index = 0;
-var readyCounter = 0; // This variable is not sustainable for multiple players at once
-// Connect to client via ws, log the proxess of receiving and sending messages
-// or client
-ws.on('connection', (ws, req) => {
-  console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''));
-  ws.on("message", message => {
-    console.log(`Received message: ${message}`);
-
-    if (message == 'create') {
-      var players = [];
-      groupCode++; // group code generation function.
-      groups.set(groupCode, players) // first key-value pair in this map could be ( 1: [] )
-      index = groups.get(groupCode).push(ws) - 1; // put ws in that value []           ^^^, 
-      groups.get(groupCode)[index].send(groupCode);
-      // send code to client for it to be displayed for other users
-    } else {
-      //Check to see what group the message is being sent from.
-      if (message.includes('join')) {
-        gameID = parseInt(message.substr(4, message.length));
-        index = groups.get(gameID).push(ws) - 1;
-        groups.get(gameID)[index].send('You are now in a group!');
-        // Alert other players that another player has joined group, unneeded for finished product.
-        for (var i = 0; i < groups.get(gameID).length - 1; i++) {
-          groups.get(gameID)[i] && groups.get(gameID)[i].send('New player has joined!');
-        }
-        console.log('Current Connections for this group: ' + groups.get(gameID).length);
-      } else if (message.includes('ready')) {
-        gameID = parseInt(message.substr(5, message.length));
-        readyCounter++;
-        if (readyCounter == groups.get(gameID).length) {
-          readyCounter = 0;
-          for (var i = 0; i < groups.get(gameID).length; i++) {
-            groups.get(gameID)[i] && groups.get(gameID)[i].send('Game is about to start!');
-          }
-          // Push all of the details about this group into the group table
-          // Start getting words for game and loading Gameplay logic
-        }
-      }
-    }
-  })
-});
 /*
 ws.on('close', () => {
   console.log(`Client #${index} has disconnected`);
@@ -408,3 +377,4 @@ ws.on('close', () => {
 })
 */
 module.exports = app;
+
