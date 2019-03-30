@@ -60,9 +60,9 @@ export default class GamePlayScreen extends Component {
 
   async populateChoicesAndPrompt() {
     var lesson = this.props.navigation.state.params.lesson;
-    var gameID = this.props.navigation.state.params.gameID;
+    var gameID = parseInt(this.props.navigation.state.params.gameID);
     console.log("GamePlayScreen: props: gameID: ", gameID);
-    console.log("                    lesson: ", lesson);
+    console.log("                   lesson: ", lesson);
     console.log(' ');
 
     // Request to send to the server - must be stringified.

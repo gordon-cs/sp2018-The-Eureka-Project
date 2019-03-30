@@ -117,9 +117,12 @@ ws.on("connection", function connection(ws, req) {
     if (message[0].request == "initGame") {
 
       var lesson = message[0].lesson;
-      gameMap.get(message[0].gameID).lesson = lesson;
       var gameID = parseInt(message[0].gameID);
-
+      console.log("in initGame before lesson set, map content: ", gameMap.get(1).lesson);
+      gameMap.get(gameID).lesson = lesson;
+      game.lesson = lesson;
+      console.log("in initGame after lesson set, map content: ", gameMap.get(1).lesson);
+      console.log("in initGame, after lesson set gameID: ", gameID);
       
       if (gameMap.get(gameID).players.length > 1) {
         var initGameMessage = JSON.stringify([{ isGameInitialized: true }]); // Convert JSON to string inorder to send;
@@ -136,7 +139,8 @@ ws.on("connection", function connection(ws, req) {
 
     if (message[0].request == "choicesAndPrompt") {
       var gameID = parseInt(message[0].gameID);
-      var allMessages = await getChoicesAndPrompt(game); // returns a promise of an array of messages
+      console.log("in choicesPrompt, game lesson = ", gameMap.get(gameID).lesson);
+      var allMessages = await getChoicesAndPrompt(gameMap.get(gameID)); // returns a promise of an array of messages
       for (let i = 0; i < gameMap.get(gameID).players.length; i++) {
         gameMap.get(gameID).players[i].ws.send(stringifyChoicesAndPrompt("choicesAndPrompt", allMessages[i]));
         console.log("         >>>>>>>>>>Sent message 'choicesAndPrompt'", i);

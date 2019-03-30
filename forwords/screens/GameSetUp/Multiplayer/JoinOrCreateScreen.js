@@ -48,7 +48,7 @@ export default class JoinOrCreateScreen extends Component {
   joinOnPress() {
     const { navigate } = this.props.navigation;
     var playerType = 'member'; // First time it is set as 'member'   
-    var userInputGameID = this.state.gameID;
+    var userInputGameID = parseInt(this.state.gameID);
     console.log("JoinOrCreateScreen:  playerType: ", playerType);
     console.log(' ');
     console.log(' ');
