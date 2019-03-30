@@ -100,8 +100,10 @@ export default class GamePlayScreen extends Component {
       global.ws.onmessage = event => {
         // Turn every received message into a JSON immediately to access it
         let receivedMessage = JSON.parse(event.data); 
-        console.log("GamePlayScreen: receivedMessage", receivedMessage);
+        
+        // console.log("GamePlayScreen: receivedMessage", receivedMessage);
         if (receivedMessage[0] == "choicesAndPrompt") {
+          console.log("GamePlayScreen: receivedMessage for choicesAndPrompt",);
           // Set prompt first, then remove it
           this.setState({
             promptObj: receivedMessage[5] // Picks one of the choice ids as the prompt id

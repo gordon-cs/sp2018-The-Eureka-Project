@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Button, StyleSheet, Platform, Text, View, ScrollView, TextInput, Image, } from "react-native";
 import LessonSelection from './components/LessonSelection';
-
 export default class GameSetUpScreen extends Component {
   static navigationOptions = {
     header: null
@@ -13,6 +12,7 @@ export default class GameSetUpScreen extends Component {
   render() {
     const gameID = this.props.navigation.state.params.gameID; // does not exist for solo playerTypes yet, should we set it as null in the parent component, or is it fine?
     const playerType = this.props.navigation.state.params.playerType; // host, member, or solo
+    console.log("GameSetUpScreen: playertype:", playerType);
     let content;
 
     // If the user is playing solo

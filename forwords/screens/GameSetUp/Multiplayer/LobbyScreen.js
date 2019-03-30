@@ -65,7 +65,6 @@ export default class LobbyScreenRoom extends Component {
      }
 
     if (receivedMessage[0].isGameInitialized) {
-      console.warn("made it in 'isGameInitialized'");
       navigate("Instructions", { gameID: gameID, lesson: lesson });
     }
     };
