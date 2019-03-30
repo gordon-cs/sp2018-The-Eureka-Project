@@ -89,7 +89,7 @@ ws.on("connection", function connection(ws, req) {
 
   // Now, code for when receiving specific messages :)
   ws.on("message", async function incoming(message) {
-    console.log(`<<<<<<<<<<----------Received message: ${message}`);
+    console.log(`<<<<<<<<<<         Received message: ${message}`);
     message = JSON.parse(message);
 
     /* OPTIONS FOR WHAT THE USER WILL SEND:
@@ -110,7 +110,7 @@ ws.on("connection", function connection(ws, req) {
       gameMap.set(gameID, game);
       // Send gameID message
       let gameIDMessage = JSON.stringify([{ gameID: gameID }]); // Convert JSON to string inorder to send
-      console.log("---------->>>>>>>>>>Sent message", gameIDMessage);
+      console.log("         >>>>>>>>>>Sent message", gameIDMessage);
       ws.send(gameIDMessage);
     }
     // how to figure out who the request is actually coming from ?
@@ -124,9 +124,13 @@ ws.on("connection", function connection(ws, req) {
       if (gameMap.get(gameID).players.length > 1) {
         var initGameMessage = JSON.stringify([{ isGameInitialized: true }]); // Convert JSON to string inorder to send;
         for (let i = 0; i < gameMap.get(gameID).players.length; i++) {
-          console.log("---------->>>>>>>>>>Sent message", initGameMessage);
-          ws.send(initGameMessage);
+          console.log("         >>>>>>>>>>Sent message", initGameMessage);
+          gameMap.get(gameID).players[i].ws.send(initGameMessage);
         }
+      } else {
+        var initGameMessage = JSON.stringify([{ isGameInitialized: false }]); // Convert JSON to string inorder to send;
+        console.log("         >>>>>>>>>>Sent message", initGameMessage);
+        ws.send(initGameMessage);
       }
     }
 
@@ -134,10 +138,11 @@ ws.on("connection", function connection(ws, req) {
       var gameID = parseInt(message[0].gameID);
       var allMessages = await getChoicesAndPrompt(game); // returns a promise of an array of messages
       for (let i = 0; i < gameMap.get(gameID).players.length; i++) {
-        gameMap.get(gameID).players[i].ws.send(stringifyChoicesAndPrompt("choicesAndPrompt", allMessages[0]));
-        console.log("---------->>>>>>>>>>Sent message 'choicesAndPrompt'", i);
+        gameMap.get(gameID).players[i].ws.send(stringifyChoicesAndPrompt("choicesAndPrompt", allMessages[i]));
+        console.log("         >>>>>>>>>>Sent message 'choicesAndPrompt'", i);
       }
     }
+
     if (message[0].request == "join") {
       var gameID = parseInt(message[0].gameID);
       // look up in the map and see if any key equals that gameID they requested
@@ -146,13 +151,13 @@ ws.on("connection", function connection(ws, req) {
         gameMap.get(gameID).players.push(player);
 
         let joinGameIDMessage = JSON.stringify([{ isValidGameID: true }]); // Convert JSON to string inorder to send
-        console.log("---------->>>>>>>>>>Sent message", joinGameIDMessage);
+        console.log("         >>>>>>>>>>Sent message", joinGameIDMessage);
         ws.send(joinGameIDMessage);
 
         var numberOfPlayers = gameMap.get(gameID).players.length;
         var numberOfPlayersMessage = JSON.stringify([{ numberOfPlayers: numberOfPlayers }]); // Convert JSON to string inorder to send
         for (let i = 0; i < numberOfPlayers; i++) {
-          console.log("---------->>>>>>>>>>Sent message", numberOfPlayersMessage);
+          console.log("         >>>>>>>>>>Sent message", numberOfPlayersMessage);
           gameMap.get(gameID).players[i].ws.send(numberOfPlayersMessage);
         }
       } else {
@@ -160,9 +165,6 @@ ws.on("connection", function connection(ws, req) {
         ws.send(joinGameIDMessage);
       }
     }
-    console.log(" ");
-    console.log("      OUTSIDE OF IF STATEMENT: Check object values: player.ip:",player.IP,"should have ws and ip, game.lesson:",game.lesson);
-    console.log(" ");
   });
 });
 
@@ -201,58 +203,6 @@ function setGame(lessonID, promptType, choiceType, partOfSpeech) {
     );
   });
 }
-
-// Initialize variables neccessary for storing player data
-/*
-var groups = new Map();
-var groupCode = 0;
-var index = 0;
-var readyCounter = 0; // This variable is not sustainable for multiple players at once
-
-// Connect to client via ws, log the proxess of receiving and sending messages
-// or client
-
-ws.on('connection', (ws, req) => {
-  console.log('Connection accepted:', req.connection.remoteAddress.replace(/.*:/, ''));
-
-
-  ws.on("message", message => {
-    console.log(`Received message: ${message}`);
-
-    if (message == 'create') {
-      var players = [];
-      groupCode++; // group code generation function.
-      groups.set(groupCode, players)
-      index = groups.get(groupCode).push(ws) - 1;
-      groups.get(groupCode)[index].send(groupCode);
-      // send code to client for it to be displayed for other users
-    } else {
-      //Check to see what group the message is being sent from.
-      if (message.includes('join')) {
-        gameID = parseInt(message.substr(4, message.length));
-        index = groups.get(gameID).push(ws) - 1;
-        groups.get(gameID)[index].send('You are now in a group!');
-        // Alert other players that another player has joined group, unneeded for finished product.
-        for (var i = 0; i < groups.get(gameID).length - 1; i++) {
-          groups.get(gameID)[i] && groups.get(gameID)[i].send('New player has joined!');
-        }
-        console.log('Current Connections for this group: ' + groups.get(gameID).length);
-      } else if (message.includes('ready')) {
-        gameID = parseInt(message.substr(5, message.length));
-        readyCounter++;
-        if (readyCounter == groups.get(gameID).length) {
-          readyCounter = 0;
-          for (var i = 0; i < groups.get(gameID).length; i++) {
-            groups.get(gameID)[i] && groups.get(gameID)[i].send('Game is about to start!');
-          }
-          // Push all of the details about this group into the group table
-          // Start getting words for game and loading Gameplay logic
-        }
-      }
-    }
-  })
-});
-*/
 
 function getChoicesAndPrompt(game) {
   return new Promise(function (resolve, reject) {
