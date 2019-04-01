@@ -9,7 +9,7 @@ export default class JoinOrCreateScreen extends Component {
     super(props);
 
     this.state = {
-      gameID: '',
+      gameID: '1',
     }
   }
 
