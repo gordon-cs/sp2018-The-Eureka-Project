@@ -32,7 +32,7 @@ export default class GamePlayScreen extends Component {
 
   async componentWillMount() {
     try {
-      this.populateChoicesAndPrompt();
+      this.initChoicesAndPrompt();
     } catch (error) {
       throw new Error('component will not mount');
     }
@@ -70,7 +70,7 @@ export default class GamePlayScreen extends Component {
         answeredCorrectly: [choiceIDGiven, 1]
       });
       TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
-        this.populateChoicesAndPrompt();
+        this.renewChoicesAndPrompt();
       }, 750);
     }
     else {
@@ -86,25 +86,45 @@ export default class GamePlayScreen extends Component {
 }
 
 
-  async populateChoicesAndPrompt() {
+  async initChoicesAndPrompt() {
     var lesson = this.props.navigation.state.params.lesson;
     var gameID = parseInt(this.props.navigation.state.params.gameID);
-    console.log("GamePlayScreen: props: gameID: ", gameID);
-    console.log("                   lesson: ", lesson);
+    console.log("GamePlayScreen: props: gameID: ", gameID, "lesson: ", lesson);
     console.log(' ');
 
     // Request to send to the server - must be stringified.
     var stringifiedRequest = JSON.stringify(
       [{
-        'request': 'choicesAndPrompt',
+        'request': 'initChoicesAndPrompt',
         'lesson': lesson,
         'gameID': gameID,
       }]
     );
     global.ws.send(stringifiedRequest);
 
+    this.setState({
+      answeredCorrectly: [0, 0],
+      resetTimer: true,
+    });
+  }
 
-    
+
+  async renewChoicesAndPrompt() {
+    var lesson = this.props.navigation.state.params.lesson;
+    var gameID = parseInt(this.props.navigation.state.params.gameID);
+    // console.log("GamePlayScreen: props: gameID: ", gameID, "lesson: ", lesson);
+    console.log(' ');
+
+    // Request to send to the server - must be stringified.
+    var stringifiedRequest = JSON.stringify(
+      [{
+        'request': 'renewChoicesAndPrompt',
+        'lesson': lesson,
+        'gameID': gameID,
+      }]
+    );
+    global.ws.send(stringifiedRequest);
+
     this.setState({
       answeredCorrectly: [0, 0],
       resetTimer: true,
