@@ -7,8 +7,8 @@ var app = express();
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-var wsPort = 4444;
-var httpPort = 6666;
+var wsPort = 3333;
+var httpPort = 9999;
 
 // WebSocket
 var WebSocket = require("ws");
@@ -113,16 +113,12 @@ ws.on("connection", function connection(ws, req) {
       console.log("         >>>>>>>>>>Sent message", gameIDMessage);
       ws.send(gameIDMessage);
     }
-    // how to figure out who the request is actually coming from ?
+    
     if (message[0].request == "initGame") {
-
       var lesson = message[0].lesson;
       var gameID = parseInt(message[0].gameID);
-      console.log("in initGame before lesson set, map content: ", gameMap.get(1).lesson);
       gameMap.get(gameID).lesson = lesson;
       game.lesson = lesson;
-      console.log("in initGame after lesson set, map content: ", gameMap.get(1).lesson);
-      console.log("in initGame, after lesson set gameID: ", gameID);
       
       if (gameMap.get(gameID).players.length > 1) {
         var initGameMessage = JSON.stringify([{ isGameInitialized: true }]); // Convert JSON to string inorder to send;
@@ -137,9 +133,8 @@ ws.on("connection", function connection(ws, req) {
       }
     }
 
-    if (message[0].request == "choicesAndPrompt") {
+    if (message[0].request == "initChoicesAndPrompt" || message[0].request == "renewChoicesAndPrompt") {
       var gameID = parseInt(message[0].gameID);
-      console.log("in choicesPrompt, game lesson = ", gameMap.get(gameID).lesson);
       var allMessages = await getChoicesAndPrompt(gameMap.get(gameID)); // returns a promise of an array of messages
       for (let i = 0; i < gameMap.get(gameID).players.length; i++) {
         gameMap.get(gameID).players[i].ws.send(stringifyChoicesAndPrompt("choicesAndPrompt", allMessages[i]));
@@ -176,7 +171,6 @@ ws.on("connection", function connection(ws, req) {
       var input = message[0].input;
       var inputGameID = message[0].gameID;
       var inputGame = gameMap.get(inputGameID);
-      console.log("In input, this is the game it is working with: inputGame.gammID", inputGame.gameID);
       // var isCorrectMessage = JSON.stringify([{ isCorrect: isCorrect }]);
 
       // loop through array of players to see if anyone had the right answer
@@ -188,7 +182,7 @@ ws.on("connection", function connection(ws, req) {
           let isCorrectMessage = JSON.stringify([{ isCorrect: isCorrect }]);
           //send message to the player with prompt saying that their word was answered
           console.log("         >>>>>>>>>>Sent message (in if statement)", isCorrectMessage);
-          inputGame.player[i].ws.send(isCorrectMessage);
+          inputGame.players[i].ws.send(isCorrectMessage);
         }
       }
       let isIncorrectMessage = JSON.stringify([{ isCorrect: isCorrect }]);
@@ -253,22 +247,32 @@ function getChoicesAndPrompt(game) {
         ); // returns array of wordIDs randomly selected from all wordsInLesson
 
         var allMessages = [];
-        // Set Choices and Prompts for every player in game
+        // Set Prompts for every player in game
         for (let i = 0; i < numPlayers; i++) {
           // Set the prompt to be the object from the wordsInLesson array
           players[i].prompt = wordsInLesson[prompts[i] - minID];
+        }
+        prompts.shuffle();
 
+        // Set Choices for every player in game
+        for (let i = 0; i < numPlayers; i++) {
           let choiceWordIDs = randomWordsPicker(minID, wordsInLesson.length, 3); // 3 random wordIDs to be choices
 
-          // Set the choices to be the objects from the wordsInLesson array
+          // Set the Choices to be the objects from the wordsInLesson array
           players[i].choices = [
             wordsInLesson[choiceWordIDs[0] - minID],
             wordsInLesson[choiceWordIDs[1] - minID],
             wordsInLesson[choiceWordIDs[2] - minID]
           ];
-
-          // Make sure the player has the prompt as one of their choices
-          players[i].choices.push(players[i].prompt);
+          // Solo mode: the player must have their prompt as one of their choices
+          if (numPlayers == 1) {
+            // Make sure the player has the prompt as one of their choices
+            players[i].choices.push(players[i].prompt);
+          }
+          else {
+            // Make sure each player has one of the prompts as 1/4 of their choices
+            players[i].choices.push(wordsInLesson[prompts[i] - minID]);
+          }
 
           // An array with the choices and the array
           let messageArray = [];
@@ -315,6 +319,24 @@ function randomNumGen(minID, lessonWordsCount) {
   let maxID = minID + lessonWordsCount;
   return Math.floor(Math.random() * (maxID - minID) + minID);
 }
+
+Array.prototype.shuffle = function() {
+  var input = this;
+    
+  for (var i = input.length-1; i >=0; i--) {
+    
+      var randomIndex = Math.floor(Math.random()*(i+1)); 
+      var itemAtIndex = input[randomIndex]; 
+        
+      input[randomIndex] = input[i]; 
+      input[i] = itemAtIndex;
+  }
+  return input;
+}
+
+
+
+
 
 // HTTP
 // Display welcome message
