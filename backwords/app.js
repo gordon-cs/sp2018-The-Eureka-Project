@@ -75,6 +75,7 @@ class Game {
     this.players = players;
     this.words = words;
     this.prompts = prompts;
+    this.isInitialized = false;
   }
 }
 
@@ -87,7 +88,7 @@ ws.on("connection", function connection(ws, req) {
 
   // Immediately create player & game objects, with this ws connection as one of their attributes
   var player = new Player(IP, ws, [], {}, 0);
-  var game = new Game(0, 0, [], [], []);
+  var game = new Game(0, 0, [], [], [], false);
 
   // Now, code for when receiving specific messages :)
   ws.on("message", async function incoming(message) {
@@ -136,30 +137,34 @@ ws.on("connection", function connection(ws, req) {
 
     if (message[0].request == "initChoicesAndPrompt" || message[0].request == "renewChoicesAndPrompt") {
       var gameID = parseInt(message[0].gameID);
-      // Set up choices and prompts for the game
-      gameMap.get(gameID).words = await getGameChoices(gameMap.get(gameID));
-      gameMap.get(gameID).prompts = getPrompts(gameMap.get(gameID));
 
-      var allMessages = [];
-      var count = 0;
-      for (let i = 0; i < game.players.length; i++) {
-        while(gameMap.get(gameID).players[i].choices.length < 4) {
-          gameMap.get(gameID).players[i].choices.push(gameMap.get(gameID).words[count]);
-          count++;
+      if (!gameMap.get(gameID).isInitialized) {
+        gameMap.get(gameID).isInitialized = true;
+        // Set up choices and prompts for the game
+        gameMap.get(gameID).words = await getGameChoices(gameMap.get(gameID));
+        gameMap.get(gameID).prompts = getPrompts(gameMap.get(gameID));
+
+        var allMessages = [];
+        var count = 0;
+        for (let i = 0; i < game.players.length; i++) {
+          while(gameMap.get(gameID).players[i].choices.length < 4) {
+            gameMap.get(gameID).players[i].choices.push(gameMap.get(gameID).words[count]);
+            count++;
+          }
+          gameMap.get(gameID).players[i].prompt = gameMap.get(gameID).prompts[i];
+          // An array with the choices and the prompt
+          let messageArray = [];
+          messageArray.push(
+            gameMap.get(gameID).players[i].choices,
+            gameMap.get(gameID).players[i].prompt
+          );
+          allMessages[i] = messageArray;
         }
-        gameMap.get(gameID).players[i].prompt = gameMap.get(gameID).prompts[i];
-        // An array with the choices and the prompt
-        let messageArray = [];
-        messageArray.push(
-          gameMap.get(gameID).players[i].choices,
-          gameMap.get(gameID).players[i].prompt
-        );
-        allMessages[i] = messageArray;
-      }
-      // Sent messages to every player with their choices/prompts
-      for (let i = 0; i < gameMap.get(gameID).players.length; i++) {
-        gameMap.get(gameID).players[i].ws.send(stringifyChoicesAndPrompt("choicesAndPrompt", allMessages[i]));
-        console.log("         >>>>>>>>>>Sent message 'choicesAndPrompt'",i,"th time:");
+        // Send messages to every player with their choices/prompts
+        for (let i = 0; i < gameMap.get(gameID).players.length; i++) {
+          gameMap.get(gameID).players[i].ws.send(stringifyChoicesAndPrompt("choicesAndPrompt", allMessages[i]));
+          console.log("         >>>>>>>>>>Sent message 'choicesAndPrompt'",i,"th time:", allMessages[i]);
+        }
       }
     }
 
@@ -343,11 +348,20 @@ function getGameChoices(game) {
 // When initializing round, this code will generate prompts for each player.
 function getPrompts(game) {
   var numPlayers = game.players.length;
+  for (let i = 0; i < game.words.length; i++) {  
+    console.log("getPrompts: game.words--should be 8 random word IDs:"); 
+    console.log("game.words[",i,"]",game.words[i].ID);
+  }
   let promptWordIndex = randomWordsPicker(0, game.words.length, numPlayers); // numPlayers to be prompts
+  console.log("getPrompts: game.words.length--should be 8:", game.words.length);
+  console.log("getPrompts: promptWordIndex--should be 2 numbers:", promptWordIndex);
+
+
   let promptArray = [];
   for (let i = 0; i < numPlayers; i++) {
     promptArray.push(game.words[promptWordIndex[i]]);
   }
+  console.log("getPrompts: promptArray--should be 2 random words from words", promptArray[0].ID, promptArray[1].ID);
   return promptArray;
 }
 
