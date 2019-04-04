@@ -198,23 +198,33 @@ ws.on("connection", function connection(ws, req) {
       var input = message[0].input;
       var inputGameID = message[0].gameID;
       var inputGame = gameMap.get(inputGameID);
-      // var isCorrectMessage = JSON.stringify([{ isCorrect: isCorrect }]);
 
       // loop through array of players to see if anyone had the right answer
       for (let i = 0; i < inputGame.players.length; i++ ) {
         console.log("In input, everybody's prompt.ID: ", inputGame.players[i].prompt.ID);
         if (input == inputGame.players[i].prompt.ID) {
-
           isCorrect = true; // the button press was correct
-
-          // Send to player whose prompt it was their new prompt
-          inputGame.players[i].prompt = getSinglePrompt(inputGame);
-          let newPromptMessage = JSON.stringify([ "newPrompt", inputGame.players[i].prompt ])
-          console.log("         >>>>>>>>>>Sent message newPromptMessage", newPromptMessage);
-          inputGame.players[i].ws.send(newPromptMessage);
+          
+          // Check if it is the own player's prompt
+          if (ws = inputGame.players[i].ws) {
+            console.log("In input: Was their own prompt!!!!!!!!!!!");
+            //  Send that same player their new prompt
+            let newPrompt = getSinglePrompt(inputGame);
+            let newPromptMessage = JSON.stringify([ "newPrompt", newPrompt ])
+            console.log("         >>>>>>>>>>Sent message newPromptMessage", newPromptMessage);
+            ws.send(newPromptMessage);
+            inputGame.players[i].prompt = newPrompt;
+          } else {
+            //  Send that other player their new prompt
+            let newPrompt = getSinglePrompt(inputGame);
+            let newPromptMessage = JSON.stringify([ "newPrompt", newPrompt ])
+            console.log("         >>>>>>>>>>Sent message newPromptMessage", newPromptMessage);
+            inputGame.players[i].ws.send(newPromptMessage);
+            inputGame.players[i].prompt = newPrompt;
+          }
         }
       }
-      let isCorrectMessage = JSON.stringify([{ isCorrect: isCorrect }]);
+      var isCorrectMessage = JSON.stringify([{ isCorrect: isCorrect }]);
       // If the button press was wrong
       ws.send(isCorrectMessage);
       console.log("         >>>>>>>>>>Sent message (after if statement)", isCorrectMessage);
