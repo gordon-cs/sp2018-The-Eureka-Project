@@ -20,28 +20,9 @@ export default class LobbyScreenRoom extends Component {
     };
   }
 
-  startGameOnPress() {
-    var gameID = this.props.navigation.state.params.gameID;
+  componentDidMount() {
     var lesson = this.props.navigation.state.params.lesson;
-    // console.log("LobbyScreen: props: playerType: ", playerType);
-    console.log(" ");
-    // Request to send to the server - must be stringified.
-    var stringifiedRequest = JSON.stringify([
-      {
-        request: "initGame",
-        gameID: gameID,
-        lesson: "" + lesson + ""
-      }
-    ]);
-    console.log("LobbyScreen: startGameOnPress",stringifiedRequest);
-    global.ws.send(stringifiedRequest);
-  }
-
-  render() { // MOVE ALL THIS TO CONSTRUCTOR
-    const playerType = this.props.navigation.state.params.playerType; // host, member, or solo
     var gameID = this.props.navigation.state.params.gameID;
-    var lesson = this.props.navigation.state.params.lesson;
-    let content;
     const { navigate } = this.props.navigation;
 
 
@@ -59,15 +40,38 @@ export default class LobbyScreenRoom extends Component {
           'numberOfPlayers': 3,
           }]
       */
-     if (receivedMessage[0].numberOfPlayers !== undefined) {
-      this.setState({ numberOfPlayers: receivedMessage[0].numberOfPlayers })
-      console.log("LobbyScreen: numberOfPlayers: ", this.state.numberOfPlayers);
-     }
+      if (receivedMessage[0].numberOfPlayers !== undefined) {
+        this.setState({ numberOfPlayers: receivedMessage[0].numberOfPlayers })
+        console.log("LobbyScreen: numberOfPlayers: ", this.state.numberOfPlayers);
+      }
 
-    if (receivedMessage[0].isGameInitialized) {
-      navigate("Instructions", { gameID: gameID, lesson: lesson });
-    }
+      if (receivedMessage[0].isGameInitialized) {
+        navigate("Instructions", { gameID: gameID, lesson: lesson });
+      }
     };
+  }
+
+  startGameOnPress() {
+    var gameID = this.props.navigation.state.params.gameID;
+    var lesson = this.props.navigation.state.params.lesson;
+    // console.log("LobbyScreen: props: playerType: ", playerType);
+    console.log(" ");
+    // Request to send to the server - must be stringified.
+    var stringifiedRequest = JSON.stringify([
+      {
+        request: "initGame",
+        gameID: gameID,
+        lesson: "" + lesson + ""
+      }
+    ]);
+    console.log("LobbyScreen: startGameOnPress", stringifiedRequest);
+    global.ws.send(stringifiedRequest);
+  }
+
+  render() { 
+    const playerType = this.props.navigation.state.params.playerType; // host, member, or solo
+    var gameID = this.props.navigation.state.params.gameID;
+    let content;
 
     // If the user is a HOST (playing with others)
     if (playerType == "host") {
