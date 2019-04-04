@@ -92,7 +92,7 @@ ws.on("connection", function connection(ws, req) {
 
   // Now, code for when receiving specific messages :)
   ws.on("message", async function incoming(message) {
-    console.log(`<<<<<<<<<<         Received message: ${message}`);
+    console.log("<<<<<<<<<<         Received message: ", message, "from: ", player.IP);
     message = JSON.parse(message);
 
     /* OPTIONS FOR WHAT THE USER WILL SEND:
@@ -135,7 +135,7 @@ ws.on("connection", function connection(ws, req) {
       }
     }
 
-    if (message[0].request == "initChoicesAndPrompt" || message[0].request == "renewChoicesAndPrompt") {
+    if (message[0].request == "initChoicesAndPrompt") {
       var gameID = parseInt(message[0].gameID);
 
       if (!gameMap.get(gameID).isInitialized) {
@@ -196,6 +196,7 @@ ws.on("connection", function connection(ws, req) {
 
     // case to check and see if the answer was correct when a user presses a button
     if (message[0].request == "input") {
+
       var isCorrect = false;
       var input = message[0].input;
       var inputGameID = message[0].gameID;
@@ -233,31 +234,34 @@ ws.on("connection", function connection(ws, req) {
        *    Game continues until next person inputs
       */
      for (let i = 0; i < inputGame.players.length; i++) {
-      console.log("       In input, everybody's prompt.ID: ", inputGame.players[i].prompt.ID);
+      // console.log("       In input, player ", inputGame.players[i].IP,"'s prompt.ID:". inputGame.players[i].prompt.ID);
       // If it does equal someone's prompt, and that person is the one who actually sent the input request
       if (input == inputGame.players[i].prompt.ID) {
         isCorrect = true;
-        let newPrompt = getSinglePrompt(inputGame);
+        let newPrompt = getSinglePrompt(inputGame, inputGame.players[i].prompt);
         
-        // If it was the person's prompt who sent the input request
+        // I answered my own prompt
         if (ws === inputGame.players[i].ws) {
-          console.log("       In input, it was their own prompt");
+          console.log("       In input, it was their own prompt:", inputGame.players[i].IP);
           // Send them their new prompt, and that it was correct
-          let newPromptAndValidationMessage = JSON.stringify(["message1", {wasYourPrompt: true}, {isCorrect: isCorrect }, {newPrompt: newPrompt} ])
+          let newPromptAndValidationMessage = JSON.stringify(["message1", {wasYourPrompt: true}, {isCorrect: isCorrect }, newPrompt])
           ws.send(newPromptAndValidationMessage);
+          console.log("       sent message1");
           inputGame.players[i].prompt = newPrompt;
         }
-        // It was a different person's prompt that the input refers to
+        // I answered your prompt
         else {
           // Send player that inputted that it was correct
           let validationMessage = JSON.stringify(["message2", {wasYourPrompt: false}, {isCorrect: isCorrect }])
           ws.send(validationMessage);
+          console.log("       sent message2");
 
 
-          console.log("             In input, it was someone else's prompt");
+          console.log("             In input, it was someone else's prompt: ", inputGame.players[i].IP);
           // Send them their new prompt
-          let newPromptAndValidationMessage = JSON.stringify(["message3", {wasYourPrompt: false}, {newPrompt: newPrompt} ])
+          let newPromptAndValidationMessage = JSON.stringify(["message3", {wasYourPrompt: false}, newPrompt ])
           inputGame.players[i].ws.send(newPromptAndValidationMessage)
+          console.log("       sent message3");
           inputGame.players[i].prompt = newPrompt;
         }
       }
@@ -266,6 +270,7 @@ ws.on("connection", function connection(ws, req) {
      var validationMessage = JSON.stringify([ "message4", {wasYourPrompt: false}, {isCorrect: isCorrect }]);
      if (!isCorrect) {
        ws.send(validationMessage);
+       console.log("       sent message4");
      }
     }
   });
@@ -399,30 +404,30 @@ function getGameChoices(game) {
 // When initializing round, this code will generate prompts for each player.
 function getPrompts(game) {
   var numPlayers = game.players.length;
-  for (let i = 0; i < game.words.length; i++) {
-    // console.log("getPrompts: game.words--should be 8 random word IDs:");
-    // console.log("game.words[", i, "]", game.words[i].ID);
-  }
   let promptWordIndex = randomWordsPicker(0, game.words.length, numPlayers); // numPlayers to be prompts
-  // console.log("getPrompts: game.words.length--should be 8:", game.words.length);
-  // console.log("getPrompts: promptWordIndex--should be 2 numbers:", promptWordIndex);
-
-
   let promptArray = [];
   for (let i = 0; i < numPlayers; i++) {
     promptArray.push(game.words[promptWordIndex[i]]);
   }
-  console.log("getPrompts: promptArray--should be 2 random words from words", promptArray[0].ID, promptArray[1].ID);
+  // console.log("getPrompts: promptArray--should be 2 random words from words", promptArray[0].ID, promptArray[1].ID);
   return promptArray;
 }
 
-function getSinglePrompt(game) {
+function getSinglePrompt(game, currentPrompt) {
   // Generate a new word that is not currently a prompt, but is also someone's current choice
   let newPrompt = randomWordsPicker(0, game.words.length, 1); // random ID from list of all words
   let newPromptObj = game.words[newPrompt];
+
   while (game.prompts.includes(newPromptObj)) {
     newPromptObj = game.words[randomWordsPicker(0, game.words.length, 1)];
   }
+
+  for (let i = 0; i < game.prompts.length; i++) {
+    if (game.prompts[i] === currentPrompt) {
+      game.prompts[i] = newPromptObj;
+    }
+  }
+
   return newPromptObj;
 }
 
