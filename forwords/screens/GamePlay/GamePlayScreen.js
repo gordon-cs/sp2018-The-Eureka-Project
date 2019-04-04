@@ -102,7 +102,7 @@ export default class GamePlayScreen extends Component {
       // if it was a different person's prompt that i answered right, then turn my answer green
       else if (receivedMessage[0] == "message2") {
         // tell choice component that it is correct! 
-        this.setState({answeredCorrectly: [choiceIDGiven, 1]});
+        this.setState({answeredCorrectly: [receivedMessage[1].oldInput, 1]});
         TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
           this.setState({
             answeredCorrectly: [0, 0],
