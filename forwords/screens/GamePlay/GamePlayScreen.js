@@ -87,11 +87,11 @@ export default class GamePlayScreen extends Component {
       // if it was your prompt, change ur answer to green and change ur prompt to new prompt
       else if (receivedMessage[0] == "message1") {
         // tell choice component that it is correct!  
-        console.log("message1 the new prompt i got:", receivedMessage[3])
+        console.log("message1:", receivedMessage)
         // Change prompt as well
         this.setState({
-          answeredCorrectly: [choiceIDGiven, 1],
-          promptObj: receivedMessage[3]
+          answeredCorrectly: [receivedMessage[1].oldInput, 1],
+          promptObj: receivedMessage[2]
         });
         TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
           this.setState({

@@ -244,7 +244,7 @@ ws.on("connection", function connection(ws, req) {
         if (ws === inputGame.players[i].ws) {
           console.log("       In input, it was their own prompt:", inputGame.players[i].IP);
           // Send them their new prompt, and that it was correct
-          let newPromptAndValidationMessage = JSON.stringify(["message1", {wasYourPrompt: true}, {isCorrect: isCorrect }, newPrompt])
+          let newPromptAndValidationMessage = JSON.stringify(["message1", {oldInput: input}, newPrompt])
           ws.send(newPromptAndValidationMessage);
           console.log("       sent message1");
           inputGame.players[i].prompt = newPrompt;
@@ -252,10 +252,9 @@ ws.on("connection", function connection(ws, req) {
         // I answered your prompt
         else {
           // Send player that inputted that it was correct
-          let validationMessage = JSON.stringify(["message2", {wasYourPrompt: false}, {isCorrect: isCorrect }])
+          let validationMessage = JSON.stringify(["message2", {oldInput: input}])
           ws.send(validationMessage);
           console.log("       sent message2");
-
 
           console.log("             In input, it was someone else's prompt: ", inputGame.players[i].IP);
           // Send them their new prompt
