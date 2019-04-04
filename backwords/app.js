@@ -158,12 +158,13 @@ ws.on("connection", function connection(ws, req) {
             gameMap.get(gameID).players[i].choices,
             gameMap.get(gameID).players[i].prompt
           );
+          messageArray.unshift("choicesAndPrompt");
           allMessages[i] = messageArray;
         }
         // Send messages to every player with their choices/prompts
         for (let i = 0; i < gameMap.get(gameID).players.length; i++) {
-          gameMap.get(gameID).players[i].ws.send(stringifyChoicesAndPrompt("choicesAndPrompt", allMessages[i]));
-          console.log("         >>>>>>>>>>Sent message 'choicesAndPrompt'",i,"th time:", allMessages[i]);
+          gameMap.get(gameID).players[i].ws.send(JSON.stringify(allMessages[i]));
+          console.log("         >>>>>>>>>>Sent message 'choicesAndPrompt'",i,"th time:", allMessages[i][2].ID);
         }
       }
     }
@@ -215,8 +216,8 @@ ws.on("connection", function connection(ws, req) {
       }
       let isCorrectMessage = JSON.stringify([{ isCorrect: isCorrect }]);
       // If the button press was wrong
-      console.log("         >>>>>>>>>>Sent message (after if statement)", isCorrectMessage);
       ws.send(isCorrectMessage);
+      console.log("         >>>>>>>>>>Sent message (after if statement)", isCorrectMessage);
     }
   });
 });
@@ -373,13 +374,6 @@ function getSinglePrompt(game) {
     newPromptObj = game.words[randomWordsPicker(0, game.words.length, 1)];
   }
   return newPromptObj;
-}
-
-function stringifyChoicesAndPrompt(header, message) {
-  // Put header as first element in array
-  message.unshift(header);
-  // Stringify the array so it can be sent
-  return JSON.stringify(message);
 }
 
 /* Create a list of number unique numbers
