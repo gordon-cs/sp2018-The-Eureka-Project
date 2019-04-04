@@ -112,17 +112,17 @@ export default class GamePlayScreen extends Component {
       }
       // if someone else answered my prompt correctly! yay, change my prompt now
       else if (receivedMessage[0] == "message3") {
-        console.log("message3: YAY someone answered my prompt!");
+        console.log("message3: YAY someone answered my prompt! receivedMessage:", receivedMessage);
         this.setState({
-          promptObj: receivedMessage[2]
+          promptObj: receivedMessage[1]
         });
       }
       // if the input i gave was incorrect
       else if (receivedMessage[0] == "message4") {
-      this.setState({ answeredCorrectly: [choiceIDGiven, 2] }); // got it incorrect
+      this.setState({ answeredCorrectly: [receivedMessage[1].oldInput, 2] }); // got it incorrect
       TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
         this.setState({
-          answeredCorrectly: [choiceIDGiven, 0]
+          answeredCorrectly: [receivedMessage[1].oldInput, 0]
         });
       }, 750);
       }

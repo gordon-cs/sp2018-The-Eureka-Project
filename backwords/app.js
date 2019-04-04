@@ -79,9 +79,8 @@ class Game {
   }
 }
 
-// allPlayers = [];
-var gameMap = new Map();
 // Final Websocket Code :)
+var gameMap = new Map();
 ws.on("connection", function connection(ws, req) {
   var IP = req.connection.remoteAddress.replace(/.*:/, "");
   console.log("Connection accepted:", IP);
@@ -258,7 +257,7 @@ ws.on("connection", function connection(ws, req) {
 
           console.log("             In input, it was someone else's prompt: ", inputGame.players[i].IP);
           // Send them their new prompt
-          let newPromptAndValidationMessage = JSON.stringify(["message3", {wasYourPrompt: false}, newPrompt ])
+          let newPromptAndValidationMessage = JSON.stringify(["message3", newPrompt])
           inputGame.players[i].ws.send(newPromptAndValidationMessage)
           console.log("       sent message3");
           inputGame.players[i].prompt = newPrompt;
@@ -266,7 +265,7 @@ ws.on("connection", function connection(ws, req) {
       }
      }
      // If the player's input was incorrect
-     var validationMessage = JSON.stringify([ "message4", {wasYourPrompt: false}, {isCorrect: isCorrect }]);
+     var validationMessage = JSON.stringify([ "message4", {oldInput: input}]);
      if (!isCorrect) {
        ws.send(validationMessage);
        console.log("       sent message4");
