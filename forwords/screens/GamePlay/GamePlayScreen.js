@@ -32,7 +32,10 @@ export default class GamePlayScreen extends Component {
 
   async componentWillMount() {
     try {
+      TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
       this.initChoicesAndPrompt();
+      }, 3000);
+      
     } catch (error) {
       throw new Error('component will not mount');
     }
@@ -52,14 +55,15 @@ export default class GamePlayScreen extends Component {
       }
       return input;
     }
+    var choiceIDGiven = this.state.choiceIDGiven;
     // What to do when receiving a message
     global.ws.onmessage = event => {
       // Turn every received message into a JSON immediately to access it
-      let receivedMessage = JSON.parse(event.data);
+      var receivedMessage = JSON.parse(event.data);
 
       // console.log("GamePlayScreen: receivedMessage", receivedMessage);
       if (receivedMessage[0] == "choicesAndPrompt") {
-        console.log("GamePlayScreen: receivedMessage for choicesAndPrompt receivedMessage[2]", receivedMessage[2]);
+        // console.log("GamePlayScreen: receivedMessage for choicesAndPrompt receivedMessage[2]", receivedMessage[2]);
 
         // Shuffle choices
         receivedMessage[1].shuffle();
@@ -71,6 +75,57 @@ export default class GamePlayScreen extends Component {
           bottomRightChoice: receivedMessage[1][3],
           promptObj: receivedMessage[2],
         });
+      }
+      // Answer Validation and Prompt Changing BOI
+      /* If successful, going to receive something like this back:
+      [{
+        'isCorrect': true,
+      }]
+      */
+      // Turn every received message into a JSON immediately to access it
+
+      // if it was your prompt, change ur answer to green and change ur prompt to new prompt
+      else if (receivedMessage[0] == "message1") {
+        // tell choice component that it is correct!  
+        console.log("message1 the new prompt i got:", receivedMessage[3])
+        // Change prompt as well
+        this.setState({
+          answeredCorrectly: [choiceIDGiven, 1],
+          promptObj: receivedMessage[3]
+        });
+        TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
+          this.setState({
+            answeredCorrectly: [0, 0],
+            resetTimer: true,
+          });
+        }, 750);
+      }
+      // if it was a different person's prompt that i answered right, then turn my answer green
+      else if (receivedMessage[0] == "message2") {
+        // tell choice component that it is correct! 
+        this.setState({answeredCorrectly: [choiceIDGiven, 1]});
+        TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
+          this.setState({
+            answeredCorrectly: [0, 0],
+            resetTimer: true,
+          });
+        }, 750);
+      }
+      // if someone else answered my prompt correctly! yay, change my prompt now
+      else if (receivedMessage[0] == "message3") {
+        console.log("message3: YAY someone answered my prompt!");
+        this.setState({
+          promptObj: receivedMessage[2]
+        });
+      }
+      // if the input i gave was incorrect
+      else if (receivedMessage[0] == "message4") {
+      this.setState({ answeredCorrectly: [choiceIDGiven, 2] }); // got it incorrect
+      TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
+        this.setState({
+          answeredCorrectly: [choiceIDGiven, 0]
+        });
+      }, 750);
       }
     }
   }
@@ -89,61 +144,6 @@ export default class GamePlayScreen extends Component {
     );
     console.log("GamePlayScreen: sentRequest", stringifiedRequest);
     global.ws.send(stringifiedRequest);
-
-    // What to do when receiving a message
-    global.ws.onmessage = event => {
-      /* If successful, going to receive something like this back:
-      [{
-        'isCorrect': true,
-      }]
-      */
-      // Turn every received message into a JSON immediately to access it
-      let receivedMessage = JSON.parse(event.data);
-
-      console.log("GamePlayScreen: receivedMessage in wasAnsweredCorrectly, ", receivedMessage);
-
-      // if it was your prompt, change ur answer to green and change ur prompt to new prompt
-      if (receivedMessage[0] == "message1") {
-          // tell choice component that it is correct! 
-          // Change prompt as well
-          this.setState({
-            answeredCorrectly: [choiceIDGiven, 1],
-            promptObj: receivedMessage[3].newPrompt
-          });
-          TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
-            this.setState({
-              answeredCorrectly: [0, 0],
-              resetTimer: true,
-            });
-          }, 750);
-      }
-      // if it was a different person's prompt that i answered right, then turn my answer green
-      if (receivedMessage[0] == "message2") {
-          // tell choice component that it is correct! 
-          this.setState({answeredCorrectly: [choiceIDGiven, 1]});
-          TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
-            this.setState({
-              answeredCorrectly: [0, 0],
-              resetTimer: true,
-            });
-          }, 750);
-      }
-      // if someone else answered my prompt correctly! yay, change my prompt now
-      if (receivedMessage[0] == "message3") {
-        this.setState({
-          promptObj: receivedMessage[2].newPrompt
-        });
-      }
-      // if the input i gave was incorrect
-      if (receivedMessage[0] == "message4") {
-        this.setState({ answeredCorrectly: [choiceIDGiven, 2] }); // got it incorrect
-        TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
-          this.setState({
-            answeredCorrectly: [choiceIDGiven, 0]
-          });
-        }, 750);
-      }
-  }
 }
 
 
@@ -170,8 +170,6 @@ initChoicesAndPrompt() {
 
 
   render() {
-
-
     const topLeftChoice = this.state.topLeftChoice;
     const topRightChoice = this.state.topRightChoice;
     const bottomLeftChoice = this.state.bottomLeftChoice;
