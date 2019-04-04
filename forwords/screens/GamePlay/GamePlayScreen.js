@@ -55,7 +55,6 @@ export default class GamePlayScreen extends Component {
       }
       return input;
     }
-    var choiceIDGiven = this.state.choiceIDGiven;
     // What to do when receiving a message
     global.ws.onmessage = event => {
       // Turn every received message into a JSON immediately to access it
