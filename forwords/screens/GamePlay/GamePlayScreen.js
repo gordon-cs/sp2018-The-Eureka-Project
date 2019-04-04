@@ -31,11 +31,35 @@ export default class GamePlayScreen extends Component {
   }
 
   async componentWillMount() {
-    
     try {
       this.initChoicesAndPrompt();
     } catch (error) {
       throw new Error('component will not mount');
+    }
+  }
+
+  componentDidMount() {
+    // What to do when receiving a message
+    global.ws.onmessage = event => {
+      // Turn every received message into a JSON immediately to access it
+      let receivedMessage = JSON.parse(event.data); 
+      
+      // console.log("GamePlayScreen: receivedMessage", receivedMessage);
+      if (receivedMessage[0] == "choicesAndPrompt") {
+        console.log("GamePlayScreen: receivedMessage for choicesAndPrompt receivedMessage[2]",receivedMessage[2]);
+
+        // Shuffle choices
+        receivedMessage[1].shuffle();
+        this.setState({
+          isLoading: false,
+          topLeftChoice: receivedMessage[1][0],
+          topRightChoice: receivedMessage[1][1],
+          bottomLeftChoice: receivedMessage[1][2],
+          bottomRightChoice: receivedMessage[1][3],
+          promptObj: receivedMessage[2],
+        });
+      }
+      
     }
   }
 
@@ -131,28 +155,6 @@ export default class GamePlayScreen extends Component {
       return input;
     }
 
-      // What to do when receiving a message
-      global.ws.onmessage = event => {
-        // Turn every received message into a JSON immediately to access it
-        let receivedMessage = JSON.parse(event.data); 
-        
-        // console.log("GamePlayScreen: receivedMessage", receivedMessage);
-        if (receivedMessage[0] == "choicesAndPrompt") {
-          console.log("GamePlayScreen: receivedMessage for choicesAndPrompt receivedMessage[2]",receivedMessage[2]);
-
-          // Shuffle choices
-          receivedMessage[1].shuffle();
-          this.setState({
-            isLoading: false,
-            topLeftChoice: receivedMessage[1][0],
-            topRightChoice: receivedMessage[1][1],
-            bottomLeftChoice: receivedMessage[1][2],
-            bottomRightChoice: receivedMessage[1][3],
-            promptObj: receivedMessage[2],
-          });
-        }
-        
-      }
 
     const topLeftChoice = this.state.topLeftChoice;
     const topRightChoice = this.state.topRightChoice;
