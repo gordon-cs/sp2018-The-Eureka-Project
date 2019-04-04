@@ -29,12 +29,12 @@ export default class InstructionScreen extends React.Component {
       try {
         TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
           navigate("GamePlay", { lesson: lesson.ID, gameID: gameID })
-        }, 1000);
+        }, 5000);
   
       } catch (error) {
         throw new Error('component will not mount');
       }
-    }    
+    }   
   }
 
   // For solo users only
