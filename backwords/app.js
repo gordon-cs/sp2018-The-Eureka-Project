@@ -476,7 +476,7 @@ app.get("/", function (req, res) {
 
 // returns the list of lessons
 app.get("/lesson-list", function (req, res) {
-  connection.query("SELECT * FROM lesson;", function (error, results) {
+  connection.query("SELECT * FROM Lesson;", function (error, results) {
     if (error) throw error;
     res.json(results);
   });
