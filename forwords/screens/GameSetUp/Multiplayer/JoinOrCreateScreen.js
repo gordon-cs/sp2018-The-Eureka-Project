@@ -20,30 +20,8 @@ export default class JoinOrCreateScreen extends Component {
     console.log("JoinOrCreateScreen:  playerType: ", playerType);
     console.log(' ');
     console.log(' ');
-    // Request to send to the server - must be stringified.
-    var stringifiedRequest = JSON.stringify(
-      [{
-        'request': 'create',  // only a host can send 'create'
-        // should also send in email or some other unique identifier, perhaps (if IP is not enough)
-      }]
-    );
-
-    global.ws.send(stringifiedRequest);
-
-    // Receive a message from the server about what your gameID is
-    global.ws.onmessage = event => {
-      /* If successful, going to receive something like this back:
-      [{
-        'gameID': 1234,
-      }]
-      */
-      let receivedMessage = JSON.parse(event.data);
-      let gameID = receivedMessage[0].gameID;
-      console.log("JoinOrCreateScreen: Received message: (event.data):", event.data);
-      console.log(" ");
-      navigate("GameSetUp", { gameID: gameID, playerType: playerType });
+    navigate("GameSetUp", { playerType: playerType });
     }
-  }
 
   joinOnPress() {
     const { navigate } = this.props.navigation;

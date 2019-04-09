@@ -54,16 +54,12 @@ export default class LobbyScreenRoom extends Component {
   }
 
   startGameOnPress() {
-    var gameID = this.props.navigation.state.params.gameID;
-    var lesson = this.props.navigation.state.params.lesson;
     // console.log("LobbyScreen: props: playerType: ", playerType);
     console.log(" ");
     // Request to send to the server - must be stringified.
     var stringifiedRequest = JSON.stringify([
       {
         request: "initGame",
-        gameID: gameID,
-        lesson: "" + lesson + ""
       }
     ]);
     console.log("LobbyScreen: startGameOnPress", stringifiedRequest);

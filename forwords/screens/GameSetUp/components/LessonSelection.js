@@ -12,7 +12,8 @@ export default class LessonSelection extends Component {
 
     this.state = {
       isLoading: true,
-      lessonList: []
+      lessonList: [],
+      openToReceivingMessages: true,
     };
   }
 
@@ -32,15 +33,47 @@ export default class LessonSelection extends Component {
     }
   }
 
-  render() {
+
+createGame(lessonID) {
     const { navigate } = this.props.navigation;
+    const playerType = this.props.navigation.state.params.playerType; // host, member, or solo
+
+    // Request to send to the server - must be stringified.
+    var stringifiedRequest = JSON.stringify(
+      [{
+        'request': 'create',
+        'lessonID': lessonID
+      }]
+    );
+    console.log(`LessonSelection: Sent message: ${stringifiedRequest}`);
+    global.ws.send(stringifiedRequest);
+    
+    // Receive a message from the server about what your gameID is
+    global.ws.onmessage = event => {
+      /* If successful, going to receive something like this back:
+      [{
+        'gameID': 1234,
+      }]
+      */
+      if (this.state.openToReceivingMessages) {
+        console.log("LessonSelection: receivedMessage: ", event.data);
+        let receivedMessage = JSON.parse(event.data);
+        let gameID = receivedMessage[0].gameID;
+        if (playerType == 'solo') {
+          navigate("Instructions", { lesson: lessonID, gameID: gameID, playerType: playerType });
+        }
+        if (playerType == 'host') {
+          navigate("Lobby", { lesson: lessonID,  gameID: gameID, playerType: playerType });
+        }
+        this.setState({ openToReceivingMessages: false });
+      }
+    }
+  }
+
+  render() {
     const lessons = this.state.lessonList;
-    const gameID = this.props.navigation.state.params.gameID;
     const playerType = this.props.navigation.state.params.playerType; // host, member, or solo
     console.log("LessonSelection: props: playerType: ", playerType);
-    if (playerType !== 'solo') {
-      console.log("                    gameID: ", gameID);
-    }
     console.log(' ');
     let buttons;
     // If the user is playing solo
@@ -50,7 +83,7 @@ export default class LessonSelection extends Component {
           key={lesson.lessonID}
           color="#5b3b89"
           title={'Lesson ' + lesson.lessonID + ': ' + lesson.title}
-          onPress={() => navigate("Instructions", { lesson: lesson.lessonID, playerType: playerType})}
+          onPress={() => this.createGame(lesson.lessonID)}
         />
       ));
     }
@@ -61,7 +94,7 @@ export default class LessonSelection extends Component {
           key={lesson.lessonID}
           color="#5b3b89"
           title={'Lesson ' + lesson.lessonID + ': ' + lesson.title}
-          onPress={() => navigate("Lobby", { lesson: lesson.lessonID, playerType: playerType, gameID: gameID })}
+          onPress={() => this.createGame(lesson.lessonID)}
         />
       ));
     }

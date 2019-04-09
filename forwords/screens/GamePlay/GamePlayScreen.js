@@ -147,7 +147,7 @@ export default class GamePlayScreen extends Component {
 
 
 initChoicesAndPrompt() {
-    var lesson = this.props.navigation.state.params.lesson;
+    var lessonID = this.props.navigation.state.params.lessonID;
     var gameID = parseInt(this.props.navigation.state.params.gameID);
     console.log(' ');
 
@@ -155,7 +155,7 @@ initChoicesAndPrompt() {
     var stringifiedRequest = JSON.stringify(
       [{
         'request': 'initChoicesAndPrompt',
-        'lesson': lesson,
+        'lessonID': lessonID,
         'gameID': gameID,
       }]
     );

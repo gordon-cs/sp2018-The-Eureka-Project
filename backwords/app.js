@@ -69,13 +69,16 @@ class Player {
 }
 // Game Class
 class Game {
-  constructor(gameID, lesson, players, words, prompts) {
+  constructor(gameID, lessonID, players, words, prompts, isInitialized, promptType, choiceType, partOfSpeech) {
     this.gameID = gameID;
-    this.lesson = lesson;
+    this.lessonID = lessonID;
     this.players = players;
     this.words = words;
     this.prompts = prompts;
-    this.isInitialized = false;
+    this.isInitialized = isInitialized;
+    this.promptType = promptType;
+    this.choiceType = choiceType;
+    this.partOfSpeech = partOfSpeech;
   }
 }
 
@@ -87,7 +90,7 @@ ws.on("connection", function connection(ws, req) {
 
   // Immediately create player & game objects, with this ws connection as one of their attributes
   var player = new Player(IP, ws, [], {}, 0);
-  var game = new Game(0, 0, [], [], [], false);
+  var game = new Game(0, 0, [], [], [], false, "pinyin", "Chinese", "NULL");
 
   // Now, code for when receiving specific messages :)
   ws.on("message", async function incoming(message) {
@@ -103,11 +106,12 @@ ws.on("connection", function connection(ws, req) {
     if (message[0].request == "create") {
       // Set up game
       var gameID = await getGameID(); // should return an int that is the next wordID available in the Game table
-      if (message[0].lesson !== undefined) {
-        game.lesson = message[0].lesson; // does not exist for multiplayer, only single player
-      }
+      player.gameID = gameID;
+      var lessonID = message[0].lessonID;
+      game.lessonID = lessonID;
       game.gameID = gameID;
       game.players = [player];
+      setGame(game);
       // Put this in the map --> key: gameID value: game Object
       gameMap.set(gameID, game);
       // Send gameID message
@@ -117,10 +121,7 @@ ws.on("connection", function connection(ws, req) {
     }
 
     if (message[0].request == "initGame") {
-      var lesson = message[0].lesson;
-      var gameID = parseInt(message[0].gameID);
-      gameMap.get(gameID).lesson = lesson;
-
+      var gameID = checkGameIDOfWS(ws, gameMap);
       if (gameMap.get(gameID).players.length > 1) {
         var initGameMessage = JSON.stringify([{ isGameInitialized: true }]); // Convert JSON to string inorder to send;
         for (let i = 0; i < gameMap.get(gameID).players.length; i++) {
@@ -135,8 +136,9 @@ ws.on("connection", function connection(ws, req) {
     }
 
     if (message[0].request == "initChoicesAndPrompt") {
-      var gameID = parseInt(message[0].gameID);
-
+      var gameID = checkGameIDOfWS(ws, gameMap);
+      // var gameID = parseInt(message[0].gameID);
+      console.log("initChoicesAndPrompt: gameMap.get(",gameID,")====", gameMap.get(gameID).gameID);
       if (!gameMap.get(gameID).isInitialized) {
         gameMap.get(gameID).isInitialized = true;
         // Set up choices and prompts for the game
@@ -159,11 +161,11 @@ ws.on("connection", function connection(ws, req) {
           );
           messageArray.unshift("choicesAndPrompt");
           allMessages[i] = messageArray;
-          
         }
+
         // Send messages to every player with their choices/prompts
         for (let i = 0; i < gameMap.get(gameID).players.length; i++) {
-          console.log("in initChoicesAndPrompt: sending these two arrays ", JSON.stringify(allMessages[i]));
+          console.log("in initChoicesAndPrompt: sending these  arrays ", JSON.stringify(allMessages[i]));
           gameMap.get(gameID).players[i].ws.send(JSON.stringify(allMessages[i]));
           // console.log("         >>>>>>>>>>Sent message 'choicesAndPrompt'", i, "th time:", allMessages[i][2].wordID);
         }
@@ -174,9 +176,9 @@ ws.on("connection", function connection(ws, req) {
       var gameID = parseInt(message[0].gameID);
       // look up in the map and see if any key equals that gameID they requested
       if (gameMap.has(gameID)) {
+        player.gameID = gameID;
         // Get game at that gameID in the map, add the player to it
         gameMap.get(gameID).players.push(player);
-
         let joinGameIDMessage = JSON.stringify([{ isValidGameID: true }]); // Convert JSON to string inorder to send
         console.log("         >>>>>>>>>>Sent message", joinGameIDMessage);
         ws.send(joinGameIDMessage);
@@ -275,6 +277,17 @@ ws.on("connection", function connection(ws, req) {
   
 });
 
+function checkGameIDOfWS(ws, map) {
+  for (const value of map.values()) {
+    for (let i = 0; i < value.players.length; i++) {
+      if (ws == value.players[i].ws) {
+        console.log("checkGameIDOfWS: This player is  part of the game {",value.players[i].gameID,"}in the gameMap.")
+        return value.players[i].gameID;
+      }
+    }
+  }
+}
+
 function getGameID() {
   return new Promise(function (resolve, reject) {
     connection.query(
@@ -290,19 +303,28 @@ function getGameID() {
   });
 }
 
-function setGame(lessonID, promptType, choiceType, partOfSpeech) {
+function setGame(game) {
+  console.log("in setGame, what does game equal?");
+  console.log("                                 game.lessonID: ", game.lessonID);
+  console.log("                                 game.promptType: ", game.promptType);
+  console.log("                                 game.choiceType: ", game.choiceType);
+  console.log("                                 game.partOfSpeech: ", game.partOfSpeech);
   return new Promise(function (resolve, reject) {
+    let lessonID = game.lessonID;
+    let promptType = game.promptType;
+    let choiceType = game.choiceType;
+    let partOfSpeech = game.partOfSpeech;
     connection.query(
       "INSERT INTO Game (lessonID, promptType, choiceType, partOfSpeech) " +
       "VALUES (" +
       lessonID +
-      ", " +
+      ", '" +
       promptType +
-      ", " +
+      "', '" +
       choiceType +
-      ", " +
+      "', '" +
       partOfSpeech +
-      ");",
+      "');",
       function (error, results) {
         if (error) throw error;
         resolve("setGame completed!");
@@ -314,11 +336,11 @@ function setGame(lessonID, promptType, choiceType, partOfSpeech) {
 // At the begginning of each round, this function will generate 4 consistent choices for each player.
 function getGameChoices(game) {
   return new Promise(function (resolve, reject) {
-    let lesson = game.lesson;
+    let lessonID = game.lessonID;
     let numPlayers = game.players.length;
 
     connection.query(
-      "SELECT * FROM Word NATURAL JOIN Contains WHERE lessonID = " + lesson + ";",
+      "SELECT * FROM Word NATURAL JOIN Contains WHERE lessonID = " + lessonID + ";",
       function (error, wordsInLesson) {
         if (error) throw error;
 
@@ -381,7 +403,7 @@ function randomWordsPicker(minID, lessonWordsCount, number) {
   return choicesList; // should be 4 random numbers between minID and maxID
 }
 
-//Generate a random number between the minimum wordID in that lesson and the maximum wordID in that lesson
+//Generate a random number between the minimum wordID in that lessonID and the maximum wordID in that lesson
 function randomNumGen(minID, lessonWordsCount) {
   let maxID = minID + lessonWordsCount;
   return Math.floor(Math.random() * (maxID - minID) + minID);
@@ -466,3 +488,4 @@ ws.on('close', () => {
 })
 */
 module.exports = app;
+

@@ -10,7 +10,6 @@ export default class GameSetUpScreen extends Component {
   }
 
   render() {
-    const gameID = this.props.navigation.state.params.gameID; // does not exist for solo playerTypes yet, should we set it as null in the parent component, or is it fine?
     const playerType = this.props.navigation.state.params.playerType; // host, member, or solo
     console.log("GameSetUpScreen: playertype:", playerType);
     let content;
@@ -53,7 +52,6 @@ export default class GameSetUpScreen extends Component {
             <LessonSelection
               navigation={this.props.navigation}
               playerType={playerType}
-              gameID={gameID}
             />
           </View>
         </ScrollView>
