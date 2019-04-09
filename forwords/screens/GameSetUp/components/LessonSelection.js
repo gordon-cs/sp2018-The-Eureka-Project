@@ -47,10 +47,10 @@ export default class LessonSelection extends Component {
     if (playerType == 'solo') {
       buttons = lessons.map(lesson => (
         <Button
-          key={lesson.ID}
+          key={lesson.lessonID}
           color="#5b3b89"
-          title={'Lesson ' + lesson.ID + ': ' + lesson.Title}
-          onPress={() => navigate("Instructions", { lesson: lesson.ID, playerType: playerType})}
+          title={'Lesson ' + lesson.lessonID + ': ' + lesson.title}
+          onPress={() => navigate("Instructions", { lesson: lesson.lessonID, playerType: playerType})}
         />
       ));
     }
@@ -58,10 +58,10 @@ export default class LessonSelection extends Component {
     else if (playerType == 'host') {
       buttons = lessons.map(lesson => (
         <Button
-          key={lesson.ID}
+          key={lesson.lessonID}
           color="#5b3b89"
-          title={'Lesson ' + lesson.ID + ': ' + lesson.Title}
-          onPress={() => navigate("Lobby", { lesson: lesson.ID, playerType: playerType, gameID: gameID })}
+          title={'Lesson ' + lesson.lessonID + ': ' + lesson.title}
+          onPress={() => navigate("Lobby", { lesson: lesson.lessonID, playerType: playerType, gameID: gameID })}
         />
       ));
     }
