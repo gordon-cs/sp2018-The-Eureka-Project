@@ -102,7 +102,7 @@ ws.on("connection", function connection(ws, req) {
 
     if (message[0].request == "create") {
       // Set up game
-      var gameID = await getGameID(); // should return an int that is the next ID available in the Game table
+      var gameID = await getGameID(); // should return an int that is the next wordID available in the Game table
       if (message[0].lesson !== undefined) {
         game.lesson = message[0].lesson; // does not exist for multiplayer, only single player
       }
@@ -165,7 +165,7 @@ ws.on("connection", function connection(ws, req) {
         for (let i = 0; i < gameMap.get(gameID).players.length; i++) {
           console.log("in initChoicesAndPrompt: sending these two arrays ", JSON.stringify(allMessages[i]));
           gameMap.get(gameID).players[i].ws.send(JSON.stringify(allMessages[i]));
-          // console.log("         >>>>>>>>>>Sent message 'choicesAndPrompt'", i, "th time:", allMessages[i][2].ID);
+          // console.log("         >>>>>>>>>>Sent message 'choicesAndPrompt'", i, "th time:", allMessages[i][2].wordID);
         }
       }
     }
@@ -203,7 +203,7 @@ ws.on("connection", function connection(ws, req) {
       /*
        * Given: [{"request":"input","gameID":1,"input":94}]
        * Go through all players' prompts
-       *      Does this input ID equal someone's prompt ID?
+       *      Does this input wordID equal someone's prompt wordID?
                     * If YES && it is the person who sent it:
                     *      Send them a new prompt, and that it was correct
                     * IF YES && it was a different person:
@@ -233,9 +233,9 @@ ws.on("connection", function connection(ws, req) {
        *    Game continues until next person inputs
       */
      for (let i = 0; i < inputGame.players.length; i++) {
-      // console.log("       In input, player ", inputGame.players[i].IP,"'s prompt.ID:". inputGame.players[i].prompt.ID);
+      // console.log("       In input, player ", inputGame.players[i].IP,"'s prompt.wordID:". inputGame.players[i].prompt.wordID);
       // If it does equal someone's prompt, and that person is the one who actually sent the input request
-      if (input == inputGame.players[i].prompt.ID) {
+      if (input == inputGame.players[i].prompt.wordID) {
         isCorrect = true;
         let newPrompt = getSinglePrompt(inputGame, inputGame.players[i].prompt);
         
@@ -245,7 +245,7 @@ ws.on("connection", function connection(ws, req) {
           // Send them their new prompt, and that it was correct
           let newPromptAndValidationMessage = JSON.stringify(["message1", {oldInput: input}, newPrompt])
           ws.send(newPromptAndValidationMessage);
-          console.log("       sent message1");
+          console.log("       sent message1:", newPromptAndValidationMessage);
           inputGame.players[i].prompt = newPrompt;
         }
         // I answered your prompt
@@ -311,69 +311,6 @@ function setGame(lessonID, promptType, choiceType, partOfSpeech) {
   });
 }
 
-function getChoicesAndPrompt(game) {
-  return new Promise(function (resolve, reject) {
-    let lesson = game.lesson;
-    let numPlayers = game.players.length;
-    var players = game.players;
-
-    connection.query(
-      "SELECT * FROM word WHERE lesson = " + lesson + ";",
-      function (error, wordsInLesson) {
-        if (error) throw error;
-        var minID = wordsInLesson[0].ID;
-        let prompts = randomWordsPicker(
-          minID,
-          wordsInLesson.length - 1,
-          numPlayers
-        ); // returns array of wordIDs randomly selected from all wordsInLesson
-
-        var allMessages = [];
-        // Set Prompts for every player in game
-        for (let i = 0; i < numPlayers; i++) {
-          // Set the prompt to be the object from the wordsInLesson array
-          players[i].prompt = wordsInLesson[prompts[i] - minID];
-        }
-        prompts.shuffle();
-
-        // Set Choices for every player in game
-        for (let i = 0; i < numPlayers; i++) {
-          let choiceWordIDs = randomWordsPicker(minID, wordsInLesson.length, 3); // 3 random wordIDs to be choices
-
-          // Set the Choices to be the objects from the wordsInLesson array
-          players[i].choices = [
-            wordsInLesson[choiceWordIDs[0] - minID],
-            wordsInLesson[choiceWordIDs[1] - minID],
-            wordsInLesson[choiceWordIDs[2] - minID]
-          ];
-          // Solo mode: the player must have their prompt as one of their choices
-          if (numPlayers == 1) {
-            // Make sure the player has the prompt as one of their choices
-            players[i].choices.push(players[i].prompt);
-          }
-          else {
-            // Make sure each player has one of the prompts as 1/4 of their choices
-            players[i].choices.push(wordsInLesson[prompts[i] - minID]);
-          }
-
-          // An array with the choices and the array
-          let messageArray = [];
-          messageArray.push(
-            players[i].choices[0],
-            players[i].choices[1],
-            players[i].choices[2],
-            players[i].choices[3],
-            players[i].prompt
-          );
-
-          allMessages[i] = messageArray;
-        }
-        resolve(allMessages);
-      }
-    );
-  });
-}
-
 // At the begginning of each round, this function will generate 4 consistent choices for each player.
 function getGameChoices(game) {
   return new Promise(function (resolve, reject) {
@@ -381,11 +318,11 @@ function getGameChoices(game) {
     let numPlayers = game.players.length;
 
     connection.query(
-      "SELECT * FROM word WHERE lesson = " + lesson + ";",
+      "SELECT * FROM Word NATURAL JOIN Contains WHERE lessonID = " + lesson + ";",
       function (error, wordsInLesson) {
         if (error) throw error;
 
-        var minID = wordsInLesson[0].ID;
+        var minID = wordsInLesson[0].wordID;
 
         var choiceWordsIDs = randomWordsPicker(minID, wordsInLesson.length, (4 * numPlayers)); // 4*numPlayers wordIDs to be choices
         console.log("getGameChoices choiceWordsIDs=", choiceWordsIDs);
@@ -407,13 +344,13 @@ function getPrompts(game) {
   for (let i = 0; i < numPlayers; i++) {
     promptArray.push(game.words[promptWordIndex[i]]);
   }
-  // console.log("getPrompts: promptArray--should be 2 random words from words", promptArray[0].ID, promptArray[1].ID);
+  // console.log("getPrompts: promptArray--should be 2 random words from words", promptArray[0].wordID, promptArray[1].wordID);
   return promptArray;
 }
 
 function getSinglePrompt(game, currentPrompt) {
   // Generate a new word that is not currently a prompt, but is also someone's current choice
-  let newPrompt = randomWordsPicker(0, game.words.length, 1); // random ID from list of all words
+  let newPrompt = randomWordsPicker(0, game.words.length, 1); // random wordID from list of all words
   let newPromptObj = game.words[newPrompt];
 
   while (game.prompts.includes(newPromptObj)) {
@@ -444,7 +381,7 @@ function randomWordsPicker(minID, lessonWordsCount, number) {
   return choicesList; // should be 4 random numbers between minID and maxID
 }
 
-//Generate a random number between the minimum ID in that lesson and the maximum ID in that lesson
+//Generate a random number between the minimum wordID in that lesson and the maximum wordID in that lesson
 function randomNumGen(minID, lessonWordsCount) {
   let maxID = minID + lessonWordsCount;
   return Math.floor(Math.random() * (maxID - minID) + minID);
@@ -529,4 +466,3 @@ ws.on('close', () => {
 })
 */
 module.exports = app;
-

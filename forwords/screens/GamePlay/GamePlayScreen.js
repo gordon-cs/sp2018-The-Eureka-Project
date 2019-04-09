@@ -59,11 +59,11 @@ export default class GamePlayScreen extends Component {
     global.ws.onmessage = event => {
       // Turn every received message into a JSON immediately to access it
       var receivedMessage = JSON.parse(event.data);
-
+      
       // console.log("GamePlayScreen: receivedMessage", receivedMessage);
       if (receivedMessage[0] == "choicesAndPrompt") {
         // console.log("GamePlayScreen: receivedMessage for choicesAndPrompt receivedMessage[2]", receivedMessage[2]);
-
+        console.log("choicesAndPrompt message:", receivedMessage);
         // Shuffle choices
         receivedMessage[1].shuffle();
         this.setState({
@@ -174,7 +174,7 @@ initChoicesAndPrompt() {
     const bottomLeftChoice = this.state.bottomLeftChoice;
     const bottomRightChoice = this.state.bottomRightChoice;
     const promptObj = this.state.promptObj;
-    const promptID = this.state.promptObj.ID;
+    const promptID = this.state.promptObj.wordID;
     const answeredCorrectly = this.state.answeredCorrectly;
     const resetTimer = this.state.resetTimer;
 
@@ -194,7 +194,7 @@ initChoicesAndPrompt() {
           <Choice
             text={topLeftChoice.Chinese}
             promptID={promptID}
-            choiceID={topLeftChoice.ID}
+            choiceID={topLeftChoice.wordID}
             answeredCorrectly={answeredCorrectly}
             wasAnsweredCorrectly={this.wasAnsweredCorrectly} // a function
           >
@@ -202,7 +202,7 @@ initChoicesAndPrompt() {
           <Choice
             text={topRightChoice.Chinese}
             promptID={promptID}
-            choiceID={topRightChoice.ID}
+            choiceID={topRightChoice.wordID}
             answeredCorrectly={answeredCorrectly}
             wasAnsweredCorrectly={this.wasAnsweredCorrectly}>
           </Choice>
@@ -211,14 +211,14 @@ initChoicesAndPrompt() {
           <Choice
             text={bottomLeftChoice.Chinese}
             promptID={promptID}
-            choiceID={bottomLeftChoice.ID}
+            choiceID={bottomLeftChoice.wordID}
             answeredCorrectly={answeredCorrectly}
             wasAnsweredCorrectly={this.wasAnsweredCorrectly}>
           </Choice>
           <Choice
             text={bottomRightChoice.Chinese}
             promptID={promptID}
-            choiceID={bottomRightChoice.ID}
+            choiceID={bottomRightChoice.wordID}
             answeredCorrectly={answeredCorrectly}
             wasAnsweredCorrectly={this.wasAnsweredCorrectly}>
           </Choice>
