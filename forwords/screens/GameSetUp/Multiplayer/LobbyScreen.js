@@ -16,7 +16,7 @@ export default class LobbyScreenRoom extends Component {
     super(props);
 
     this.state = {
-      numberOfPlayers: 0,
+      numberOfPlayers: 0
     };
   }
 
@@ -24,7 +24,6 @@ export default class LobbyScreenRoom extends Component {
     var lesson = this.props.navigation.state.params.lesson;
     var gameID = this.props.navigation.state.params.gameID;
     const { navigate } = this.props.navigation;
-
 
     // What to do when receiving a message
     global.ws.onmessage = event => {
@@ -41,8 +40,11 @@ export default class LobbyScreenRoom extends Component {
           }]
       */
       if (receivedMessage[0].numberOfPlayers !== undefined) {
-        this.setState({ numberOfPlayers: receivedMessage[0].numberOfPlayers })
-        console.log("LobbyScreen: numberOfPlayers: ", this.state.numberOfPlayers);
+        this.setState({ numberOfPlayers: receivedMessage[0].numberOfPlayers });
+        console.log(
+          "LobbyScreen: numberOfPlayers: ",
+          this.state.numberOfPlayers
+        );
       }
 
       if (receivedMessage[0].isGameInitialized) {
@@ -68,7 +70,7 @@ export default class LobbyScreenRoom extends Component {
     global.ws.send(stringifiedRequest);
   }
 
-  render() { 
+  render() {
     const playerType = this.props.navigation.state.params.playerType; // host, member, or solo
     var gameID = this.props.navigation.state.params.gameID;
     let content;
@@ -80,6 +82,10 @@ export default class LobbyScreenRoom extends Component {
           <Text style={styles.headingText}>
             {" "}
             You are the host of Group {gameID}
+          </Text>
+          <Text style={styles.subheadingText}>
+            {" "}
+            Invite others to play in your group – they can enter the code: {gameID}
           </Text>
           <Text style={styles.subheadingText}>
             {" "}

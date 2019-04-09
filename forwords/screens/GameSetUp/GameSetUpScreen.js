@@ -46,8 +46,7 @@ export default class GameSetUpScreen extends Component {
                 style={styles.multiplayerImage}
                 source={require("../../assets/images/people.png")}
               />
-              <Text style={styles.mainText}>Your Group Code is: {gameID}</Text>
-              <Text style={styles.subheadingText}>Invite others to your group using this unique code!</Text>
+              <Text style={styles.subheadingText}>You will receive a group code once you select a lesson!</Text>
               <Text style={styles.subheadingText}>Select a lesson for your group to play with!</Text>
             </View>
 
