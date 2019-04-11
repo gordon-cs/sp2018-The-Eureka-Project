@@ -59,17 +59,18 @@ connection.connect(function (err) {
 // Classes
 // Player Class
 class Player {
-  constructor(IP, ws, choices, prompt, gameID) {
+  constructor(IP, ws, choices, prompt, gameID, playerType) {
     this.IP = IP;
     this.ws = ws;
     this.choices = choices;
     this.prompt = prompt;
     this.gameID = gameID;
+    this.playerType = playerType; // Either 'host', 'member', or 'solo'
   }
 }
 // Game Class
 class Game {
-  constructor(gameID, lessonID, players, words, prompts, isInitialized, promptType, choiceType, partOfSpeech) {
+  constructor(gameID, lessonID, players, words, prompts, isInitialized, promptType, choiceType, partOfSpeech, roundNumber) {
     this.gameID = gameID;
     this.lessonID = lessonID;
     this.players = players;
@@ -79,6 +80,7 @@ class Game {
     this.promptType = promptType;
     this.choiceType = choiceType;
     this.partOfSpeech = partOfSpeech;
+    this.roundNumber = roundNumber;
   }
 }
 
@@ -89,8 +91,8 @@ ws.on("connection", function connection(ws, req) {
   console.log("Connection accepted:", IP);
 
   // Immediately create player & game objects, with this ws connection as one of their attributes
-  var player = new Player(IP, ws, [], {}, 0);
-  var game = new Game(0, 0, [], [], [], false, "pinyin", "Chinese", "NULL");
+  var player = new Player(IP, ws, [], {}, 0, '');
+  var game = new Game(0, 0, [], [], [], false, "pinyin", "Chinese", "NULL", 0);
 
   // Now, code for when receiving specific messages :)
   ws.on("message", async function incoming(message) {
@@ -107,6 +109,7 @@ ws.on("connection", function connection(ws, req) {
       // Set up game
       var gameID = await getGameID(); // should return an int that is the next wordID available in the Game table
       player.gameID = gameID;
+      player.playerType = 'host';
       var lessonID = message[0].lessonID;
       game.lessonID = lessonID;
       game.gameID = gameID;
@@ -136,17 +139,24 @@ ws.on("connection", function connection(ws, req) {
     }
 
     if (message[0].request == "initChoicesAndPrompt") {
-      // var gameID = player.gameID;
       var gameID = checkGameIDOfWS(ws, gameMap);
-      if (!gameMap.get(gameID).isInitialized) {
+      
+      if (player.playerType == 'host') {
+        gameMap.get(gameID).roundNumber++;
         gameMap.get(gameID).isInitialized = true;
+
         // Set up choices and prompts for the game
+        gameMap.get(gameID).words = [];
+        gameMap.get(gameID).prompts = [];
         gameMap.get(gameID).words = await getGameChoices(gameMap.get(gameID));
         gameMap.get(gameID).prompts = getPrompts(gameMap.get(gameID));
 
+
         var allMessages = [];
         var count = 0;
-        for (let i = 0; i < game.players.length; i++) {
+        for (let i = 0; i < gameMap.get(gameID).players.length; i++) {
+          gameMap.get(gameID).players[i].choices = [];
+          gameMap.get(gameID).players[i].prompt = {};
           while (gameMap.get(gameID).players[i].choices.length < 4) {
             gameMap.get(gameID).players[i].choices.push(gameMap.get(gameID).words[count]);
             count++;
@@ -159,19 +169,20 @@ ws.on("connection", function connection(ws, req) {
             gameMap.get(gameID).players[i].prompt
           );
           messageArray.unshift("choicesAndPrompt");
+          messageArray.push({roundNumber: gameMap.get(gameID).roundNumber});
           allMessages[i] = messageArray;
+          console.log("        initChoicesandPrompt messageArray i=",i,"firstChoice:", allMessages[i][1][0].wordID);
         }
 
         // Send messages to every player with their choices/prompts
         for (let i = 0; i < gameMap.get(gameID).players.length; i++) {
-          console.log("in initChoicesAndPrompt: sending these  arrays ", JSON.stringify(allMessages[i]));
           gameMap.get(gameID).players[i].ws.send(JSON.stringify(allMessages[i]));
-          // console.log("         >>>>>>>>>>Sent message 'choicesAndPrompt'", i, "th time:", allMessages[i][2].wordID);
         }
       }
     }
 
     if (message[0].request == "join") {
+      player.playerType = 'member';
       var gameID = parseInt(message[0].gameID);
       // look up in the map and see if any key equals that gameID they requested
       if (gameMap.has(gameID)) {
@@ -198,7 +209,8 @@ ws.on("connection", function connection(ws, req) {
 
       var isCorrect = false;
       var input = message[0].input;
-      var inputGameID = message[0].gameID;
+
+      var inputGameID = checkGameIDOfWS(ws, gameMap);
       var inputGame = gameMap.get(inputGameID);
       /*
        * Given: [{"request":"input","gameID":1,"input":94}]
@@ -241,11 +253,10 @@ ws.on("connection", function connection(ws, req) {
         
         // I answered my own prompt
         if (ws === inputGame.players[i].ws) {
-          console.log("       In input, it was their own prompt:", inputGame.players[i].IP);
           // Send them their new prompt, and that it was correct
           let newPromptAndValidationMessage = JSON.stringify(["message1", {oldInput: input}, newPrompt])
           ws.send(newPromptAndValidationMessage);
-          console.log("       sent message1:", newPromptAndValidationMessage);
+          console.log("       sent message1:");
           inputGame.players[i].prompt = newPrompt;
         }
         // I answered your prompt
@@ -276,17 +287,22 @@ ws.on("connection", function connection(ws, req) {
       gameMap.delete(game.gameID);
       // Clear out player & game objects once the game is over
       player = new Player(IP, ws, [], {}, 0);
-      game = new Game(0, 0, [], [], [], false, "pinyin", "Chinese", "NULL");
+      game = new Game(0, 0, [], [], [], false, "pinyin", "Chinese", "NULL", 0);
     }
   });
   
 });
 
+
+
+
+
+
 function checkGameIDOfWS(ws, map) {
   for (const value of map.values()) {
     for (let i = 0; i < value.players.length; i++) {
       if (ws == value.players[i].ws) {
-        console.log("checkGameIDOfWS: This player is  part of the game {",value.players[i].gameID,"}in the gameMap.")
+        // console.log("checkGameIDOfWS: This player is  part of the game {",value.players[i].gameID,"}in the gameMap.")
         return value.players[i].gameID;
       }
     }
@@ -309,11 +325,11 @@ function getGameID() {
 }
 
 function setGame(game) {
-  console.log("in setGame, what does game equal?");
-  console.log("                                 game.lessonID: ", game.lessonID);
-  console.log("                                 game.promptType: ", game.promptType);
-  console.log("                                 game.choiceType: ", game.choiceType);
-  console.log("                                 game.partOfSpeech: ", game.partOfSpeech);
+  // console.log("in setGame, what does game equal?");
+  // console.log("                                 game.lessonID: ", game.lessonID);
+  // console.log("                                 game.promptType: ", game.promptType);
+  // console.log("                                 game.choiceType: ", game.choiceType);
+  // console.log("                                 game.partOfSpeech: ", game.partOfSpeech);
   return new Promise(function (resolve, reject) {
     let lessonID = game.lessonID;
     let promptType = game.promptType;
@@ -370,6 +386,7 @@ function getPrompts(game) {
   let promptArray = [];
   for (let i = 0; i < numPlayers; i++) {
     promptArray.push(game.words[promptWordIndex[i]]);
+    console.log("In getPrompts, array contains: ", promptArray[i].wordID);
   }
   // console.log("getPrompts: promptArray--should be 2 random words from words", promptArray[0].wordID, promptArray[1].wordID);
   return promptArray;
