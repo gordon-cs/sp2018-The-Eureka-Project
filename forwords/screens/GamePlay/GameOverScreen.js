@@ -19,6 +19,17 @@ export default class GameOverScreen extends React.Component {
   // For solo users only
   goToLaunchScreen() {
     const { navigate } = this.props.navigation;
+
+    // Request to send to the server - must be stringified.
+    var stringifiedRequest = JSON.stringify([
+      {
+        request: "endGame",
+      }
+    ]);
+    global.ws.send(stringifiedRequest);
+
+
+
     console.log("trying to go to home screen");
     navigate("Home");
   }
