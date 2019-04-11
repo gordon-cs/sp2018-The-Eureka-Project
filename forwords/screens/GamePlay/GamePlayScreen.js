@@ -1,13 +1,9 @@
 import React, { Component } from "react";
-import TimerMixin from 'react-timer-mixin';
+import TimerMixin from "react-timer-mixin";
 import Choice from "./components/Choice";
-import Prompt from './components/Prompt';
-import Timer from './components/Timer';
-import {
-  View,
-  StyleSheet,
-  Platform,
-} from "react-native";
+import Prompt from "./components/Prompt";
+import Timer from "./components/Timer";
+import { View, StyleSheet, Platform, Text } from "react-native";
 
 export default class GamePlayScreen extends Component {
   static navigationOptions = {
@@ -25,28 +21,27 @@ export default class GamePlayScreen extends Component {
       bottomRightChoice: {},
       promptObj: {},
       counter: 1,
-      resetTimer: true, // Default is true, false means  ??
+      resetTimer: true // Default is true, false means  ??
     };
     this.wasAnsweredCorrectly = this.wasAnsweredCorrectly.bind(this);
   }
 
   async componentWillMount() {
     try {
-      TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
-      this.initChoicesAndPrompt();
-      }, 3000);
-      
+      TimerMixin.setTimeout(() => {
+        // Delay the refresh of screen so user can see the correct answer response
+        this.initChoicesAndPrompt();
+      }, 3500);
     } catch (error) {
-      throw new Error('component will not mount');
+      throw new Error("component will not mount");
     }
   }
 
   componentDidMount() {
-    Array.prototype.shuffle = function () {
+    Array.prototype.shuffle = function() {
       var input = this;
 
       for (var i = input.length - 1; i >= 0; i--) {
-
         var randomIndex = Math.floor(Math.random() * (i + 1));
         var itemAtIndex = input[randomIndex];
 
@@ -54,13 +49,14 @@ export default class GamePlayScreen extends Component {
         input[i] = itemAtIndex;
       }
       return input;
-    }
+    };
+
     // What to do when receiving a message
     global.ws.onmessage = event => {
       // Turn every received message into a JSON immediately to access it
       var receivedMessage = JSON.parse(event.data);
-      
-      // console.log("GamePlayScreen: receivedMessage", receivedMessage);
+
+      console.log("GamePlayScreen: receivedMessage", receivedMessage);
       if (receivedMessage[0] == "choicesAndPrompt") {
         // console.log("GamePlayScreen: receivedMessage for choicesAndPrompt receivedMessage[2]", receivedMessage[2]);
         console.log("choicesAndPrompt message:", receivedMessage);
@@ -72,7 +68,7 @@ export default class GamePlayScreen extends Component {
           topRightChoice: receivedMessage[1][1],
           bottomLeftChoice: receivedMessage[1][2],
           bottomRightChoice: receivedMessage[1][3],
-          promptObj: receivedMessage[2],
+          promptObj: receivedMessage[2]
         });
       }
       // Answer Validation and Prompt Changing BOI
@@ -85,48 +81,59 @@ export default class GamePlayScreen extends Component {
 
       // if it was your prompt, change ur answer to green and change ur prompt to new prompt
       else if (receivedMessage[0] == "message1") {
-        // tell choice component that it is correct!  
-        console.log("message1:", receivedMessage)
+        // tell choice component that it is correct!
+        console.log("message1:", receivedMessage);
         // Change prompt as well
         this.setState({
           answeredCorrectly: [receivedMessage[1].oldInput, 1],
           promptObj: receivedMessage[2]
         });
-        TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
+        TimerMixin.setTimeout(() => {
+          // Delay the refresh of screen so user can see the correct answer response
           this.setState({
             answeredCorrectly: [0, 0],
-            resetTimer: true,
+            resetTimer: true
           });
         }, 750);
       }
       // if it was a different person's prompt that i answered right, then turn my answer green
       else if (receivedMessage[0] == "message2") {
-        // tell choice component that it is correct! 
-        this.setState({answeredCorrectly: [receivedMessage[1].oldInput, 1]});
-        TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
+        // tell choice component that it is correct!
+        this.setState({ answeredCorrectly: [receivedMessage[1].oldInput, 1] });
+        TimerMixin.setTimeout(() => {
+          // Delay the refresh of screen so user can see the correct answer response
           this.setState({
             answeredCorrectly: [0, 0],
-            resetTimer: true,
+            resetTimer: true
           });
         }, 750);
       }
       // if someone else answered my prompt correctly! yay, change my prompt now
       else if (receivedMessage[0] == "message3") {
-        console.log("message3: YAY someone answered my prompt! receivedMessage:", receivedMessage);
+        console.log(
+          "message3: YAY someone answered my prompt! receivedMessage:",
+          receivedMessage
+        );
         this.setState({
           promptObj: receivedMessage[1]
         });
       }
       // if the input i gave was incorrect
       else if (receivedMessage[0] == "message4") {
-      this.setState({ answeredCorrectly: [receivedMessage[1].oldInput, 2] }); // got it incorrect
-      TimerMixin.setTimeout(() => { // Delay the refresh of screen so user can see the correct answer response
-        this.setState({
-          answeredCorrectly: [receivedMessage[1].oldInput, 0]
-        });
-      }, 750);
+        this.setState({ answeredCorrectly: [receivedMessage[1].oldInput, 2] }); // got it incorrect
+        TimerMixin.setTimeout(() => {
+          // Delay the refresh of screen so user can see the correct answer response
+          this.setState({
+            answeredCorrectly: [receivedMessage[1].oldInput, 0]
+          });
+        }, 750);
       }
-    }
+    };
+  }
+
+
+  endGame() {
+    navigate("GameOver");
   }
 
   wasAnsweredCorrectly(choiceIDGiven) {
@@ -134,39 +141,37 @@ export default class GamePlayScreen extends Component {
     // send up the input: choice, gameID
 
     // Request to send to the server - must be stringified.
-    var stringifiedRequest = JSON.stringify(
-      [{
-        'request': 'input',
-        'gameID': gameID,
-        'input': choiceIDGiven
-      }]
-    );
+    var stringifiedRequest = JSON.stringify([
+      {
+        request: "input",
+        gameID: gameID,
+        input: choiceIDGiven
+      }
+    ]);
     console.log("GamePlayScreen: sentRequest", stringifiedRequest);
     global.ws.send(stringifiedRequest);
-}
+  }
 
-
-initChoicesAndPrompt() {
+  initChoicesAndPrompt() {
     var lessonID = this.props.navigation.state.params.lessonID;
     var gameID = parseInt(this.props.navigation.state.params.gameID);
-    console.log(' ');
+    console.log(" ");
 
     // Request to send to the server - must be stringified.
-    var stringifiedRequest = JSON.stringify(
-      [{
-        'request': 'initChoicesAndPrompt',
-        'lessonID': lessonID,
-        'gameID': gameID,
-      }]
-    );
+    var stringifiedRequest = JSON.stringify([
+      {
+        request: "initChoicesAndPrompt",
+        lessonID: lessonID,
+        gameID: gameID
+      }
+    ]);
     global.ws.send(stringifiedRequest);
 
     this.setState({
       answeredCorrectly: [0, 0],
-      resetTimer: true,
+      resetTimer: true
     });
   }
-
 
   render() {
     const topLeftChoice = this.state.topLeftChoice;
@@ -178,80 +183,96 @@ initChoicesAndPrompt() {
     const answeredCorrectly = this.state.answeredCorrectly;
     const resetTimer = this.state.resetTimer;
 
-    return (
-      <View style={styles.mainContainer}>
-        <View style={styles.choicesTopContainer}>
-          <Prompt promptObj={promptObj}>
-          </Prompt>
+    
+    if (this.state.isLoading) {
+      return (
+        <View style={styles.splashContainer}>
+          <Text style={styles.headingText}>Get ready to play!</Text>
         </View>
-        <View style={styles.timerContainer}>
-          <Timer
-            resetTimer={resetTimer}>
-          </Timer>
+      );
+    } else if (!this.state.isLoading) {
+      return (
+        <View style={styles.mainContainer}>
+          <View style={styles.choicesTopContainer}>
+            <Prompt promptObj={promptObj} />
+          </View>
+          <View style={styles.timerContainer}>
+            <Timer resetTimer={resetTimer} endGame={this.endGame}/>
+          </View>
+          <View style={styles.choicesTopContainer}>
+            <Choice
+              text={topLeftChoice.Chinese}
+              promptID={promptID}
+              choiceID={topLeftChoice.wordID}
+              answeredCorrectly={answeredCorrectly}
+              wasAnsweredCorrectly={this.wasAnsweredCorrectly} // a function
+            />
+            <Choice
+              text={topRightChoice.Chinese}
+              promptID={promptID}
+              choiceID={topRightChoice.wordID}
+              answeredCorrectly={answeredCorrectly}
+              wasAnsweredCorrectly={this.wasAnsweredCorrectly}
+            />
+          </View>
+          <View style={styles.choicesBottomContainer}>
+            <Choice
+              text={bottomLeftChoice.Chinese}
+              promptID={promptID}
+              choiceID={bottomLeftChoice.wordID}
+              answeredCorrectly={answeredCorrectly}
+              wasAnsweredCorrectly={this.wasAnsweredCorrectly}
+            />
+            <Choice
+              text={bottomRightChoice.Chinese}
+              promptID={promptID}
+              choiceID={bottomRightChoice.wordID}
+              answeredCorrectly={answeredCorrectly}
+              wasAnsweredCorrectly={this.wasAnsweredCorrectly}
+            />
+          </View>
         </View>
-
-        <View style={styles.choicesTopContainer}>
-          <Choice
-            text={topLeftChoice.Chinese}
-            promptID={promptID}
-            choiceID={topLeftChoice.wordID}
-            answeredCorrectly={answeredCorrectly}
-            wasAnsweredCorrectly={this.wasAnsweredCorrectly} // a function
-          >
-          </Choice>
-          <Choice
-            text={topRightChoice.Chinese}
-            promptID={promptID}
-            choiceID={topRightChoice.wordID}
-            answeredCorrectly={answeredCorrectly}
-            wasAnsweredCorrectly={this.wasAnsweredCorrectly}>
-          </Choice>
-        </View>
-        <View style={styles.choicesBottomContainer}>
-          <Choice
-            text={bottomLeftChoice.Chinese}
-            promptID={promptID}
-            choiceID={bottomLeftChoice.wordID}
-            answeredCorrectly={answeredCorrectly}
-            wasAnsweredCorrectly={this.wasAnsweredCorrectly}>
-          </Choice>
-          <Choice
-            text={bottomRightChoice.Chinese}
-            promptID={promptID}
-            choiceID={bottomRightChoice.wordID}
-            answeredCorrectly={answeredCorrectly}
-            wasAnsweredCorrectly={this.wasAnsweredCorrectly}>
-          </Choice>
-        </View>
-      </View>
-    );
+      );
+    }
   }
 }
 
 const styles = StyleSheet.create({
   mainContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     flex: 1,
     paddingTop: Platform.OS === "ios" ? 20 : 0,
-    backgroundColor: '#5b3b89'
+    backgroundColor: "#5b3b89",
   },
   choicesTopContainer: {
     flex: 1,
-    flexDirection: 'row',
-    margin: 10,
+    flexDirection: "row",
+    margin: 10
   },
   choicesBottomContainer: {
     flex: 1,
-    flexDirection: 'row',
-    margin: 10,
+    flexDirection: "row",
+    margin: 10
   },
   timerContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     borderRadius: 40,
-    borderColor: 'white',
+    borderColor: "white",
     width: 75,
     height: 75,
-    backgroundColor: 'white',
+    backgroundColor: "white"
+  },
+  headingText: {
+    fontWeight: "bold",
+    fontSize: 30,
+    color: 'black',
+    margin: 10,
+  },
+  splashContainer: {
+    alignItems: "center",
+    flex: 1,
+    paddingTop: Platform.OS === "ios" ? 20 : 0,
+    backgroundColor: "white"
   },
 });
