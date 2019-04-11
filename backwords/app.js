@@ -82,7 +82,7 @@ class Game {
   }
 }
 
-// Final Websocket Code :)
+// Websocket Code
 var gameMap = new Map();
 ws.on("connection", function connection(ws, req) {
   var IP = req.connection.remoteAddress.replace(/.*:/, "");
@@ -136,7 +136,8 @@ ws.on("connection", function connection(ws, req) {
     }
 
     if (message[0].request == "initChoicesAndPrompt") {
-      var gameID = player.gameID;
+      // var gameID = player.gameID;
+      var gameID = checkGameIDOfWS(ws, gameMap);
       if (!gameMap.get(gameID).isInitialized) {
         gameMap.get(gameID).isInitialized = true;
         // Set up choices and prompts for the game
@@ -193,7 +194,6 @@ ws.on("connection", function connection(ws, req) {
       }
     }
 
-    // case to check and see if the answer was correct when a user presses a button
     if (message[0].request == "input") {
 
       var isCorrect = false;
@@ -271,11 +271,17 @@ ws.on("connection", function connection(ws, req) {
        console.log("       sent message4");
      }
     }
+
+    if (message[0].request == "endGame") {
+      gameMap.delete(game.gameID);
+      // Clear out player & game objects once the game is over
+      player = new Player(IP, ws, [], {}, 0);
+      game = new Game(0, 0, [], [], [], false, "pinyin", "Chinese", "NULL");
+    }
   });
   
 });
 
-/*
 function checkGameIDOfWS(ws, map) {
   for (const value of map.values()) {
     for (let i = 0; i < value.players.length; i++) {
@@ -286,7 +292,6 @@ function checkGameIDOfWS(ws, map) {
     }
   }
 }
-*/
 
 function getGameID() {
   return new Promise(function (resolve, reject) {
