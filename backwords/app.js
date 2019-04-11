@@ -70,7 +70,7 @@ class Player {
 }
 // Game Class
 class Game {
-  constructor(gameID, lessonID, players, words, prompts, isInitialized, promptType, choiceType, partOfSpeech, roundNumber) {
+  constructor(gameID, lessonID, players, words, prompts, isInitialized, promptType, choiceType, partOfSpeech, roundNumber, correctAnswers) {
     this.gameID = gameID;
     this.lessonID = lessonID;
     this.players = players;
@@ -81,6 +81,7 @@ class Game {
     this.choiceType = choiceType;
     this.partOfSpeech = partOfSpeech;
     this.roundNumber = roundNumber;
+    this.correctAnswers = correctAnswers;
   }
 }
 
@@ -92,7 +93,7 @@ ws.on("connection", function connection(ws, req) {
 
   // Immediately create player & game objects, with this ws connection as one of their attributes
   var player = new Player(IP, ws, [], {}, 0, '');
-  var game = new Game(0, 0, [], [], [], false, "pinyin", "Chinese", "NULL", 0);
+  var game = new Game(0, 0, [], [], [], false, "pinyin", "Chinese", "NULL", 0, 0);
 
   // Now, code for when receiving specific messages :)
   ws.on("message", async function incoming(message) {
@@ -142,7 +143,6 @@ ws.on("connection", function connection(ws, req) {
       var gameID = checkGameIDOfWS(ws, gameMap);
       
       if (player.playerType == 'host') {
-        gameMap.get(gameID).roundNumber++;
         gameMap.get(gameID).isInitialized = true;
 
         // Set up choices and prompts for the game
@@ -169,9 +169,8 @@ ws.on("connection", function connection(ws, req) {
             gameMap.get(gameID).players[i].prompt
           );
           messageArray.unshift("choicesAndPrompt");
-          messageArray.push({roundNumber: gameMap.get(gameID).roundNumber});
           allMessages[i] = messageArray;
-          console.log("        initChoicesandPrompt messageArray i=",i,"firstChoice:", allMessages[i][1][0].wordID);
+          // console.log("        initChoicesandPrompt messageArray i=",i, allMessages[i][1][3].wordID);
         }
 
         // Send messages to every player with their choices/prompts
@@ -213,16 +212,7 @@ ws.on("connection", function connection(ws, req) {
       var inputGameID = checkGameIDOfWS(ws, gameMap);
       var inputGame = gameMap.get(inputGameID);
       /*
-       * Given: [{"request":"input","gameID":1,"input":94}]
-       * Go through all players' prompts
-       *      Does this input wordID equal someone's prompt wordID?
-                    * If YES && it is the person who sent it:
-                    *      Send them a new prompt, and that it was correct
-                    * IF YES && it was a different person:
-                    *      Send them it was correct and send different person a new prompt
-       * If NO:
-       *      Send them it was NOT correct
-       * 
+       * Given: [{"request":"input","inputGameID":1,"input":94}]
        * Cases (message need same format because all players listening and need to handle message):
        * 
        * Player pressed the correct prompt which they have
@@ -247,28 +237,38 @@ ws.on("connection", function connection(ws, req) {
      for (let i = 0; i < inputGame.players.length; i++) {
       // console.log("       In input, player ", inputGame.players[i].IP,"'s prompt.wordID:". inputGame.players[i].prompt.wordID);
       // If it does equal someone's prompt, and that person is the one who actually sent the input request
+      // console.log("how mnay correct Answers have there been? before answer is correct:", gameMap.get(inputGameID).correctAnswers);
       if (input == inputGame.players[i].prompt.wordID) {
         isCorrect = true;
+        gameMap.get(inputGameID).correctAnswers++;
+        console.log("                             AFTER correctAnswers incremented:", gameMap.get(inputGameID).correctAnswers);
+
         let newPrompt = getSinglePrompt(inputGame, inputGame.players[i].prompt);
-        
+        // If the total amount of Correct answers in the game is a multiple of 10
+        if (gameMap.get(inputGameID).correctAnswers % 10 == 0) {
+          gameMap.get(inputGameID).roundNumber++;
+          gameMap.get(inputGameID).correctAnswers = 0;
+
+        }
+       
         // I answered my own prompt
         if (ws === inputGame.players[i].ws) {
           // Send them their new prompt, and that it was correct
-          let newPromptAndValidationMessage = JSON.stringify(["message1", {oldInput: input}, newPrompt])
+          let newPromptAndValidationMessage = JSON.stringify(["message1", {roundNumber: gameMap.get(inputGameID).roundNumber}, {oldInput: input}, newPrompt])
           ws.send(newPromptAndValidationMessage);
-          console.log("       sent message1:");
+          console.log("       sent message1[1]:", newPromptAndValidationMessage);
           inputGame.players[i].prompt = newPrompt;
         }
         // I answered your prompt
         else {
           // Send player that inputted that it was correct
-          let validationMessage = JSON.stringify(["message2", {oldInput: input}])
+          let validationMessage = JSON.stringify(["message2", {roundNumber: gameMap.get(inputGameID).roundNumber}, {oldInput: input}])
           ws.send(validationMessage);
           console.log("       sent message2");
 
           console.log("             In input, it was someone else's prompt: ", inputGame.players[i].IP);
           // Send them their new prompt
-          let newPromptAndValidationMessage = JSON.stringify(["message3", newPrompt])
+          let newPromptAndValidationMessage = JSON.stringify(["message3", {roundNumber: gameMap.get(inputGameID).roundNumber}, newPrompt])
           inputGame.players[i].ws.send(newPromptAndValidationMessage)
           console.log("       sent message3");
           inputGame.players[i].prompt = newPrompt;
@@ -276,11 +276,12 @@ ws.on("connection", function connection(ws, req) {
       }
      }
      // If the player's input was incorrect
-     var validationMessage = JSON.stringify([ "message4", {oldInput: input}]);
+     var validationMessage = JSON.stringify([ "message4",  {roundNumber: gameMap.get(inputGameID).roundNumber}, {oldInput: input}]);
      if (!isCorrect) {
        ws.send(validationMessage);
        console.log("       sent message4");
      }
+
     }
 
     if (message[0].request == "endGame") {
@@ -368,7 +369,7 @@ function getGameChoices(game) {
         var minID = wordsInLesson[0].wordID;
 
         var choiceWordsIDs = randomWordsPicker(minID, wordsInLesson.length, (4 * numPlayers)); // 4*numPlayers wordIDs to be choices
-        console.log("getGameChoices choiceWordsIDs=", choiceWordsIDs);
+        // console.log("getGameChoices choiceWordsIDs=", choiceWordsIDs);
         let wordArray = [];
         for (let i = 0; i < choiceWordsIDs.length; i++) {
           wordArray.push(wordsInLesson[choiceWordsIDs[i] - minID])
@@ -386,7 +387,7 @@ function getPrompts(game) {
   let promptArray = [];
   for (let i = 0; i < numPlayers; i++) {
     promptArray.push(game.words[promptWordIndex[i]]);
-    console.log("In getPrompts, array contains: ", promptArray[i].wordID);
+    // console.log("In getPrompts, array contains: ", promptArray[i].wordID);
   }
   // console.log("getPrompts: promptArray--should be 2 random words from words", promptArray[0].wordID, promptArray[1].wordID);
   return promptArray;

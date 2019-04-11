@@ -3,7 +3,7 @@ import TimerMixin from "react-timer-mixin";
 import Choice from "./components/Choice";
 import Prompt from "./components/Prompt";
 import Timer from "./components/Timer";
-import { View, StyleSheet, Platform, Text } from "react-native";
+import { View, StyleSheet, Platform, Text, Button } from "react-native";
 
 export default class GamePlayScreen extends Component {
   static navigationOptions = {
@@ -20,12 +20,13 @@ export default class GamePlayScreen extends Component {
       bottomLeftChoice: {},
       bottomRightChoice: {},
       promptObj: {},
-      counter: 1,
+      roundNumber: 0,
+      newRound: false,
       resetTimer: true // Default is true, false means  ??
     };
     this.wasAnsweredCorrectly = this.wasAnsweredCorrectly.bind(this);
     this.endGame = this.endGame.bind(this);
-
+    this.newRound = this.newRound.bind(this);
   }
 
   async componentWillMount() {
@@ -57,38 +58,33 @@ export default class GamePlayScreen extends Component {
     global.ws.onmessage = event => {
       // Turn every received message into a JSON immediately to access it
       var receivedMessage = JSON.parse(event.data);
-
-      console.log("GamePlayScreen: receivedMessage", receivedMessage);
+      
       if (receivedMessage[0] == "choicesAndPrompt") {
-        // console.log("GamePlayScreen: receivedMessage for choicesAndPrompt receivedMessage[2]", receivedMessage[2]);
-        console.log("choicesAndPrompt message:", receivedMessage);
         // Shuffle choices
-        receivedMessage[1].shuffle();
+        let shuffledChoices = receivedMessage[1].shuffle();
+        // console.log("shuffledchoices = ", shuffledChoices);
         this.setState({
           isLoading: false,
-          topLeftChoice: receivedMessage[1][0],
-          topRightChoice: receivedMessage[1][1],
-          bottomLeftChoice: receivedMessage[1][2],
-          bottomRightChoice: receivedMessage[1][3],
-          promptObj: receivedMessage[2]
+          topLeftChoice: shuffledChoices[0],
+          topRightChoice: shuffledChoices[1],
+          bottomLeftChoice: shuffledChoices[2],
+          bottomRightChoice: shuffledChoices[3],
+          promptObj: receivedMessage[2],
+          // roundNumber: receivedMessage[3].roundNumber,
+          newRound: true
         });
       }
-      // Answer Validation and Prompt Changing BOI
-      /* If successful, going to receive something like this back:
-      [{
-        'isCorrect': true,
-      }]
-      */
+      // Answer Validation and Prompt Changing 
       // Turn every received message into a JSON immediately to access it
 
       // if it was your prompt, change ur answer to green and change ur prompt to new prompt
       else if (receivedMessage[0] == "message1") {
         // tell choice component that it is correct!
-        console.log("message1:", receivedMessage);
+        console.log("message1:", receivedMessage[1].roundNumber);
         // Change prompt as well
         this.setState({
-          answeredCorrectly: [receivedMessage[1].oldInput, 1],
-          promptObj: receivedMessage[2]
+          answeredCorrectly: [receivedMessage[2].oldInput, 1],
+          promptObj: receivedMessage[3]
         });
         TimerMixin.setTimeout(() => {
           // Delay the refresh of screen so user can see the correct answer response
@@ -101,7 +97,7 @@ export default class GamePlayScreen extends Component {
       // if it was a different person's prompt that i answered right, then turn my answer green
       else if (receivedMessage[0] == "message2") {
         // tell choice component that it is correct!
-        this.setState({ answeredCorrectly: [receivedMessage[1].oldInput, 1] });
+        this.setState({ answeredCorrectly: [receivedMessage[2].oldInput, 1] });
         TimerMixin.setTimeout(() => {
           // Delay the refresh of screen so user can see the correct answer response
           this.setState({
@@ -117,26 +113,32 @@ export default class GamePlayScreen extends Component {
           receivedMessage
         );
         this.setState({
-          promptObj: receivedMessage[1]
+          promptObj: receivedMessage[2]
         });
       }
       // if the input i gave was incorrect
       else if (receivedMessage[0] == "message4") {
-        this.setState({ answeredCorrectly: [receivedMessage[1].oldInput, 2] }); // got it incorrect
+        console.log("receivedMessage4", receivedMessage);
+        this.setState({ answeredCorrectly: [receivedMessage[2].oldInput, 2] }); // got it incorrect
         TimerMixin.setTimeout(() => {
           // Delay the refresh of screen so user can see the correct answer response
           this.setState({
-            answeredCorrectly: [receivedMessage[1].oldInput, 0]
+            answeredCorrectly: [receivedMessage[2].oldInput, 0]
           });
         }, 750);
       }
+      if (receivedMessage[1].roundNumber > this.state.roundNumber) {
+        console.log("we shoudl change the round now, round received:", receivedMessage[1].roundNumber);
+        this.initChoicesAndPrompt();
+        this.setState({roundNumber: receivedMessage[1].roundNumber})
+      }
+      this.setState({ newRound: false });
     };
   }
 
-
   endGame() {
     const { navigate } = this.props.navigation;
-    console.log("GamePlayScreen: made it to parent endGame()")
+    console.log("GamePlayScreen: made it to parent endGame()");
     navigate("GameOver");
   }
 
@@ -165,8 +167,6 @@ export default class GamePlayScreen extends Component {
     var stringifiedRequest = JSON.stringify([
       {
         request: "initChoicesAndPrompt",
-        lessonID: lessonID,
-        gameID: gameID
       }
     ]);
     global.ws.send(stringifiedRequest);
@@ -175,6 +175,16 @@ export default class GamePlayScreen extends Component {
       answeredCorrectly: [0, 0],
       resetTimer: true
     });
+  }
+
+  newRound() {
+    return (
+      <View style={styles.mainContainer}>
+        <View style={styles.splashContainer}>
+          <Text style={styles.headingText}>Round {this.state.roundNumber}</Text>
+        </View>
+      </View>
+    );
   }
 
   render() {
@@ -187,7 +197,6 @@ export default class GamePlayScreen extends Component {
     const answeredCorrectly = this.state.answeredCorrectly;
     const resetTimer = this.state.resetTimer;
 
-    
     if (this.state.isLoading) {
       return (
         <View style={styles.splashContainer}>
@@ -246,7 +255,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
     paddingTop: Platform.OS === "ios" ? 20 : 0,
-    backgroundColor: "#5b3b89",
+    backgroundColor: "#5b3b89"
   },
   choicesTopContainer: {
     flex: 1,
@@ -270,13 +279,13 @@ const styles = StyleSheet.create({
   headingText: {
     fontWeight: "bold",
     fontSize: 30,
-    color: 'black',
-    margin: 10,
+    color: "black",
+    margin: 10
   },
   splashContainer: {
     alignItems: "center",
     flex: 1,
     paddingTop: Platform.OS === "ios" ? 20 : 0,
     backgroundColor: "white"
-  },
+  }
 });

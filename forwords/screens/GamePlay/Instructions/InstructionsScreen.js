@@ -89,7 +89,7 @@ export default class InstructionScreen extends React.Component {
                 teammates' screens!
               </Text>
               <Text style={styles.bulletText}>
-                3. Say your prompt out loud in Chinese in order for them to
+                3. Say your prompt out loud in  your target language in order for them to
                 click the right option on their screen.
               </Text>
               {/*
