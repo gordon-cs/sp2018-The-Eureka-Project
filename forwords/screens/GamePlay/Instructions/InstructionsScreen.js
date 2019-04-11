@@ -27,7 +27,7 @@ export default class InstructionScreen extends React.Component {
         TimerMixin.setTimeout(() => {
           // Delay the refresh of screen so user can see the correct answer response
           navigate("GamePlay", { lesson: lesson.ID, gameID: gameID });
-        }, 10000);
+        }, 15000);
       } catch (error) {
         throw new Error("component will not mount");
       }
