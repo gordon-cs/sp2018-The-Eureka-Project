@@ -24,6 +24,8 @@ export default class GamePlayScreen extends Component {
       resetTimer: true // Default is true, false means  ??
     };
     this.wasAnsweredCorrectly = this.wasAnsweredCorrectly.bind(this);
+    this.endGame = this.endGame.bind(this);
+
   }
 
   async componentWillMount() {
@@ -133,6 +135,8 @@ export default class GamePlayScreen extends Component {
 
 
   endGame() {
+    const { navigate } = this.props.navigation;
+    console.log("GamePlayScreen: made it to parent endGame()")
     navigate("GameOver");
   }
 

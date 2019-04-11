@@ -43,7 +43,7 @@ const GamePlayStack = createStackNavigator({
 });
 
 const GameOverStack = createStackNavigator({
-  GamePlay: GameOverScreen,
+  GameOver: GameOverScreen,
 });
 
 const InstructionsStack = createStackNavigator({
