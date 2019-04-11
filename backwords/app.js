@@ -121,7 +121,7 @@ ws.on("connection", function connection(ws, req) {
     }
 
     if (message[0].request == "initGame") {
-      var gameID = checkGameIDOfWS(ws, gameMap);
+      var gameID = player.gameID;
       if (gameMap.get(gameID).players.length > 1) {
         var initGameMessage = JSON.stringify([{ isGameInitialized: true }]); // Convert JSON to string inorder to send;
         for (let i = 0; i < gameMap.get(gameID).players.length; i++) {
@@ -136,9 +136,7 @@ ws.on("connection", function connection(ws, req) {
     }
 
     if (message[0].request == "initChoicesAndPrompt") {
-      var gameID = checkGameIDOfWS(ws, gameMap);
-      // var gameID = parseInt(message[0].gameID);
-      console.log("initChoicesAndPrompt: gameMap.get(",gameID,")====", gameMap.get(gameID).gameID);
+      var gameID = player.gameID;
       if (!gameMap.get(gameID).isInitialized) {
         gameMap.get(gameID).isInitialized = true;
         // Set up choices and prompts for the game
@@ -277,6 +275,7 @@ ws.on("connection", function connection(ws, req) {
   
 });
 
+/*
 function checkGameIDOfWS(ws, map) {
   for (const value of map.values()) {
     for (let i = 0; i < value.players.length; i++) {
@@ -287,6 +286,7 @@ function checkGameIDOfWS(ws, map) {
     }
   }
 }
+*/
 
 function getGameID() {
   return new Promise(function (resolve, reject) {
