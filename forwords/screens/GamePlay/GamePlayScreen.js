@@ -181,7 +181,7 @@ initChoicesAndPrompt() {
     return (
       <View style={styles.mainContainer}>
         <View style={styles.choicesTopContainer}>
-          <Prompt promptObj={promptObj.pinyin}>
+          <Prompt promptObj={promptObj}>
           </Prompt>
         </View>
         <View style={styles.timerContainer}>

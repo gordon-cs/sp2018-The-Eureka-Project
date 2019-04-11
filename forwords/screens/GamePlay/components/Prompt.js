@@ -11,7 +11,7 @@ export default class Prompt extends Component {
         };
     }
     render() {
-        const promptText = this.props.promptObj;
+        const promptText = this.props.promptObj.pinyin;
         return (
             <View style={styles.mainContainer}>
                 <Text style={styles.promptText}>
