@@ -27,7 +27,7 @@ export default class InstructionScreen extends React.Component {
         TimerMixin.setTimeout(() => {
           // Delay the refresh of screen so user can see the correct answer response
           navigate("GamePlay", { lesson: lesson.ID, gameID: gameID });
-        }, 10000);
+        }, 15000);
       } catch (error) {
         throw new Error("component will not mount");
       }
@@ -89,7 +89,7 @@ export default class InstructionScreen extends React.Component {
                 teammates' screens!
               </Text>
               <Text style={styles.bulletText}>
-                3. Say your prompt out loud in Chinese in order for them to
+                3. Say your prompt out loud in  your target language in order for them to
                 click the right option on their screen.
               </Text>
               {/*

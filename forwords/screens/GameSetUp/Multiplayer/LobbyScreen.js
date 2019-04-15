@@ -16,7 +16,7 @@ export default class LobbyScreenRoom extends Component {
     super(props);
 
     this.state = {
-      numberOfPlayers: 0
+      numberOfPlayers: []
     };
   }
 
@@ -59,7 +59,7 @@ export default class LobbyScreenRoom extends Component {
     // Request to send to the server - must be stringified.
     var stringifiedRequest = JSON.stringify([
       {
-        request: "initGame",
+        request: "initGame"
       }
     ]);
     console.log("LobbyScreen: startGameOnPress", stringifiedRequest);
@@ -71,6 +71,14 @@ export default class LobbyScreenRoom extends Component {
     var gameID = this.props.navigation.state.params.gameID;
     let content;
 
+    let players = this.state.numberOfPlayers.map(player => (
+      <Image
+        key={player}
+        style={styles.singlePlayerImage}
+        source={require("../../../assets/images/personIcon.png")}
+      />
+    ));
+
     // If the user is a HOST (playing with others)
     if (playerType == "host") {
       content = (
@@ -81,19 +89,16 @@ export default class LobbyScreenRoom extends Component {
           </Text>
           <Text style={styles.subheadingText}>
             {" "}
-            Invite others to play in your group – they can enter the code: {gameID}
+            Invite others to play in your group – they can enter the code:{" "}
+            {gameID}
           </Text>
           <Text style={styles.subheadingText}>
             {" "}
             Click Play when everyone is ready to go!
           </Text>
-          <Image
-            style={styles.singlePlayerImage}
-            source={require("../../../assets/images/person.png")}
-          />
-          {/*Array.from(Array(this.state.numberOfPlayers)).map(() =>
-            <Text>💆</Text>
-          )*/}
+          <View styles={styles.iconContainer}>
+            {players}
+          </View>
           <TouchableOpacity
             style={styles.button}
             onPress={() => this.startGameOnPress()}
@@ -118,9 +123,9 @@ export default class LobbyScreenRoom extends Component {
             {" "}
             Waiting for the host to start the game once everyone is in!
           </Text>
-          {/*Array.from(Array(this.state.numberOfPlayers)).map(() =>
-            <Text>💆</Text>
-          )*/}
+          <View styles={styles.iconContainer}>
+            {players}
+          </View>
         </View>
       );
     }
@@ -140,6 +145,11 @@ const styles = StyleSheet.create({
   },
   headingView: {
     alignItems: "center"
+  },
+  iconsContainer: {
+    flex: 1,
+    flexDirection: "row",
+    margin: 10
   },
   mainText: {
     alignItems: "center",
@@ -162,9 +172,8 @@ const styles = StyleSheet.create({
     color: "black"
   },
   singlePlayerImage: {
-    width: 30,
-    height: 55,
-    flex: 1,
+    width: 50,
+    height: 50,
     resizeMode: "contain"
   },
   button: {
