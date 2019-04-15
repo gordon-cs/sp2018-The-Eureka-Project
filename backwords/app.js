@@ -4,6 +4,8 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var mysql = require("mysql");
 var app = express();
+
+
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
@@ -193,7 +195,12 @@ ws.on("connection", function connection(ws, req) {
         ws.send(joinGameIDMessage);
 
         var numberOfPlayers = gameMap.get(gameID).players.length;
-        var numberOfPlayersMessage = JSON.stringify([{ numberOfPlayers: numberOfPlayers }]); // Convert JSON to string inorder to send
+        var playersArray = [];
+        for (let i = 0; i < numberOfPlayers; i++) {
+          playersArray.push(gameMap.get(gameID).players[i].IP);
+        }
+
+        var numberOfPlayersMessage = JSON.stringify([{ numberOfPlayers: playersArray }]); // Convert JSON to string inorder to send
         for (let i = 0; i < numberOfPlayers; i++) {
           console.log("         >>>>>>>>>>Sent message", numberOfPlayersMessage);
           gameMap.get(gameID).players[i].ws.send(numberOfPlayersMessage);
@@ -235,22 +242,16 @@ ws.on("connection", function connection(ws, req) {
        *    Game continues until next person inputs
       */
      for (let i = 0; i < inputGame.players.length; i++) {
-      // console.log("       In input, player ", inputGame.players[i].IP,"'s prompt.wordID:". inputGame.players[i].prompt.wordID);
-      // If it does equal someone's prompt, and that person is the one who actually sent the input request
-      // console.log("how mnay correct Answers have there been? before answer is correct:", gameMap.get(inputGameID).correctAnswers);
       if (input == inputGame.players[i].prompt.wordID) {
         isCorrect = true;
         gameMap.get(inputGameID).correctAnswers++;
         console.log("                             AFTER correctAnswers incremented:", gameMap.get(inputGameID).correctAnswers);
 
         let newPrompt = getSinglePrompt(inputGame, inputGame.players[i].prompt);
-        // If the total amount of Correct answers in the game is a multiple of 10
-        if (gameMap.get(inputGameID).correctAnswers % 10 == 0) {
+        if (gameMap.get(inputGameID).correctAnswers % (gameMap.get(inputGameID).players.length * 4) == 0) {
           gameMap.get(inputGameID).roundNumber++;
           gameMap.get(inputGameID).correctAnswers = 0;
-
         }
-       
         // I answered my own prompt
         if (ws === inputGame.players[i].ws) {
           // Send them their new prompt, and that it was correct
@@ -453,7 +454,7 @@ Array.prototype.shuffle = function () {
 // HTTP
 // Display welcome message
 app.get("/", function (req, res) {
-  res.send("Welcome to forwords");
+  res.send("Welcome to forwords!");
 });
 
 // returns the list of lessons
