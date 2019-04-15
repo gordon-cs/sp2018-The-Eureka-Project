@@ -92,14 +92,14 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   multiplayerImage: {
-    width: 50,
+    width: 70,
     height: 70,
     flex: 1,
     resizeMode: 'contain',
   },
   singlePlayerImage: {
-    width: 30, 
-    height: 55, 
+    width: 70, 
+    height: 70, 
     flex: 1,
     resizeMode: 'contain',
   },

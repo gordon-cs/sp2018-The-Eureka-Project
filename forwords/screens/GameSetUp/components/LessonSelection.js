@@ -13,7 +13,6 @@ export default class LessonSelection extends Component {
     this.state = {
       isLoading: true,
       lessonList: [],
-      openToReceivingMessages: true,
     };
   }
 
@@ -55,7 +54,6 @@ createGame(lessonID) {
         'gameID': 1234,
       }]
       */
-      if (this.state.openToReceivingMessages) {
         console.log("LessonSelection: receivedMessage: ", event.data);
         let receivedMessage = JSON.parse(event.data);
         let gameID = receivedMessage[0].gameID;
@@ -65,10 +63,8 @@ createGame(lessonID) {
         if (playerType == 'host') {
           navigate("Lobby", { lesson: lessonID,  gameID: gameID, playerType: playerType });
         }
-        this.setState({ openToReceivingMessages: false });
       }
     }
-  }
 
   render() {
     const lessons = this.state.lessonList;
