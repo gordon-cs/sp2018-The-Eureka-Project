@@ -35,6 +35,8 @@ export default class GameOverScreen extends React.Component {
   }
 
   render() {
+    const navigate = this.props.navigation;
+    const roundNumber = this.props.navigation.state.params.roundNumber;
     return (
       <View style={styles.container}>
         <ScrollView
@@ -43,7 +45,7 @@ export default class GameOverScreen extends React.Component {
         >
           <View style={styles.mainContainer}>
             <Text style={styles.headingText}>Game Over!</Text>
-            <Text style={styles.bulletText}>Great job!!!</Text>
+            <Text style={styles.bulletText}>Great job!!! You made it to round {roundNumber}!</Text>
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.button}

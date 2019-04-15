@@ -14,7 +14,7 @@ export default class Timer extends Component {
     const reset = this.props.resetTimer;
     let seconds;
     if (reset) {
-      seconds = 60;
+      seconds = 20;
     }
     return (
       <View>

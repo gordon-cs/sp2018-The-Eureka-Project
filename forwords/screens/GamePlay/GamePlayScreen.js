@@ -22,7 +22,7 @@ export default class GamePlayScreen extends Component {
       promptObj: {},
       roundNumber: 0,
       newRound: false,
-      resetTimer: true // Default is true, false means  ??
+      resetTimer: true
     };
     this.wasAnsweredCorrectly = this.wasAnsweredCorrectly.bind(this);
     this.endGame = this.endGame.bind(this);
@@ -58,11 +58,9 @@ export default class GamePlayScreen extends Component {
     global.ws.onmessage = event => {
       // Turn every received message into a JSON immediately to access it
       var receivedMessage = JSON.parse(event.data);
-      
       if (receivedMessage[0] == "choicesAndPrompt") {
         // Shuffle choices
         let shuffledChoices = receivedMessage[1].shuffle();
-        // console.log("shuffledchoices = ", shuffledChoices);
         this.setState({
           isLoading: false,
           topLeftChoice: shuffledChoices[0],
@@ -70,8 +68,6 @@ export default class GamePlayScreen extends Component {
           bottomLeftChoice: shuffledChoices[2],
           bottomRightChoice: shuffledChoices[3],
           promptObj: receivedMessage[2],
-          // roundNumber: receivedMessage[3].roundNumber,
-          newRound: true
         });
       }
       // Answer Validation and Prompt Changing 
@@ -79,9 +75,6 @@ export default class GamePlayScreen extends Component {
 
       // if it was your prompt, change ur answer to green and change ur prompt to new prompt
       else if (receivedMessage[0] == "message1") {
-        // tell choice component that it is correct!
-        console.log("message1:", receivedMessage[1].roundNumber);
-        // Change prompt as well
         this.setState({
           answeredCorrectly: [receivedMessage[2].oldInput, 1],
           promptObj: receivedMessage[3]
@@ -108,17 +101,12 @@ export default class GamePlayScreen extends Component {
       }
       // if someone else answered my prompt correctly! yay, change my prompt now
       else if (receivedMessage[0] == "message3") {
-        console.log(
-          "message3: YAY someone answered my prompt! receivedMessage:",
-          receivedMessage
-        );
         this.setState({
           promptObj: receivedMessage[2]
         });
       }
       // if the input i gave was incorrect
       else if (receivedMessage[0] == "message4") {
-        console.log("receivedMessage4", receivedMessage);
         this.setState({ answeredCorrectly: [receivedMessage[2].oldInput, 2] }); // got it incorrect
         TimerMixin.setTimeout(() => {
           // Delay the refresh of screen so user can see the correct answer response
@@ -128,18 +116,28 @@ export default class GamePlayScreen extends Component {
         }, 750);
       }
       if (receivedMessage[1].roundNumber > this.state.roundNumber) {
-        console.log("we shoudl change the round now, round received:", receivedMessage[1].roundNumber);
-        this.initChoicesAndPrompt();
-        this.setState({roundNumber: receivedMessage[1].roundNumber})
+        this.newRound(receivedMessage[1].roundNumber);
       }
-      this.setState({ newRound: false });
     };
+  }
+
+
+  newRound(newRoundNumber) {
+    this.setState({
+      newRound: true, 
+      roundNumber: newRoundNumber,
+    });
+    this.initChoicesAndPrompt();
+
+    TimerMixin.setTimeout(() => {
+      this.setState({newRound: false});
+    }, 2000);
+
   }
 
   endGame() {
     const { navigate } = this.props.navigation;
-    console.log("GamePlayScreen: made it to parent endGame()");
-    navigate("GameOver");
+    navigate("GameOver", {roundNumber: this.state.roundNumber});
   }
 
   wasAnsweredCorrectly(choiceIDGiven) {
@@ -154,14 +152,10 @@ export default class GamePlayScreen extends Component {
         input: choiceIDGiven
       }
     ]);
-    console.log("GamePlayScreen: sentRequest", stringifiedRequest);
     global.ws.send(stringifiedRequest);
   }
 
   initChoicesAndPrompt() {
-    var lessonID = this.props.navigation.state.params.lessonID;
-    var gameID = parseInt(this.props.navigation.state.params.gameID);
-    console.log(" ");
 
     // Request to send to the server - must be stringified.
     var stringifiedRequest = JSON.stringify([
@@ -177,16 +171,6 @@ export default class GamePlayScreen extends Component {
     });
   }
 
-  newRound() {
-    return (
-      <View style={styles.mainContainer}>
-        <View style={styles.splashContainer}>
-          <Text style={styles.headingText}>Round {this.state.roundNumber}</Text>
-        </View>
-      </View>
-    );
-  }
-
   render() {
     const topLeftChoice = this.state.topLeftChoice;
     const topRightChoice = this.state.topRightChoice;
@@ -196,14 +180,19 @@ export default class GamePlayScreen extends Component {
     const promptID = this.state.promptObj.wordID;
     const answeredCorrectly = this.state.answeredCorrectly;
     const resetTimer = this.state.resetTimer;
-
-    if (this.state.isLoading) {
+    if (this.state.isLoading && this.state.roundNumber == 0 && !this.state.newRound) {
       return (
         <View style={styles.splashContainer}>
           <Text style={styles.headingText}>Get ready to play!</Text>
         </View>
       );
-    } else if (!this.state.isLoading) {
+    } else if (this.state.newRound) {
+      return (
+        <View style={styles.splashContainer}>
+          <Text style={styles.headingText}>You have advanced to round {this.state.roundNumber}</Text>
+        </View>
+      );    
+    } else if (!this.state.isLoading && !this.state.newRound) {
       return (
         <View style={styles.mainContainer}>
           <View style={styles.choicesTopContainer}>
