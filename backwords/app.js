@@ -12,6 +12,9 @@ var logger = require("morgan");
 var wsPort = 3333;
 var httpPort = 9999;
 
+// Send static images to frontend
+app.use(express.static("images"));
+
 // WebSocket
 var WebSocket = require("ws");
 var ws = new WebSocket.Server({
@@ -454,7 +457,7 @@ Array.prototype.shuffle = function () {
 // HTTP
 // Display welcome message
 app.get("/", function (req, res) {
-  res.send("Welcome to forwords!");
+  res.send("Welcome to forwords!!!!!!");
 });
 
 // returns the list of lessons
