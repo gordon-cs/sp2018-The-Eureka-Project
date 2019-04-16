@@ -7,14 +7,13 @@ export default class Choice extends Component {
     this.handleAttempt = this.handleAttempt.bind(this);
   }
 
-  handleAttempt(answer, prompt) {
-    this.props.wasAnsweredCorrectly(answer, prompt);
+  handleAttempt(answer) {
+    this.props.wasAnsweredCorrectly(answer);
   }
 
   render() {
     const text = this.props.text;
     const choiceID = this.props.choiceID;
-    const promptID = this.props.promptID;
     const answeredCorrectly = this.props.answeredCorrectly;
     if (answeredCorrectly[1] == 0) {
       var backgroundColor = {
@@ -45,7 +44,7 @@ export default class Choice extends Component {
       <TouchableOpacity
         style={[styles.mainContainer, backgroundColor]}
         onPress={() => {
-          this.handleAttempt(choiceID, promptID);
+          this.handleAttempt(choiceID);
         }}
       >
         <Text style={styles.choiceText}>{text}</Text>
