@@ -457,7 +457,7 @@ Array.prototype.shuffle = function () {
 // HTTP
 // Display welcome message
 app.get("/", function (req, res) {
-  res.send("Welcome to forwords!!!!!!");
+  res.send("Welcome to forwords!");
 });
 
 // returns the list of lessons
