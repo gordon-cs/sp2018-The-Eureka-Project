@@ -9,8 +9,8 @@ var app = express();
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-var wsPort = 3333;
-var httpPort = 9999;
+var wsPort = 5555;
+var httpsPort = 8081;
 
 // Send static images to frontend
 app.use(express.static("images"));
@@ -37,14 +37,14 @@ app.use(function (req, res, next) {
 });
 
 //Setting up server
-var server = app.listen(process.env.PORT || httpPort, function () {
+var server = app.listen(process.env.PORT || httpsPort, function () {
   var port = server.address().port;
   console.log("App now running on port", port);
   console.log("WebSocket running on port", wsPort);
 });
 // account needed for connecing to our sql database
 var connection = mysql.createConnection({
-  host: "localhost",
+  host: "localhost", 
   user: "root",
   password: "",
   database: "forwords"
@@ -468,6 +468,41 @@ app.get("/lesson-list", function (req, res) {
   });
 });
 
+// once the user registers, adds user to User table
+app.post('/add-user', 
+  function(req, res) {
+    const { email, username, lastName, firstName, targetLanguage } = req.body;
+    var sql = 'INSERT INTO User (email, username, lastName, firstName, targetLanguage) VALUES (?, ?, ?, ?, ?)';
+    var inserts = [email, username, lastName, firstName, targetLanguage];
+    sql = mysql.format(sql, inserts);
+    connection.beginTransaction();
+    connection.beginTransaction(sql, err => err && console.log(err));
+    connection.commit();
+    res.send();
+  }
+);
+
+// returns the list of courses the user with this email is in
+// PROBLEM: anyone could find out what classes anyone is in, 
+// we should do something with an auth token or something.
+app.get('/my-courses/:email', 
+ function (req, res) {
+  const { email } = req.params;
+  var sql = 'select * from Course where courseID in (select courseID from Participation where userID = ' +
+  '(select userID from User where email = ?)' +
+  ');'
+  inserts = [email];
+  sql = mysql.format(sql, inserts);
+  connection.query(sql, function (error, results) {
+    if (error) throw error;
+    res.json(results);
+  });
+});
+
+
+
+
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
@@ -498,6 +533,7 @@ app.use(function (err, req, res, next) {
   res.sendStatus(err.status);
   //  res.render('error');
 });
+
 
 /*
 ws.on('close', () => {
