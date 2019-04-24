@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
+import { httpsRoute } from '../../../constants/API';
 
 export default class Prompt extends Component {
   constructor(props) {
@@ -17,7 +18,7 @@ export default class Prompt extends Component {
     if (promptObj.lessonID == 21) {
           image = (
             <Image
-              source={{uri: 'http://172.27.43.141:9999/_'+promptObj.meaning+'_.png'}}
+              source={{uri: `${httpsRoute}/_${promptObj.meaning}_.png`}}
               style={styles.promptImage}
             />
           ); 
