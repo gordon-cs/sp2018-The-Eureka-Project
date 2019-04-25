@@ -1,5 +1,15 @@
 import React, { Component } from "react";
-import { Button, StyleSheet, Text, View, TextInput, Image, Alert } from "react-native";
+import {
+  Button,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Image,
+  Alert,
+  ScrollView,
+  TouchableOpacity
+} from "react-native";
 
 export default class JoinOrCreateScreen extends Component {
   static navigationOptions = {
@@ -71,41 +81,44 @@ export default class JoinOrCreateScreen extends Component {
   render() {
     return (
       <View style={styles.MainContainer}>
-        <View style={styles.headingView}>
-          <Text style={styles.headingText}>Multiplayer Mode</Text>
-        </View>
-        <Image
-          style={styles.multiplayerImage}
-          source={require("../../../assets/images/people.png")}
-        />
-        <Text style={styles.mainText}>
-          Create your own group or join an existing one!
-        </Text>
-        <View style={styles.headingView}>
-          <Button
-            style={styles.button}
-            title="Create Game!"
-            onPress={() => this.createOnPress()} // Ideally this will also lead to this player going to a wait screen.
-            color="purple"
-          />
-          <TextInput
-            style={styles.textInput}
-            alignItems="center"
-            placeholder="Group Code"
-            onChangeText={gameID => this.setState({ gameID })}
-            autoCorrect={false}
-            autoCapitalize="none"
-            placeholderTextColor="black"
-            returnKeyType="done"
-            keyboardType="number-pad"
-          />
-          <Button
-            style={styles.button}
-            title="Join Game!"
-            onPress={() => this.joinOnPress()}
-            color="purple"
-          />
-        </View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.headingView}>
+            <Text style={styles.headingText}>Multiplayer Mode</Text>
+            <Image
+              style={styles.multiplayerImage}
+              source={require("../../../assets/images/people.png")}
+            />
+          </View>
+          <Text style={styles.mainText}>
+            Create your own group or join an existing one!
+          </Text>
+          <View style={styles.headingView}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => this.createOnPress()}
+            >
+              <Text style={styles.buttonText}>Create a Game!</Text>
+            </TouchableOpacity>
+            <TextInput
+              style={styles.textInput}
+              alignItems="center"
+              placeholder="Group Code"
+              onChangeText={gameID => this.setState({ gameID })}
+              autoCorrect={false}
+              autoCapitalize="none"
+              placeholderTextColor="black"
+              returnKeyType="done"
+              keyboardType="number-pad"
+            />
+
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => this.joinOnPress()}
+            >
+              <Text style={styles.buttonText}>Join Game!</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       </View>
     );
   }
@@ -118,11 +131,29 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 10
   },
+  contentContainer: {
+    paddingTop: 30
+  },
   headingText: {
     fontWeight: "bold",
     fontSize: 30,
     color: "black",
     margin: 10
+  },
+  button: {
+    justifyContent: "center",
+    flexDirection: "column",
+    margin: 10,
+    width: 120,
+    height: 120,
+    borderRadius: 80,
+    backgroundColor: "#5b3b89"
+  },
+  buttonText: {
+    textAlign: "center",
+    fontSize: 25,
+    fontWeight: "bold",
+    color: "white"
   },
   mainText: {
     alignItems: "center",
@@ -139,9 +170,9 @@ const styles = StyleSheet.create({
     flex: 1 / 4
   },
   textInput: {
-    height: 120,
-    width: 250,
-    fontSize: 24,
+    height: 60,
+    width: 280,
+    fontSize: 18,
     borderColor: "#5b3b89",
     borderWidth: 1,
     borderRadius: 20,
@@ -150,6 +181,6 @@ const styles = StyleSheet.create({
   multiplayerImage: {
     width: 70,
     height: 70,
-    resizeMode: 'contain',
-  },
+    resizeMode: "contain"
+  }
 });
