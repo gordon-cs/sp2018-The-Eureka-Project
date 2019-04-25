@@ -23,7 +23,6 @@ export default class ForgotPasswordScreen extends React.Component {
   }
 
   onResetPasswordPress = () => {
-    const { navigate } = this.props.navigation;
     firebase
       .auth()
       .sendPasswordResetEmail(this.state.email)
@@ -80,7 +79,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center"
+    alignItems: "center",
+    justifyContent: "center"
   },
   headingView: {
     alignItems: "center"
