@@ -98,7 +98,7 @@ ws.on("connection", function connection(ws, req) {
 
   // Immediately create player & game objects, with this ws connection as one of their attributes
   var player = new Player(IP, ws, [], {}, 0, '');
-  var game = new Game(0, 0, [], [], [], false, "pinyin", "Chinese", "NULL", 0, 0);
+  var game = new Game(0, 0, [], [], [], false, "pinyin", "Chinese", "NULL", 1, 0);
 
   // Now, code for when receiving specific messages :)
   ws.on("message", async function incoming(message) {
@@ -373,7 +373,6 @@ function getGameChoices(game) {
         var minID = wordsInLesson[0].wordID;
 
         var choiceWordsIDs = randomWordsPicker(minID, wordsInLesson.length, (4 * numPlayers)); // 4*numPlayers wordIDs to be choices
-        // console.log("getGameChoices choiceWordsIDs=", choiceWordsIDs);
         let wordArray = [];
         for (let i = 0; i < choiceWordsIDs.length; i++) {
           wordArray.push(wordsInLesson[choiceWordsIDs[i] - minID])
