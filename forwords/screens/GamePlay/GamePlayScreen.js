@@ -203,14 +203,14 @@ export default class GamePlayScreen extends Component {
           </View>
           <View style={styles.choicesTopContainer}>
             <Choice
-              text={topLeftChoice.Chinese}
+              text={topLeftChoice.targetLangauge}
               promptID={promptID}
               choiceID={topLeftChoice.wordID}
               answeredCorrectly={answeredCorrectly}
               wasAnsweredCorrectly={this.wasAnsweredCorrectly} // a function
             />
             <Choice
-              text={topRightChoice.Chinese}
+              text={topRightChoice.targetLangauge}
               promptID={promptID}
               choiceID={topRightChoice.wordID}
               answeredCorrectly={answeredCorrectly}
@@ -219,14 +219,14 @@ export default class GamePlayScreen extends Component {
           </View>
           <View style={styles.choicesBottomContainer}>
             <Choice
-              text={bottomLeftChoice.Chinese}
+              text={bottomLeftChoice.targetLangauge}
               promptID={promptID}
               choiceID={bottomLeftChoice.wordID}
               answeredCorrectly={answeredCorrectly}
               wasAnsweredCorrectly={this.wasAnsweredCorrectly}
             />
             <Choice
-              text={bottomRightChoice.Chinese}
+              text={bottomRightChoice.targetLangauge}
               promptID={promptID}
               choiceID={bottomRightChoice.wordID}
               answeredCorrectly={answeredCorrectly}

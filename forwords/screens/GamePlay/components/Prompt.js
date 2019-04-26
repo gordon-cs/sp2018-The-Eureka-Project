@@ -26,7 +26,7 @@ export default class Prompt extends Component {
       } else {
       return (
         <View style={styles.mainContainer}>
-          <Text style={styles.promptText}>{promptObj.pinyin}</Text>
+          <Text style={styles.promptText}>{promptObj.romanization}</Text>
         </View>
       );
     }
