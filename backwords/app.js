@@ -94,7 +94,7 @@ class Game {
 var gameMap = new Map();
 ws.on("connection", function connection(ws, req) {
   var IP = req.connection.remoteAddress.replace(/.*:/, "");
-  console.log("Connection accepted:", IP);
+  //console.log("Connection accepted:", IP);
 
   // Immediately create player & game objects, with this ws connection as one of their attributes
   var player = new Player(IP, ws, [], {}, 0, '');
@@ -102,7 +102,7 @@ ws.on("connection", function connection(ws, req) {
 
   // Now, code for when receiving specific messages :)
   ws.on("message", async function incoming(message) {
-    console.log("<<<<<<<<<<         Received message: ", message, "from: ", player.IP);
+    //console.log("<<<<<<<<<<         Received message: ", message, "from: ", player.IP);
     message = JSON.parse(message);
 
     /* OPTIONS FOR WHAT THE USER WILL SEND:
@@ -125,7 +125,7 @@ ws.on("connection", function connection(ws, req) {
       gameMap.set(gameID, game);
       // Send gameID message
       let gameIDMessage = JSON.stringify([{ gameID: gameID }]); // Convert JSON to string inorder to send
-      console.log("         >>>>>>>>>>Sent message", gameIDMessage);
+      //console.log("         >>>>>>>>>>Sent message", gameIDMessage);
       ws.send(gameIDMessage);
     }
 
@@ -134,12 +134,12 @@ ws.on("connection", function connection(ws, req) {
       if (gameMap.get(gameID).players.length > 1) {
         var initGameMessage = JSON.stringify([{ isGameInitialized: true }]); // Convert JSON to string inorder to send;
         for (let i = 0; i < gameMap.get(gameID).players.length; i++) {
-          console.log("         >>>>>>>>>>Sent message", initGameMessage);
+          //console.log("         >>>>>>>>>>Sent message", initGameMessage);
           gameMap.get(gameID).players[i].ws.send(initGameMessage);
         }
       } else {
         var initGameMessage = JSON.stringify([{ isGameInitialized: false }]); // Convert JSON to string inorder to send;
-        console.log("         >>>>>>>>>>Sent message", initGameMessage);
+        //console.log("         >>>>>>>>>>Sent message", initGameMessage);
         ws.send(initGameMessage);
       }
     }
@@ -175,7 +175,7 @@ ws.on("connection", function connection(ws, req) {
           );
           messageArray.unshift("choicesAndPrompt");
           allMessages[i] = messageArray;
-          // console.log("        initChoicesandPrompt messageArray i=",i, allMessages[i][1][3].wordID);
+          // //console.log("        initChoicesandPrompt messageArray i=",i, allMessages[i][1][3].wordID);
         }
 
         // Send messages to every player with their choices/prompts
@@ -194,7 +194,7 @@ ws.on("connection", function connection(ws, req) {
         // Get game at that gameID in the map, add the player to it
         gameMap.get(gameID).players.push(player);
         let joinGameIDMessage = JSON.stringify([{ isValidGameID: true }]); // Convert JSON to string inorder to send
-        console.log("         >>>>>>>>>>Sent message", joinGameIDMessage);
+        //console.log("         >>>>>>>>>>Sent message", joinGameIDMessage);
         ws.send(joinGameIDMessage);
 
         var numberOfPlayers = gameMap.get(gameID).players.length;
@@ -205,7 +205,7 @@ ws.on("connection", function connection(ws, req) {
 
         var numberOfPlayersMessage = JSON.stringify([{ numberOfPlayers: playersArray }]); // Convert JSON to string inorder to send
         for (let i = 0; i < numberOfPlayers; i++) {
-          console.log("         >>>>>>>>>>Sent message", numberOfPlayersMessage);
+          //console.log("         >>>>>>>>>>Sent message", numberOfPlayersMessage);
           gameMap.get(gameID).players[i].ws.send(numberOfPlayersMessage);
         }
       } else {
@@ -248,7 +248,7 @@ ws.on("connection", function connection(ws, req) {
       if (input == inputGame.players[i].prompt.wordID) {
         isCorrect = true;
         gameMap.get(inputGameID).correctAnswers++;
-        console.log("                             AFTER correctAnswers incremented:", gameMap.get(inputGameID).correctAnswers);
+        //console.log("                             AFTER correctAnswers incremented:", gameMap.get(inputGameID).correctAnswers);
 
         let newPrompt = getSinglePrompt(inputGame, inputGame.players[i].prompt);
         if (gameMap.get(inputGameID).correctAnswers % (gameMap.get(inputGameID).players.length * 4) == 0) {
@@ -260,7 +260,7 @@ ws.on("connection", function connection(ws, req) {
           // Send them their new prompt, and that it was correct
           let newPromptAndValidationMessage = JSON.stringify(["message1", {roundNumber: gameMap.get(inputGameID).roundNumber}, {oldInput: input}, newPrompt])
           ws.send(newPromptAndValidationMessage);
-          console.log("       sent message1[1]:", newPromptAndValidationMessage);
+          //console.log("       sent message1[1]:", newPromptAndValidationMessage);
           inputGame.players[i].prompt = newPrompt;
         }
         // I answered your prompt
@@ -268,13 +268,13 @@ ws.on("connection", function connection(ws, req) {
           // Send player that inputted that it was correct
           let validationMessage = JSON.stringify(["message2", {roundNumber: gameMap.get(inputGameID).roundNumber}, {oldInput: input}])
           ws.send(validationMessage);
-          console.log("       sent message2");
+          //console.log("       sent message2");
 
-          console.log("             In input, it was someone else's prompt: ", inputGame.players[i].IP);
+          //console.log("             In input, it was someone else's prompt: ", inputGame.players[i].IP);
           // Send them their new prompt
           let newPromptAndValidationMessage = JSON.stringify(["message3", {roundNumber: gameMap.get(inputGameID).roundNumber}, newPrompt])
           inputGame.players[i].ws.send(newPromptAndValidationMessage)
-          console.log("       sent message3");
+          //console.log("       sent message3");
           inputGame.players[i].prompt = newPrompt;
         }
       }
@@ -283,7 +283,7 @@ ws.on("connection", function connection(ws, req) {
      var validationMessage = JSON.stringify([ "message4",  {roundNumber: gameMap.get(inputGameID).roundNumber}, {oldInput: input}]);
      if (!isCorrect) {
        ws.send(validationMessage);
-       console.log("       sent message4");
+       //console.log("       sent message4");
      }
 
     }
@@ -330,11 +330,6 @@ function getGameID() {
 }
 
 function setGame(game) {
-  // console.log("in setGame, what does game equal?");
-  // console.log("                                 game.lessonID: ", game.lessonID);
-  // console.log("                                 game.promptType: ", game.promptType);
-  // console.log("                                 game.choiceType: ", game.choiceType);
-  // console.log("                                 game.partOfSpeech: ", game.partOfSpeech);
   return new Promise(function (resolve, reject) {
     let lessonID = game.lessonID;
     let promptType = game.promptType;
