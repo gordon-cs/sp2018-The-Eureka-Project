@@ -11,6 +11,7 @@ import {
   Image,
   Text
 } from "react-native";
+import forwordsStyles from '../../constants/forwordsStyles';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -67,40 +68,39 @@ export default class HomeScreen extends React.Component {
       var courses = (
         <Button
           color="#5b3b89"
-          title={"++++++Add a course!"}
-          onPress={() => navigate("Login")}
+          title={"Add a course"}
+          onPress={() => navigate("AddCourse")}
         />
       );
     }
 
     return (
-      <View style={styles.container}>
+      <View style={forwordsStyles.container}>
         <ScrollView
-          contentContainerStyle={styles.contentContainer}
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.headingView}>
-            <Text style={styles.headingText}>My Courses</Text>
+          <View style={forwordsStyles.headingView}>
+            <Text style={forwordsStyles.headingText}>My Courses</Text>
           </View>
           {courses}
-          <View style={styles.headingView}>
+          <View style={forwordsStyles.headingView}>
             <TouchableOpacity
-              style={styles.imageContainer}
+              style={forwordsStyles.headingView}
               onPress={() => navigate("JoinOrCreate")}
             >
-              <Text style={styles.headingText}>Multiplayer Mode</Text>
+              <Text style={forwordsStyles.headingText}>Multiplayer Mode</Text>
               <Image
                 style={{ width: 200, height: 200 }}
                 source={require("../../assets/images/people.png")}
               />
             </TouchableOpacity>
           </View>
-          <View style={styles.headingView}>
+          <View style={forwordsStyles.headingView}>
             <TouchableOpacity
-              style={styles.imageContainer}
+              style={forwordsStyles.headingView}
               onPress={() => this.onPressSinglePlayerMode()}
             >
-              <Text style={styles.headingText}>Single Player Mode</Text>
+              <Text style={forwordsStyles.headingText}>Single Player Mode</Text>
               <Image
                 style={{ width: 200, height: 200 }}
                 source={require("../../assets/images/person.png")}
@@ -108,7 +108,7 @@ export default class HomeScreen extends React.Component {
             </TouchableOpacity>
           </View>
           <Button
-            style={styles.button}
+            style={forwordsStyles.textButton}
             title="Sign Out"
             onPress={() => this.onSignOutPress()}
             color="purple"
@@ -118,34 +118,3 @@ export default class HomeScreen extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center"
-  },
-  imageContainer: {
-    alignItems: "center"
-  },
-  headingView: {
-    alignItems: "center",
-    marginTop: 10,
-    marginBottom: 20
-  },
-  contentContainer: {
-    paddingTop: 30
-  },
-  button: {
-    alignItems: "center",
-    color: "#800080",
-    borderRadius: 50,
-    width: 160
-  },
-  headingText: {
-    fontWeight: "bold",
-    fontSize: 30,
-    color: "black",
-    margin: 10
-  }
-});

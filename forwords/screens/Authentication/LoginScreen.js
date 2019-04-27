@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   Text
 } from "react-native";
-import forwordsStyles from '../../constants/forwordsStyles';
+import forwordsStyles from "../../constants/forwordsStyles";
 import * as firebase from "firebase";
 
 export default class LoginScreen extends React.Component {
@@ -45,12 +45,7 @@ export default class LoginScreen extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <KeyboardAvoidingView
-        style={styles.container}
-        behavior="position"
-        keyboardVerticalOffset={-25}
-      >
-        <View style={styles.getStartedContainer}>
+      <KeyboardAvoidingView behavior="padding" style={forwordsStyles.container}>
           <Image
             style={forwordsStyles.logo}
             source={require("../../assets/images/forwordsFullLogo.png")}
@@ -94,27 +89,12 @@ export default class LoginScreen extends React.Component {
           <Button
             style={forwordsStyles.textButton}
             title="I forgot my password."
-            onPress={() => navigate("ForgotPassword", { email: this.state.email })}
+            onPress={() =>
+              navigate("ForgotPassword", { email: this.state.email })
+            }
             color="purple"
           />
-        </View>
       </KeyboardAvoidingView>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    justifyContent: "center"
-  },
-  contentContainer: {
-    paddingTop: 30
-  },
-  getStartedContainer: {
-    alignItems: "center",
-    marginHorizontal: 50,
-    marginVertical: 150
-  },
-});

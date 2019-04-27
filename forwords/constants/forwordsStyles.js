@@ -1,6 +1,12 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   headingView: {
     alignItems: "center"
   },
@@ -59,4 +65,22 @@ export default StyleSheet.create({
     borderRadius: 50,
     width: 160
   },
+  contentContainer: {
+    alignItems: "center",
+    marginHorizontal: 50,
+    marginVertical: 50,
+  },
+  mainText: {
+    alignItems: "center",
+    marginTop: 10,
+    marginBottom: 10,
+    marginLeft: 10,
+    fontSize: 20,
+    color: "black"
+  },
+  playerImage: {
+    width: 70,
+    height: 70,
+    resizeMode: "contain"
+  }
 });
