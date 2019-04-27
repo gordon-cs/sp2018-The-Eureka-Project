@@ -8,6 +8,7 @@ import {
   Alert,
   TouchableOpacity
 } from "react-native";
+import forwordsStyles from '../../constants/forwordsStyles';
 import * as firebase from "firebase";
 
 export default class ForgotPasswordScreen extends React.Component {
@@ -38,36 +39,37 @@ export default class ForgotPasswordScreen extends React.Component {
 
   render() {
     const { navigate } = this.props.navigation;
+    var email = this.props.navigation.state.params.email;
     return (
       <View style={styles.container}>
-        <View style={styles.headingView}>
-          <Text style={styles.headingText}>Reset Password</Text>
+        <View style={forwordsStyles.headingView}>
+          <Text style={forwordsStyles.headingText}>Reset Password</Text>
         </View>
-
         <TextInput
-          style={styles.textInput}
-          value={this.state.email}
-          onChangeText={text => {
-            this.setState({ email: text });
+          onChangeText={email => {
+            this.setState({ email });
           }}
-          placeholder="Email"
-          keyboardType="email-address"
-          autoCapitalize="none"
           autoCorrect={false}
+          placeholder={email}
+          autoCapitalize="none"
+          returnKeyType="done"
+          keyboardType="email-address"
+          placeholderTextColor="black"
+          style={forwordsStyles.textInput}
         />
-        <View style={styles.buttonsContainer}>
+        <View style={forwordsStyles.rowButtonsContainer}>
           <TouchableOpacity
-            style={styles.cancelButton}
+            style={forwordsStyles.secondaryButton}
             onPress={() => navigate("Login")}
           >
-            <Text style={styles.buttonText}>Cancel</Text>
+            <Text style={forwordsStyles.buttonText}>Cancel</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.button}
+            style={forwordsStyles.primaryButton}
             onPress={() => this.onResetPasswordPress()}
           >
-            <Text style={styles.buttonText}>Reset Password</Text>
+            <Text style={forwordsStyles.buttonText}>Reset Password</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -82,55 +84,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center"
   },
-  headingView: {
-    alignItems: "center"
-  },
-  headingText: {
-    fontWeight: "bold",
-    fontSize: 30,
-    color: "black",
-    margin: 10
-  },
-  textInput: {
-    height: 60,
-    width: 280,
-    borderColor: "#5b3b89",
-    borderWidth: 1,
-    borderRadius: 20,
-    paddingHorizontal: 10,
-    margin: 4
-  },
-  cancelButton: {
-    justifyContent: "center",
-    flexDirection: "column",
-    margin: 10,
-    width: 120,
-    height: 120,
-    borderRadius: 80,
-    backgroundColor: "gray"
-  },
-  button: {
-    justifyContent: "center",
-    flexDirection: "column",
-    margin: 10,
-    width: 120,
-    height: 120,
-    borderRadius: 80,
-    backgroundColor: "#5b3b89"
-  },
-  buttonsContainer: {
-    justifyContent: "center",
-    flexDirection: "row"
-  },
-  headingView: {
-    alignItems: "center",
-    marginTop: 10,
-    marginBottom: 20
-  },
-  buttonText: {
-    textAlign: "center",
-    fontSize: 25,
-    fontWeight: "bold",
-    color: "white"
-  }
 });
