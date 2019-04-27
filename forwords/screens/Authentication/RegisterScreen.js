@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { Component } from "React";
 import {
-  Button,
   StyleSheet,
   Text,
   TextInput,
@@ -12,6 +11,7 @@ import {
   TouchableOpacity
 } from "react-native";
 import firebase from "firebase";
+import forwordsStyles from '../../constants/forwordsStyles';
 import { httpsRoute } from "../../constants/API";
 
 export default class RegisterScreen extends Component {
@@ -51,7 +51,7 @@ export default class RegisterScreen extends Component {
       );
   }
 
-  // parameter user: an object from firebase that we will use to fill in sql table,
+ // parameter user: an object from firebase that we will use to fill in sql table,
   // then navigate to Login Screen
   async addUser(user) {
     const { navigate } = this.props.navigation;
@@ -90,36 +90,36 @@ export default class RegisterScreen extends Component {
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.contentContainer}>
           <KeyboardAvoidingView>
-            <View style={styles.headingView}>
-              <Text style={styles.headingText}>Register!</Text>
+            <View style={forwordsStyles.headingView}>
+              <Text style={forwordsStyles.headingText}>Register!</Text>
             </View>
             <TextInput
               onChangeText={firstName => this.setState({ firstName })}
               placeholder="First Name"
               returnKeyType="next"
               placeholderTextColor="black"
-              style={styles.textInput}
+              style={forwordsStyles.textInput}
             />
             <TextInput
               onChangeText={lastName => this.setState({ lastName })}
               placeholder="Last Name"
               returnKeyType="next"
               placeholderTextColor="black"
-              style={styles.textInput}
+              style={forwordsStyles.textInput}
             />
             <TextInput
               onChangeText={email => this.setState({ email })}
               placeholder="Email"
               returnKeyType="next"
               placeholderTextColor="black"
-              style={styles.textInput}
+              style={forwordsStyles.textInput}
             />
             <TextInput
               onChangeText={username => this.setState({ username })}
               placeholder="Username"
               returnKeyType="next"
               placeholderTextColor="black"
-              style={styles.textInput}
+              style={forwordsStyles.textInput}
             />
             <TextInput
               onChangeText={password => this.setState({ password })}
@@ -127,7 +127,7 @@ export default class RegisterScreen extends Component {
               returnKeyType="next"
               secureTextEntry={true}
               placeholderTextColor="black"
-              style={styles.textInput}
+              style={forwordsStyles.textInput}
             />
             <TextInput
               onChangeText={confirmPassword =>
@@ -136,22 +136,22 @@ export default class RegisterScreen extends Component {
               placeholder="Confirm Password"
               secureTextEntry={true}
               placeholderTextColor="black"
-              style={styles.textInput}
+              style={forwordsStyles.textInput}
             />
           </KeyboardAvoidingView>
-          <View style={styles.buttonsContainer}>
+          <View style={forwordsStyles.rowButtonsContainer}>
             <TouchableOpacity
-              style={styles.cancelButton}
+              style={forwordsStyles.secondaryButton}
               onPress={() => navigate("Login")}
             >
-              <Text style={styles.buttonText}>Cancel</Text>
+              <Text style={forwordsStyles.buttonText}>Cancel</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={styles.button}
+              style={forwordsStyles.primaryButton}
               onPress={() => this.register()}
             >
-              <Text style={styles.buttonText}>Register</Text>
+              <Text style={forwordsStyles.buttonText}>Register</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -161,39 +161,6 @@ export default class RegisterScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  button: {
-    justifyContent: "center",
-    flexDirection: "column",
-    margin: 10,
-    width: 120,
-    height: 120,
-    borderRadius: 80,
-    backgroundColor: "#5b3b89"
-  },
-  cancelButton: {
-    justifyContent: "center",
-    flexDirection: "column",
-    margin: 10,
-    width: 120,
-    height: 120,
-    borderRadius: 80,
-    backgroundColor: "gray"
-  },
-  buttonText: {
-    textAlign: "center",
-    fontSize: 25,
-    fontWeight: "bold",
-    color: "white"
-  },
-  textInput: {
-    height: 60,
-    width: 280,
-    borderColor: "#5b3b89",
-    borderWidth: 1,
-    borderRadius: 20,
-    paddingHorizontal: 10,
-    margin: 4
-  },
   container: {
     flex: 10,
     backgroundColor: "#fff",
@@ -204,17 +171,4 @@ const styles = StyleSheet.create({
     marginHorizontal: 50,
     marginVertical: 50,
   },
-  buttonsContainer: {
-    justifyContent: "center",
-    flexDirection: "row"
-  },
-  headingView: {
-    alignItems: "center"
-  },
-  headingText: {
-    fontWeight: "bold",
-    fontSize: 30,
-    color: "black",
-    margin: 10
-  }
 });
