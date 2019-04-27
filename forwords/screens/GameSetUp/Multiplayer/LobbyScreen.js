@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity
 } from "react-native";
+import forwordsStyles from '../../../constants/forwordsStyles';
 
 export default class LobbyScreenRoom extends Component {
   static navigationOptions = {
@@ -74,7 +75,7 @@ export default class LobbyScreenRoom extends Component {
     let players = this.state.numberOfPlayers.map(player => (
       <Image
         key={player}
-        style={styles.singlePlayerImage}
+        style={forwordsStyles.playerImage}
         source={require("../../../assets/images/personIcon.png")}
       />
     ));
@@ -82,19 +83,19 @@ export default class LobbyScreenRoom extends Component {
     // If the user is a HOST (playing with others)
     if (playerType == "host") {
       content = (
-        <View style={styles.headingView}>
-          <Text style={styles.headingText}>
+        <View style={forwordsStyles.headingView}>
+          <Text style={forwordsStyles.headingText}>
             {" "}
             You are the host of Group {gameID}
           </Text>
-          <Text style={styles.subheadingText}>
+          <Text style={forwordsStyles.mainText}>
             {" "}
             Invite others to play in your group – they can enter the code:{" "}
             {gameID}
           </Text>
-          <Text style={styles.subheadingText}>
+          <Text style={forwordsStyles.mainText}>
             {" "}
-            Click Play when everyone is ready to go!
+            Click Start Game when everyone is ready to go!
           </Text>
           <View styles={styles.iconContainer}>
             {players}
@@ -103,7 +104,7 @@ export default class LobbyScreenRoom extends Component {
             style={styles.button}
             onPress={() => this.startGameOnPress()}
           >
-            <Text style={styles.buttonText}>Start Game</Text>
+            <Text style={forwordsStyles.buttonText}>Start Game</Text>
           </TouchableOpacity>
         </View>
       );
@@ -114,12 +115,12 @@ export default class LobbyScreenRoom extends Component {
       // let host enter the room with the same gameID
       // then host clicks play when eveyone is ready
       content = (
-        <View style={styles.headingView}>
-          <Text style={styles.headingText}>
+        <View style={forwordsStyles.headingView}>
+          <Text style={forwordsStyles.headingText}>
             {" "}
             You are a member of Group {gameID}
           </Text>
-          <Text style={styles.subheadingText}>
+          <Text style={forwordsStyles.subheadingText}>
             {" "}
             Waiting for the host to start the game once everyone is in!
           </Text>
@@ -129,41 +130,14 @@ export default class LobbyScreenRoom extends Component {
         </View>
       );
     }
-    return <View style={styles.MainContainer}>{content}</View>;
+    return <View style={forwordsStyles.container}>{content}</View>;
   }
 }
 const styles = StyleSheet.create({
-  MainContainer: {
-    flex: 1,
-    paddingTop: Platform.OS === "ios" ? 20 : 0,
-    backgroundColor: "#fff"
-  },
-  headingText: {
-    fontWeight: "bold",
-    fontSize: 30,
-    color: "black"
-  },
-  headingView: {
-    alignItems: "center"
-  },
   iconsContainer: {
     flex: 1,
     flexDirection: "row",
     margin: 10
-  },
-  mainText: {
-    alignItems: "center",
-    marginTop: 10,
-    marginBottom: 10,
-    marginLeft: 10,
-    fontSize: 25,
-    color: "black",
-    fontWeight: "bold"
-  },
-  headingText: {
-    fontWeight: "bold",
-    fontSize: 30,
-    color: "black"
   },
   subheadingText: {
     alignItems: "center",

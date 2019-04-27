@@ -115,7 +115,7 @@ export default class JoinOrCreateScreen extends Component {
               style={forwordsStyles.primaryButton}
               onPress={() => this.joinOnPress()}
             >
-              <Text style={forwordsStyles.buttonText}>Join Game!</Text>
+              <Text style={forwordsStyles.buttonText}>Join Game</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

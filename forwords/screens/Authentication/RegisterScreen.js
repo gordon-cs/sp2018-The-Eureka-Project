@@ -28,22 +28,18 @@ export default class RegisterScreen extends Component {
       password: "",
       confirmPassword: ""
     };
+    this.register = this.register.bind(this);
+    this.login = this.login.bind(this);
   }
 
   login() {
+    const { navigate } = this.props.navigation;
     firebase
       .auth()
       .signInWithEmailAndPassword(this.state.email, this.state.password)
       .then(
         () => {
-          let user = {
-            email: firebase.auth().currentUser.email,
-            username: this.state.username,
-            lastName: this.state.lastName,
-            firstName: this.state.firstName,
-            targetLanguage: "Chinese"
-          };
-          this.addUser(user);
+          navigate("Home");
         },
         error => {
           Alert.alert(error.message);
@@ -53,24 +49,49 @@ export default class RegisterScreen extends Component {
 
   // parameter user: an object from firebase that we will use to fill in sql table,
   // then navigate to Login Screen
-  async addUser(user) {
-    const { navigate } = this.props.navigation;
-    axios
-      .post(`${httpsRoute}/add-user`, user)
-      .then(function(res) {
-        console.log("/add-user worked");
-        navigate("Home");
-      })
-      .catch(function(err) {
-        console.log("/add-user failed");
+  async addUser() {
+    if (this.state.firstName === "") {
+      Alert.alert("The First Name field is required.");
+    } else if (this.state.lastName === "") {
+      Alert.alert("The Last Name field is required.");
+    } else if (this.state.email === "") {
+      Alert.alert("The Email field is required.");
+    } else if (this.state.username === "") {
+      Alert.alert("The Username field is required.");
+    } else if (this.state.password !== this.state.confirmPassword) {
+      Alert.alert("Passwords do not match");
+    } else {
+      let user = {
+        email: this.state.email,
+        username: this.state.username,
+        lastName: this.state.lastName,
+        firstName: this.state.firstName
+      };
+      axios.post(`${httpsRoute}/add-user`, user).then(res => {
+        if (res.data.errno === 1062) {
+          if (res.data.sqlMessage.includes("email")) {
+            Alert.alert(
+              "Sorry, that email has already been registered to an account. Please choose another one."
+            );
+            this.setState({
+              email: ""
+            });
+          } else if (res.data.sqlMessage.includes("username")) {
+            Alert.alert(
+              "Sorry, that username has already been taken. Please choose another one."
+            );
+            this.setState({ username: "" });
+          }
+        } else if (res.data.errno === 1048) {
+          Alert.alert("No field can be left blank.");
+        } else {
+          this.register();
+        }
       });
+    }
   }
 
   register() {
-    if (this.state.password !== this.state.confirmPassword) {
-      Alert.alert("Passwords do not match");
-      return;
-    }
     firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
@@ -90,11 +111,9 @@ export default class RegisterScreen extends Component {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={forwordsStyles.container}
-        keyboardShouldPersistTaps='always'
+        keyboardShouldPersistTaps="always"
       >
-        <KeyboardAvoidingView
-          behavior="padding"
-        >
+        <KeyboardAvoidingView behavior="padding">
           <View style={forwordsStyles.headingView}>
             <Text style={forwordsStyles.headingText}>Register!</Text>
           </View>
@@ -157,7 +176,7 @@ export default class RegisterScreen extends Component {
 
           <TouchableOpacity
             style={forwordsStyles.primaryButton}
-            onPress={() => this.register()}
+            onPress={() => this.addUser()}
           >
             <Text style={forwordsStyles.buttonText}>Register</Text>
           </TouchableOpacity>

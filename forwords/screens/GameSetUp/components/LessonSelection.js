@@ -78,8 +78,6 @@ export default class LessonSelection extends Component {
   render() {
     const lessons = this.state.lessonList;
     const playerType = this.props.navigation.state.params.playerType; // host, member, or solo
-    console.log("LessonSelection: props: playerType: ", playerType);
-    console.log(" ");
     let buttons;
     // If the user is playing solo
     if (playerType == "solo") {
