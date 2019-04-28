@@ -87,6 +87,10 @@ export default StyleSheet.create({
     fontSize: 20,
     color: "black"
   },
+  picker: {
+    width: 280,
+    height: 120,
+  },
   playerImage: {
     width: 70,
     height: 70,
