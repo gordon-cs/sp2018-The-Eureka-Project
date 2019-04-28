@@ -73,14 +73,10 @@ export default class RegisterScreen extends Component {
             Alert.alert(
               "Sorry, that email has already been registered to an account. Please choose another one."
             );
-            this.setState({
-              email: ""
-            });
           } else if (res.data.sqlMessage.includes("username")) {
             Alert.alert(
               "Sorry, that username has already been taken. Please choose another one."
             );
-            this.setState({ username: "" });
           }
         } else if (res.data.errno === 1048) {
           Alert.alert("No field can be left blank.");
@@ -139,6 +135,7 @@ export default class RegisterScreen extends Component {
             returnKeyType="next"
             placeholderTextColor="black"
             textContentType="emailAddress"
+            keyboardType="email-address"
             style={forwordsStyles.textInput}
           />
           <TextInput
