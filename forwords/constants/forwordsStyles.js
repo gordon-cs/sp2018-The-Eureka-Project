@@ -53,6 +53,15 @@ export default StyleSheet.create({
     borderRadius: 80,
     backgroundColor: "black"
   },
+  longButton: {
+    justifyContent: "center",
+    flexDirection: "column",
+    margin: 10,
+    width: 280,
+    height: 120,
+    borderRadius: 20,
+    backgroundColor: "#5b3b89"
+  },
   logo: {
     height: 60,
     width: 280,

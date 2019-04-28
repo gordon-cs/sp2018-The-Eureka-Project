@@ -69,7 +69,7 @@ export default class HomeScreen extends React.Component {
         <Button
           color="#5b3b89"
           title={"Add a course"}
-          onPress={() => navigate("AddCourse")}
+          onPress={() => navigate("RoleSelection")}
         />
       );
     }
