@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Text
 } from "react-native";
+import { StackActions, NavigationActions } from 'react-navigation';
 import forwordsStyles from "../../constants/forwordsStyles";
 import * as firebase from "firebase";
 
@@ -29,12 +30,18 @@ export default class LoginScreen extends React.Component {
 
   onLoginPress = () => {
     const { navigate } = this.props.navigation;
+    // const resetAction = StackActions.reset({
+    //   index: 0, // <-- currect active route from actions array
+    //   actions: [
+    //     NavigationActions.navigate({ routeName: 'Home' }),
+    //   ],
+    // });
     firebase
       .auth()
       .signInWithEmailAndPassword(this.state.email, this.state.password)
       .then(
         () => {
-          navigate("Home");
+          this.props.navigation.navigate("Home");
         },
         error => {
           Alert.alert(error.message);

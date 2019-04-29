@@ -1,4 +1,4 @@
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator, createAppContainer, createSwitchNavigator } from 'react-navigation';
 import HomeScreen from '../screens/Launch/HomeScreen';
 import LoginScreen from '../screens/Authentication/LoginScreen';
 import GamePlayScreen from '../screens/GamePlay/GamePlayScreen';
@@ -50,15 +50,43 @@ const InstructionsStack = createStackNavigator({
   Instructions: InstructionsScreen,
 });
 
-export default createStackNavigator({
-  LoginStack,
-  HomeStack,
-  JoinOrCreateStack,
-  RegisterStack,
-  ForgotPasswordStack,
-  GamePlayStack,
-  GameSetUpStack,
-  GameOverStack,
-  InstructionsStack,
-  LobbyStack,
+const AuthStack = createStackNavigator({
+  Login: LoginScreen,
+  ForgotPassword: ForgotPasswordScreen,
+  Register: RegisterScreen,
 });
+
+const SingleGamingStack = createStackNavigator({
+  GameSetUp: GameSetUpScreen,
+  Instructions: InstructionsScreen,
+  GamePlay: GamePlayScreen,
+  GameOver: GameOverScreen,
+});
+
+const MultiGamingStack = createStackNavigator({
+  JoinOrCreate: JoinOrCreateScreen,
+  GameSetUp: GameSetUpScreen,
+  Lobby: LobbyScreen,
+  Instructions: InstructionsScreen,
+  GamePlay: GamePlayScreen,
+  GameOver: GameOverScreen,
+});
+export default createStackNavigator({
+    Auth: AuthStack,
+    Home: HomeScreen,
+    SGame: SingleGamingStack,
+    MGame: MultiGamingStack,
+});
+
+// export default createStackNavigator({
+//   LoginStack,
+//   HomeStack,
+//   JoinOrCreateStack,
+//   RegisterStack,
+//   ForgotPasswordStack,
+//   GamePlayStack,
+//   GameSetUpStack,
+//   GameOverStack,
+//   InstructionsStack,
+//   LobbyStack,
+// });
