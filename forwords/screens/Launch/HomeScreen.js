@@ -50,7 +50,7 @@ export default class HomeScreen extends React.Component {
   onPressSinglePlayerMode = () => {
     const { navigate } = this.props.navigation;
     const playerType = "solo";
-    navigate("SGame", { playerType: playerType });
+    navigate("GameSetUp", { playerType: playerType });
   };
 
   render() {
@@ -86,7 +86,7 @@ export default class HomeScreen extends React.Component {
           <View style={forwordsStyles.headingView}>
             <TouchableOpacity
               style={forwordsStyles.headingView}
-              onPress={() => navigate("MGame")}
+              onPress={() => navigate("JoinOrCreate")}
             >
               <Text style={forwordsStyles.headingText}>Multiplayer Mode</Text>
               <Image

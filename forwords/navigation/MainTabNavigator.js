@@ -1,4 +1,5 @@
-import { createStackNavigator, createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator, createDrawerNavigator, createSwitchNavigator } from 'react-navigation';
+//import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
 import HomeScreen from '../screens/Launch/HomeScreen';
 import LoginScreen from '../screens/Authentication/LoginScreen';
 import GamePlayScreen from '../screens/GamePlay/GamePlayScreen';
@@ -9,10 +10,6 @@ import InstructionsScreen from '../screens/GamePlay/Instructions/InstructionsScr
 import ForgotPasswordScreen from '../screens/Authentication/ForgotPasswordScreen';
 import LobbyScreen from '../screens/GameSetUp/Multiplayer/LobbyScreen';
 import GameOverScreen from "../screens/GamePlay/GameOverScreen";
-
-const HomeStack = createStackNavigator({
-  Home: HomeScreen,
-});
 
 const LoginStack = createStackNavigator({
   Login: LoginScreen,
@@ -50,6 +47,15 @@ const InstructionsStack = createStackNavigator({
   Instructions: InstructionsScreen,
 });
 
+const HomeDrawerStack = createDrawerNavigator({
+  Home: HomeScreen,
+})
+
+const HomeStack = createStackNavigator({
+  Home: HomeScreen,
+  HomeDrawer: HomeDrawerStack,
+});
+
 const AuthStack = createStackNavigator({
   Login: LoginScreen,
   ForgotPassword: ForgotPasswordScreen,
@@ -71,22 +77,24 @@ const MultiGamingStack = createStackNavigator({
   GamePlay: GamePlayScreen,
   GameOver: GameOverScreen,
 });
-export default createStackNavigator({
-    Auth: AuthStack,
-    Home: HomeScreen,
-    SGame: SingleGamingStack,
-    MGame: MultiGamingStack,
-});
 
-// export default createStackNavigator({
-//   LoginStack,
-//   HomeStack,
-//   JoinOrCreateStack,
-//   RegisterStack,
-//   ForgotPasswordStack,
-//   GamePlayStack,
-//   GameSetUpStack,
-//   GameOverStack,
-//   InstructionsStack,
-//   LobbyStack,
+
+// export default createSwitchNavigator({
+//     Auth: AuthStack,
+//     Home: HomeDrawerStack,
+//     SGame: SingleGamingStack,
+//     MGame: MultiGamingStack,
 // });
+
+export default createSwitchNavigator({
+  LoginStack,
+  HomeDrawerStack,
+  JoinOrCreateStack,
+  RegisterStack,
+  ForgotPasswordStack,
+  GamePlayStack,
+  GameSetUpStack,
+  GameOverStack,
+  InstructionsStack,
+  LobbyStack,
+});
