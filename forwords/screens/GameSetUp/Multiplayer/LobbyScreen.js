@@ -10,7 +10,7 @@ export default class LobbyScreenRoom extends Component {
     super(props);
 
     this.state = {
-      numberOfPlayers: []
+      numberOfPlayers: ['1']
     };
   }
 
