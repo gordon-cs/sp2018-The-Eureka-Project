@@ -55,7 +55,7 @@ export default class LoginScreen extends React.Component {
             autoCorrect={false}
             placeholder="Email"
             autoCapitalize="none"
-            returnKeyType="done"
+            returnKeyType="next"
             keyboardType="email-address"
             placeholderTextColor="black"
             style={forwordsStyles.textInput}
@@ -67,9 +67,10 @@ export default class LoginScreen extends React.Component {
             placeholder="Password"
             autoCapitalize="none"
             secureTextEntry={true}
-            returnKeyType="done"
+            returnKeyType="go"
             placeholderTextColor="black"
             style={forwordsStyles.textInput}
+            onSubmitEditing={() => this.onLoginPress()}
           />
 
           <View style={forwordsStyles.rowButtonsContainer}>
