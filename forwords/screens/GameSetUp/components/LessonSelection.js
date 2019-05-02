@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios";
-import { httpsRoute } from "../../../constants/API";
-import { Button, ActivityIndicator, ScrollView, TouchableOpacity, Text, } from "react-native";
+import lesson from '../../../services/lesson'
+import { ActivityIndicator, ScrollView, TouchableOpacity, Text, } from "react-native";
 import forwordsStyles from "../../../constants/forwordsStyles";
 
 export default class LessonSelection extends Component {
@@ -17,18 +16,9 @@ export default class LessonSelection extends Component {
     };
   }
 
-  async componentWillMount() {
-    try {
-      axios.get(`${httpsRoute}/lesson-list`).then(res => {
-        const lessons = res.data;
-        this.setState({
-          isLoading: false,
-          lessonList: lessons
-        });
-      });
-    } catch (err) {
-      throw new Error("/lesson-list did not work");
-    }
+  async componentDidMount() {
+    let lessonList = await lesson.getLessons();
+    this.setState({ isLoading: false, lessonList });
   }
 
   createGame(lessonID) {
@@ -74,33 +64,18 @@ export default class LessonSelection extends Component {
 
   render() {
     const lessons = this.state.lessonList;
-    const playerType = this.props.navigation.state.params.playerType; // host, member, or solo
     let buttons;
-    // If the user is playing solo
-    if (playerType == "solo") {
-      buttons = lessons.map(lesson => (
-        <TouchableOpacity
-          key={lesson.lessonID}
-          style={forwordsStyles.narrowLongButton}
-          onPress={() => this.createGame(lesson.lessonID)}
-        >
-          <Text style={forwordsStyles.buttonText}>
-            {"Lesson " + lesson.lessonID + ": " + lesson.title}
-          </Text>
-        </TouchableOpacity>
-      ));
-    }
-    // If the user is a HOST (playing with others) route them to the Lobby
-    else if (playerType == "host") {
-      buttons = lessons.map(lesson => (
-        <Button
-          key={lesson.lessonID}
-          color="#5b3b89"
-          title={"Lesson " + lesson.lessonID + ": " + lesson.title}
-          onPress={() => this.createGame(lesson.lessonID)}
-        />
-      ));
-    }
+    buttons = lessons.map(lesson => (
+      <TouchableOpacity
+        key={lesson.lessonID}
+        style={forwordsStyles.narrowLongButton}
+        onPress={() => this.createGame(lesson.lessonID)}
+      >
+        <Text style={forwordsStyles.buttonText}>
+          {"Lesson " + lesson.lessonID + ": " + lesson.title}
+        </Text>
+      </TouchableOpacity>
+    ));
 
     if (this.state.isLoading) {
       return <ActivityIndicator />;
