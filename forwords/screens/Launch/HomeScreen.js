@@ -1,7 +1,6 @@
 import React from "react";
-import axios from "axios";
 import * as firebase from "firebase";
-import { httpsRoute } from "../../constants/API";
+import course from '../../services/course';
 import {
   Button,
   ScrollView,
@@ -21,36 +20,14 @@ export default class HomeScreen extends React.Component {
     super(props);
 
     this.state = {
-      courses: []
+      myCourses: []
     };
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     var email = firebase.auth().currentUser.email;
-    try {
-      axios.get(`${httpsRoute}/my-courses/${email}`).then(res => {
-        const courses = res.data;
-        this.setState({
-          courses: courses
-        });
-      });
-    } catch (err) {
-      throw new Error("my-courses did not work");
-    }
-  }
-
-  async componentWillReceiveProps() {
-    var email = firebase.auth().currentUser.email;
-    try {
-      axios.get(`${httpsRoute}/my-courses/${email}`).then(res => {
-        const courses = res.data;
-        this.setState({
-          courses: courses
-        });
-      });
-    } catch (err) {
-      throw new Error("my-courses did not work");
-    }
+    let myCourses = await course.getMyCourses(email);
+    this.setState({ myCourses });
   }
 
   onSignOutPress = () => {
@@ -68,8 +45,8 @@ export default class HomeScreen extends React.Component {
 
   render() {
     const { navigate } = this.props.navigation;
-    if (this.state.courses.length > 0) {
-      var courses = this.state.courses.map(course => (
+    if (this.state.myCourses.length > 0) {
+      var myCourses = this.state.myCourses.map(course => (
         <TouchableOpacity
           key={course.courseID}
           style={forwordsStyles.narrowLongButton}
@@ -92,7 +69,7 @@ export default class HomeScreen extends React.Component {
           <View style={forwordsStyles.headingView}>
             <Text style={forwordsStyles.headingText}>My Courses</Text>
           </View>
-          {courses}
+          {myCourses}
           <TouchableOpacity
             style={forwordsStyles.addCourseNarrowLongButton}
             onPress={() => navigate("RoleSelection")}
