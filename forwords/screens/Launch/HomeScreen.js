@@ -1,7 +1,6 @@
 import React from "react";
 import * as firebase from "firebase";
 import course from "../../services/course";
-import MyCourses from "./components/MyCourses";
 import {
   Button,
   ScrollView,
@@ -25,22 +24,6 @@ export default class HomeScreen extends React.Component {
     };
   }
 
-  async componentDidMount() {
-    this.loadMycourses();
-  }
-
-  async loadMycourses() {
-    var email = firebase.auth().currentUser.email;
-    let myCourses = await course.getMyCourses(email);
-    this.setState({ myCourses });
-  }
-
-  onSignOutPress = () => {
-    const { navigate } = this.props.navigation;
-    firebase.auth().signOut();
-    navigate("Login");
-  };
-
   // User wants to play solo
   onPressSinglePlayerMode = () => {
     const { navigate } = this.props.navigation;
@@ -50,16 +33,16 @@ export default class HomeScreen extends React.Component {
 
   render() {
     const { navigate } = this.props.navigation;
+    const email = firebase.auth().currentUser.email;
     return (
       <View style={forwordsStyles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <MyCourses navigation={this.props.navigation} />
-          <TouchableOpacity
-            style={forwordsStyles.addCourseNarrowLongButton}
-            onPress={() => navigate("RoleSelection")}
-          >
-            <Text style={forwordsStyles.buttonText}>{"Add a course"}</Text>
-          </TouchableOpacity>
+          <Button
+            style={forwordsStyles.textButton}
+            title="My Profile"
+            onPress={() => navigate("UserProfile", { email: email })}
+            color="purple"
+          />
           <View style={forwordsStyles.headingView}>
             <TouchableOpacity
               style={forwordsStyles.headingView}
@@ -84,12 +67,6 @@ export default class HomeScreen extends React.Component {
               />
             </TouchableOpacity>
           </View>
-          <Button
-            style={forwordsStyles.textButton}
-            title="Sign Out"
-            onPress={() => this.onSignOutPress()}
-            color="purple"
-          />
         </ScrollView>
       </View>
     );

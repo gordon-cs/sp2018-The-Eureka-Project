@@ -31,7 +31,7 @@ export default class AddCourseScreen extends Component {
   // then navigate back to the Home Screen
   async addCourseOnPress() {
     const { navigate } = this.props.navigation;
-    var email = firebase.auth().currentUser.email;
+    const email = firebase.auth().currentUser.email;
     if (this.state.courseCode === "") {
       Alert.alert("The Course Code field is required.");
     } else {
@@ -41,8 +41,7 @@ export default class AddCourseScreen extends Component {
           email: email
         })
         .then(function(res) {
-          console.log("/add-course worked");
-          navigate("Home");
+          navigate("UserProfile", { email: email })
         });
     }
   }
@@ -51,7 +50,7 @@ export default class AddCourseScreen extends Component {
   // then navigate back to the Home Screen
   async createCourseOnPress() {
     const { navigate } = this.props.navigation;
-    var email = firebase.auth().currentUser.email;
+    const email = firebase.auth().currentUser.email;
     if (this.state.courseTitle === "") {
       Alert.alert("The Course Title field is required.");
     } else {
@@ -64,10 +63,8 @@ export default class AddCourseScreen extends Component {
         .then(res => {
           if (res.data.errno === 1048) {
             Alert.alert("The title cannot be left blank.");
-          } else {
-            console.log("/create-course worked!");
-            navigate("Home");
-          }
+          } else {            
+            navigate("UserProfile", { email: email })}
         });
     }
   }

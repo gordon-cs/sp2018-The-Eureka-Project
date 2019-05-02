@@ -92,6 +92,15 @@ export default StyleSheet.create({
     borderRadius: 15,
     backgroundColor: "red",
   },
+  signOutNarrowLongButton: {
+    justifyContent: "center",
+    flexDirection: "column",
+    margin: 1,
+    width: 140,
+    height: 40,
+    borderRadius: 15,
+    backgroundColor: "black",
+  },
   moreNarrowLongButton: {
     justifyContent: "center",
     flexDirection: "column",

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import * as firebase from "firebase";
-import student from "../../../../services/student";
+import user from "../../../../services/user";
 import { TouchableOpacity, Text, View, ActivityIndicator } from "react-native";
 import forwordsStyles from "../../../../constants/forwordsStyles";
 
@@ -21,7 +21,7 @@ export default class StudentList extends Component {
   async componentDidMount() {
     const email = firebase.auth().currentUser.email;
     const courseID = this.props.navigation.state.params.courseID;
-    let students = await student.getStudents(email, courseID);
+    let students = await user.getStudents(email, courseID);
     this.setState({ isLoading: false, students });
   }
 
@@ -41,7 +41,7 @@ export default class StudentList extends Component {
         <TouchableOpacity
           key={student.userID}
           style={forwordsStyles.moreNarrowLongButton}
-          onPress={() => navigate("Home")}
+          onPress={() => navigate("UserProfile", {userID: student.userID})}
         >
           <Text style={forwordsStyles.buttonText}>
             {student.firstName + " " + student.lastName}
