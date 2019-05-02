@@ -34,7 +34,6 @@ export default class CourseInfoScreen extends Component {
   }
 
   render() {
-    const { navigate } = this.props.navigation;
     const courseID = this.props.navigation.state.params.courseID;
     const courseTitle = this.props.navigation.state.params.courseTitle;
     const email = firebase.auth().currentUser.email;
@@ -55,7 +54,7 @@ export default class CourseInfoScreen extends Component {
                   text: "Yes, delete this course.",
                   onPress: () => {
                     course.deleteCourse(email, courseID).then(() => {
-                      this.props.navigation("Home");
+                      this.props.navigation.navigate("Home");
                     });
                   }
                 },
