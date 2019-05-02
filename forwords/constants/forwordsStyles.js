@@ -8,7 +8,8 @@ export default StyleSheet.create({
     justifyContent: "center",
   },
   headingView: {
-    alignItems: "center"
+    alignItems: "center",
+    justifyContent: "center",
   },
   headingText: {
     fontWeight: "bold",
@@ -130,8 +131,12 @@ export default StyleSheet.create({
     height: 120,
   },
   playerImage: {
+    resizeMode: "contain",
     width: 70,
-    height: 70,
-    resizeMode: "contain"
-  }
+    height: 70
+  },
+  iconsContainer: {
+    flexDirection: "row",
+    margin: 10
+  },
 });
