@@ -90,7 +90,7 @@ export default StyleSheet.create({
     width: 280,
     height: 40,
     borderRadius: 15,
-    backgroundColor: "red"
+    backgroundColor: "red",
   },
   moreNarrowLongButton: {
     justifyContent: "center",

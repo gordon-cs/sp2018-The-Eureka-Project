@@ -6,7 +6,6 @@ async function getStudents(email, courseID) {
     return response.data;
 }
 
-
 export default {
     getStudents,
 }

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import course from "../../../services/course";
-import student from "../../../services/student";
 import firebase from "firebase";
 import {
   Text,
@@ -23,7 +22,6 @@ export default class CourseInfoScreen extends Component {
     this.state = {
       isLoading: true,
       recentGames: [],
-      students: [],
       role: ""
     };
   }
@@ -32,8 +30,7 @@ export default class CourseInfoScreen extends Component {
     const email = firebase.auth().currentUser.email;
     const courseID = this.props.navigation.state.params.courseID;
     let role = await course.getCourseRole(email, courseID);
-    let students = await student.getStudents(email, courseID);
-    this.setState({ isLoading: false, role, students });
+    this.setState({ isLoading: false, role });
   }
 
   render() {
@@ -43,15 +40,8 @@ export default class CourseInfoScreen extends Component {
     const email = firebase.auth().currentUser.email;
     const { isLoading, recentGames, role } = this.state;
 
-    let deleteButton, studentList;
+    let deleteButton;
     if (role === "teacher") {
-      studentList = (
-        <StudentList
-        navigation={this.props.navigation}
-        role={role}
-        courseID={courseID}
-      />
-      );
       deleteButton = (
         <TouchableOpacity
           style={forwordsStyles.deleteNarrowLongButton}
@@ -62,10 +52,10 @@ export default class CourseInfoScreen extends Component {
                 "This action cannot be undone!",
               [
                 {
-                  text: "Yes",
+                  text: "Yes, delete this course.",
                   onPress: () => {
                     course.deleteCourse(email, courseID).then(() => {
-                      navigate("Home");
+                      this.props.navigation("Home");
                     });
                   }
                 },
@@ -81,7 +71,6 @@ export default class CourseInfoScreen extends Component {
       deleteButton = null;
     }
 
-
     return (
       <View style={forwordsStyles.container}>
         <ScrollView>
@@ -93,7 +82,11 @@ export default class CourseInfoScreen extends Component {
           <Text style={forwordsStyles.mainText}>
             Recent Activity from groups in this class:
           </Text>
-          {studentList}
+          <StudentList
+          navigation={this.props.navigation}
+          role={role}
+          courseID={courseID}
+        />
           {deleteButton}
         </ScrollView>
       </View>

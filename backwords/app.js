@@ -8,8 +8,8 @@ var app = express();
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-var wsPort = 5555;
-var httpsPort = 8081;
+var wsPort = 4444;
+var httpsPort = 9999;
 
 // Send static images to frontend
 app.use(express.static("images"));
@@ -44,8 +44,8 @@ var server = app.listen(process.env.PORT || httpsPort, function() {
 // account needed for connecing to our sql database
 var connection = mysql.createConnection({
   host: "localhost",
-  user: "root",
-  password: "",
+  user: "nadevai",
+  password: "chinese",
   database: "forwords"
 });
 
@@ -390,11 +390,6 @@ function getGameID() {
 }
 
 function setGame(game) {
-  // console.log("in setGame, what does game equal?");
-  // console.log("                                 game.lessonID: ", game.lessonID);
-  // console.log("                                 game.promptType: ", game.promptType);
-  // console.log("                                 game.choiceType: ", game.choiceType);
-  // console.log("                                 game.partOfSpeech: ", game.partOfSpeech);
   return new Promise(function(resolve, reject) {
     let lessonID = game.lessonID;
     let promptType = game.promptType;
@@ -528,21 +523,179 @@ app.get("/lesson-list", function(req, res) {
   });
 });
 
+// returns the role someone has in a course (either teacher or student)
+app.get("/course-role/:email/:courseID", function(req, res) {
+  const { email, courseID } = req.params;
+  var sql =
+    "SELECT role FROM Participation WHERE userID = (SELECT userID from User where email = ?) and courseID = ?";
+  var inserts = [email, courseID];
+  sql = mysql.format(sql, inserts);
+  connection.query(sql, inserts, function(error, results) {
+    if (error) {
+      console.log("the err.Error object = ", error);
+      res.send(error);
+      return connection.rollback(function() {
+        // throw error;
+      });
+    }
+    res.json(results);
+  });
+});
+
+// The email and courseID are received in the params of the request.
+// returns the list of students in the given course.
+app.get("/student-list/:email/:courseID", function(req, res) {
+  const { email, courseID } = req.params;
+  // Check the role of this user
+  var sql =
+    "SELECT role FROM Participation WHERE userID = (SELECT userID from User where email = ?) AND courseID = ?";
+  inserts = [email, courseID];
+  mysql.format(sql, inserts);
+  connection.query(sql, inserts, function(error, results) {
+    if (error) {
+      console.log("the err.Error object = ", error);
+      res.send(error);
+      return connection.rollback(function() {
+        // throw error;
+      });
+    }
+    const role = results[0].role;
+    // If this userID has the role "teacher" for this courseID
+    if (role === "teacher") {
+      // If this userID has the role "teacher" for this courseID
+      var sql =
+        "SELECT Course.courseID, User.userID, User.firstName, User.lastName, Participation.role " +
+        "FROM Course NATURAL JOIN User NATURAL JOIN Participation " +
+        "WHERE courseID = ? AND Participation.role = 'student'";
+      inserts = [courseID];
+      mysql.format(sql, inserts);
+      connection.query(sql, inserts, function(error, results) {
+        if (error) {
+          console.log("the err.Error object = ", error);
+          res.send(error);
+          return connection.rollback(function() {
+            console.log("/student-list erro");
+            // throw error;
+          });
+        }
+        res.json(results);
+      });
+    } else {
+      res.send("403");
+    }
+  });
+});
+
+// Add this user as a student in this course to the Participation table, as long as
+// this course exists.
+app.post("/add-course", function(req, res) {
+  const { courseCode, email } = req.body;
+  connection.beginTransaction(function(err) {
+    if (err) {
+      // do something if there is an error
+    }
+    // Get the userID for this email
+    var sql = "SELECT userID FROM User WHERE email = ?";
+    var inserts = [email];
+    connection.query(sql, inserts, function(error, results) {
+      if (error) {
+        console.log("the err.Error object = ", error);
+        res.send(error);
+        return connection.rollback(function() {
+          // throw error;
+        });
+      }
+      const userID = results[0].userID;
+
+      var sql =
+        "INSERT INTO Participation (userID, courseID, role) VALUES (?, ?, ?)";
+      var inserts = [userID, courseCode, "student"];
+      sql = mysql.format(sql, inserts);
+      // Insert into Participation
+      connection.query(sql, inserts, function(error, results) {
+        if (error) {
+          console.log("the err.Error object = ", error);
+          res.send(error);
+          return connection.rollback(function() {
+            // throw error;
+          });
+        }
+
+        connection.commit(function(err) {
+          if (err) {
+            return connection.rollback(function() {
+              // throw err;
+            });
+          }
+          res.send();
+        });
+      });
+    });
+  });
+});
+
 // If they are a teacher
 // Add this course to the Course table
 // Add this user as a teacher in this course to the Participation table
-// If they are a student
-// Add this user as a student in this course to the Participation table
-app.post("/add-course", function(req, res) {
-  const { email, username, lastName, firstName, targetLanguage } = req.body;
-  var sql =
-    "INSERT INTO User (email, username, lastName, firstName, targetLanguage) VALUES (?, ?, ?, ?, ?)";
-  var inserts = [email, username, lastName, firstName, targetLanguage];
+app.post("/create-course", function(req, res) {
+  const { title, langauge, email } = req.body;
+  var sql = "INSERT INTO Course (title, langauge) VALUES (?, ?)";
+  var inserts = [title, langauge];
   sql = mysql.format(sql, inserts);
-  connection.beginTransaction();
-  connection.query(sql, err => err && console.log(err));
-  connection.commit();
-  res.send(err);
+  connection.beginTransaction(function(err) {
+    if (err) {
+      // do something if there is an error
+    }
+    // Insert into Course
+    connection.query(sql, inserts, function(error, results) {
+      if (error) {
+        console.log("the err.Error object = ", error);
+        res.send(error);
+        return connection.rollback(function() {
+          // throw error;
+        });
+      }
+      var courseID = results.insertId;
+
+      // Get the userID for this email
+      var sql = "SELECT userID FROM User WHERE email = ?";
+      var inserts = [email];
+      connection.query(sql, inserts, function(error, results) {
+        if (error) {
+          console.log("the err.Error object = ", error);
+          res.send(error);
+          return connection.rollback(function() {
+            // throw error;
+          });
+        }
+        const userID = results[0].userID;
+
+        var sql =
+          "INSERT INTO Participation (userID, courseID, role) VALUES (?, ?, ?)";
+        var inserts = [userID, courseID, "teacher"];
+        sql = mysql.format(sql, inserts);
+        // Insert into Participation
+        connection.query(sql, inserts, function(error, results) {
+          if (error) {
+            console.log("the err.Error object = ", error);
+            res.send(error);
+            return connection.rollback(function() {
+              // throw error;
+            });
+          }
+
+          connection.commit(function(err) {
+            if (err) {
+              return connection.rollback(function() {
+                // throw err;
+              });
+            }
+            res.send();
+          });
+        });
+      });
+    });
+  });
 });
 
 // once the user registers, adds user to User table
@@ -577,46 +730,7 @@ app.post("/add-user", function(req, res) {
       });
     });
   });
-  // connection.beginTransaction(sql, err => err && console.log(err));
-  // connection.commit();
-  // res.send();
 });
-
-/*function(req, res) {
-    const { email, username, lastName, firstName } = req.body;
-    var sql = 'INSERT INTO User (email, username, lastName, firstName) VALUES (?, ?, ?, ?)';
-    var inserts = [email, username, lastName, firstName];
-    sql = mysql.format(sql, inserts);
-    connection.query(sql, function(err) {
-      if (err) console.log("Query failed. Error: %s. Query: %s", err, sql);
-    })
-    res.send();
-  }
-  */
-
-//   connection.beginTransaction(function(err) {
-//     if (err) {
-//       throw err;
-//     }
-//     connection.query(sql, inserts, function (error, results, fields) {
-//       if (error) {
-//         return connection.rollback(function() {
-//           throw error;
-//         });
-//       }
-//       connection.commit(function(err) {
-//         if (err) {
-//           return connection.rollback(function() {
-//             throw err && res.send(err);
-//           });
-//         }
-//         console.log("success!!!!");
-//       });
-//     });
-//   });
-
-//   // }
-// );
 
 // returns the list of courses the user with this email is in
 // PROBLEM: anyone could find out what classes anyone is in,
@@ -632,6 +746,51 @@ app.get("/my-courses/:email", function(req, res) {
   connection.query(sql, function(error, results) {
     if (error) throw error;
     res.json(results);
+  });
+});
+
+// Delete Methods
+
+// Delete a course
+// Parameters: The email and the courseID.
+// Deletes this course from the Course table.
+app.delete("/delete-course/:email/:courseID", function(req, res) {
+  const { email, courseID } = req.params;
+
+  // Check the role of this user
+  var sql =
+    "SELECT role FROM Participation WHERE userID = (SELECT userID from User where email = ?) AND courseID = ?";
+  inserts = [email, courseID];
+  mysql.format(sql, inserts);
+  connection.query(sql, inserts, function(error, results) {
+    if (error) {
+      console.log("the err.Error object = ", error);
+      res.send(error);
+      return connection.rollback(function() {
+        // throw error;
+      });
+    }
+    const role = results[0].role;
+    console.log("role=", role);
+    // If this userID has the role "teacher" for this courseID
+    if (role === "teacher") {
+      var sql = "DELETE FROM Course WHERE courseID = ?";
+      inserts = [courseID];
+      mysql.format(sql, inserts);
+      connection.query(sql, inserts, function(error, results) {
+        if (error) {
+          console.log("the err.Error object = ", error);
+          res.send(error);
+          return connection.rollback(function() {
+            // throw error;
+          });
+        }
+        res.send();
+      });
+    } else {
+      // students should not be able to delete courses
+      return;
+    }
   });
 });
 
@@ -660,10 +819,13 @@ app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
-  // render the error page
+  /* render the error page
   res.sendStatus(err.status || 500);
   res.sendStatus(err.status);
-  //  res.render('error');
+  res.render(
+    "error"
+  );
+  */
 });
 
 /*
