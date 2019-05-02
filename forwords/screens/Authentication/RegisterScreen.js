@@ -160,6 +160,7 @@ export default class RegisterScreen extends Component {
             secureTextEntry={true}
             placeholderTextColor="black"
             style={forwordsStyles.textInput}
+            onSubmitEditing={() => this.addUser()}
           />
         </KeyboardAvoidingView>
 
