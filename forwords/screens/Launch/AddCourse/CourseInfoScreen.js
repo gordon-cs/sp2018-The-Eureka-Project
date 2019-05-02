@@ -34,6 +34,7 @@ export default class CourseInfoScreen extends Component {
   }
 
   render() {
+    const { navigate } = this.props.navigation;
     const courseID = this.props.navigation.state.params.courseID;
     const courseTitle = this.props.navigation.state.params.courseTitle;
     const email = firebase.auth().currentUser.email;
@@ -54,7 +55,7 @@ export default class CourseInfoScreen extends Component {
                   text: "Yes, delete this course.",
                   onPress: () => {
                     course.deleteCourse(email, courseID).then(() => {
-                      this.props.navigation.navigate("Home");
+                      navigate("UserProfile", { email: email });
                     });
                   }
                 },
@@ -67,7 +68,32 @@ export default class CourseInfoScreen extends Component {
         </TouchableOpacity>
       );
     } else {
-      deleteButton = null;
+      deleteButton = (
+        <TouchableOpacity
+          style={forwordsStyles.deleteNarrowLongButton}
+          onPress={() =>
+            Alert.alert(
+              "Are You Sure?",
+              `Are you sure you want to leave the (${courseID}) ${courseTitle} Course? ` +
+                "This action cannot be undone!",
+              [
+                {
+                  text: "Yes, remove me from this course.",
+                  onPress: () => {
+                    course.removeStudentFromCourse(email, courseID).then(() => {
+                      navigate("UserProfile", { email: email });
+                    });
+                  }
+                },
+                { text: "No" }
+              ]
+            )
+          }
+        >
+          <Text style={forwordsStyles.buttonText}>Unenroll From Course</Text>
+        </TouchableOpacity>
+
+      );
     }
 
     return (
