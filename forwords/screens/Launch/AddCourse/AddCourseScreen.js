@@ -12,7 +12,7 @@ import forwordsStyles from "../../../constants/forwordsStyles";
 import firebase from "firebase";
 import { httpsRoute } from "../../../constants/API";
 
-export default class AddCourse extends Component {
+export default class AddCourseScreen extends Component {
   static navigationOptions = {
     header: null
   };
@@ -94,6 +94,7 @@ export default class AddCourse extends Component {
             placeholderTextColor="black"
             returnKeyType="done"
             keyboardType="default"
+            onSubmitEditing={() => this.addCourseOnPress()}
           />
           <TouchableOpacity
             style={forwordsStyles.primaryButton}

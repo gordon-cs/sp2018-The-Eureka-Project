@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import forwordsStyles from "../../../constants/forwordsStyles";
 
-export default class RoleSelection extends Component {
+export default class RoleSelectionScreen extends Component {
   static navigationOptions = {
     header: null
   };
