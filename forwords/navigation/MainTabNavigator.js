@@ -1,5 +1,5 @@
-import { createStackNavigator, createDrawerNavigator, createSwitchNavigator } from 'react-navigation';
-//import createAnimatedSwitchNavigator from 'react-navigation-animated-switch';
+import { createStackNavigator, createDrawerNavigator, createSwitchNavigator, createBottomTabNavigator } from 'react-navigation';
+//import colors from './utils/colors';
 import HomeScreen from '../screens/Launch/HomeScreen';
 import LoginScreen from '../screens/Authentication/LoginScreen';
 import GamePlayScreen from '../screens/GamePlay/GamePlayScreen';
@@ -51,10 +51,10 @@ const HomeDrawerStack = createDrawerNavigator({
   Home: HomeScreen,
 })
 
-const HomeStack = createStackNavigator({
-  Home: HomeScreen,
-  HomeDrawer: HomeDrawerStack,
-});
+// const HomeStack = createStackNavigator({
+//   Home: HomeScreen,
+//   HomeDrawer: HomeDrawerStack,
+// });
 
 const AuthStack = createStackNavigator({
   Login: LoginScreen,
@@ -62,39 +62,152 @@ const AuthStack = createStackNavigator({
   Register: RegisterScreen,
 });
 
-const SingleGamingStack = createStackNavigator({
-  GameSetUp: GameSetUpScreen,
-  Instructions: InstructionsScreen,
-  GamePlay: GamePlayScreen,
-  GameOver: GameOverScreen,
-});
-
-const MultiGamingStack = createStackNavigator({
-  JoinOrCreate: JoinOrCreateScreen,
-  GameSetUp: GameSetUpScreen,
-  Lobby: LobbyScreen,
-  Instructions: InstructionsScreen,
-  GamePlay: GamePlayScreen,
-  GameOver: GameOverScreen,
-});
-
-
-// export default createSwitchNavigator({
-//     Auth: AuthStack,
-//     Home: HomeDrawerStack,
-//     SGame: SingleGamingStack,
-//     MGame: MultiGamingStack,
+// const SingleGamingStack = createStackNavigator({
+//   GameSetUp: GameSetUpScreen,
+//   Instructions: InstructionsScreen,
+//   GamePlay: GamePlayScreen,
+//   GameOver: GameOverScreen,
 // });
 
+// const MultiGamingStack = createStackNavigator({
+//   JoinOrCreate: JoinOrCreateScreen,
+//   GameSetUp: GameSetUpScreen,
+//   Lobby: LobbyScreen,
+//   Instructions: InstructionsScreen,
+//   GamePlay: GamePlayScreen,
+//   GameOver: GameOverScreen,
+// });
+
+const MultiGamingStack = createSwitchNavigator(
+  {
+  JoinOrCreate: {
+    screen: JoinOrCreateStack,
+  },
+  GameSetUp: {
+    screen: GameSetUpStack,
+  },
+  Lobby: {
+    screen: LobbyStack,
+  },
+  Instruction: {
+    screen: InstructionsStack,
+  },
+  Gameplay: {
+    screen: GamePlayStack,
+  },
+  GameOver: {
+    screen: GameOverStack,
+    },
+  },
+  {
+  initialRouteName: 'JoinOrCreate',
+  },
+  );
+
+  const SingleGamingStack = createSwitchNavigator(
+    {
+    GameSetUp: {
+      screen: GameSetUpStack,
+    },
+    Instruction: {
+      screen: InstructionsStack,
+    },
+    Gameplay: {
+      screen: GamePlayStack,
+    },
+    GameOver: {
+      screen: GameOverStack,
+      },
+    },
+    {
+    initialRouteName: 'GameSetUp',
+    },
+  );
+
+    const HomeStack = createSwitchNavigator(
+      {
+      Home: {
+        screen: HomeScreen,
+      },
+      MGame: {
+        screen: MultiGamingStack,
+      },
+      SGame: {
+        screen: SingleGamingStack,
+      },
+      // JoinOrCreate: {
+      //   screen: JoinOrCreateStack,
+      // },
+      // GameSetUp: {
+      //   screen: GameSetUpStack,
+      // },
+      // Lobby: {
+      //   screen: LobbyStack,
+      // },
+      // Instruction: {
+      //   screen: InstructionsStack,
+      // },
+      // Gameplay: {
+      //   screen: GamePlayStack,
+      // },
+      // GameOver: {
+      //   screen: GameOverStack,
+      //   },
+    },
+    {
+      initialRouteName: 'Home',
+      // NavigationOptions: {
+      //   tabBarIcon: getTabBarIcon('person')
+      // },
+    },
+
+      //HomeDrawer: HomeDrawerStack,
+  );
+  const MainAppNavigation = createBottomTabNavigator(
+    {
+    Home: {
+    screen: HomeScreen,
+    },
+    // Auth: {
+    //   screen: AuthStack,
+    // },
+    },
+    {
+      initialRouteName: 'Home',
+      tabBarPosition: 'bottom',
+      tabBarOptions: {
+        activeTintColor: 'white',
+        inactiveTintColor: 'grey',
+        labelStyle: {
+          fontSize: 12,
+        },
+        style: {
+          backgroundColor: 'purple',
+        },
+      },
+      showLabel: false,
+      showIcon: true,
+      renderIndicator: () => null,
+    },
+  );
+
+
 export default createSwitchNavigator({
-  LoginStack,
-  HomeDrawerStack,
-  JoinOrCreateStack,
-  RegisterStack,
-  ForgotPasswordStack,
-  GamePlayStack,
-  GameSetUpStack,
-  GameOverStack,
-  InstructionsStack,
-  LobbyStack,
+    Auth: AuthStack,
+    Home: MainAppNavigation,
+    SGame: SingleGamingStack,
+    MGame: MultiGamingStack,
 });
+
+// export default createSwitchNavigator({
+//   LoginStack,
+//   HomeDrawerStack,
+//   JoinOrCreateStack,
+//   RegisterStack,
+//   ForgotPasswordStack,
+//   GamePlayStack,
+//   GameSetUpStack,
+//   GameOverStack,
+//   InstructionsStack,
+//   LobbyStack,
+// });

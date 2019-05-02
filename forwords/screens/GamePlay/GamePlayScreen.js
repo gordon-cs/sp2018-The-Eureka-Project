@@ -105,7 +105,7 @@ export default class GamePlayScreen extends Component {
           promptObj: receivedMessage[2]
         });
       }
-      // if the input i gave was incorrect
+      // if the input i gave was incorrect, show me dat error boi
       else if (receivedMessage[0] == "message4") {
         this.setState({ answeredCorrectly: [receivedMessage[2].oldInput, 2] }); // got it incorrect
         TimerMixin.setTimeout(() => {

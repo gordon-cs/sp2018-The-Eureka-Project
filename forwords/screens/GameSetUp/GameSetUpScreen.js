@@ -5,7 +5,8 @@ import {
   Text,
   View,
   ScrollView,
-  Image
+  Image, 
+  Button
 } from "react-native";
 import LessonSelection from "./components/LessonSelection";
 import forwordsStyles from "../../constants/forwordsStyles";
@@ -17,7 +18,6 @@ export default class GameSetUpScreen extends Component {
   constructor(props) {
     super(props);
   }
-
   render() {
     const playerType = this.props.navigation.state.params.playerType; // host, member, or solo
     let content;
