@@ -8,8 +8,8 @@ var app = express();
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-var wsPort = 4444;
-var httpsPort = 9999;
+var wsPort = 4445;
+var httpsPort = 9995;
 
 // Send static images to frontend
 app.use(express.static("images"));
@@ -510,9 +510,33 @@ Array.prototype.shuffle = function() {
 };
 
 // HTTP
+
+// Get Methods
+
 // Display welcome message
 app.get("/", function(req, res) {
   res.send("Welcome to forwords!");
+});
+
+// return the info for a given user with this email
+// TODO: make this so only authorized users who have auth'd with this email can access this info
+// OR only if they are a teacher of this student they can access this info
+app.get("/:email", function(req, res) {
+  const { email } = req.params;
+  var sql =
+    "SELECT * FROM User WHERE userID = (SELECT User.userID from User WHERE email = ?);";
+  var inserts = [email];
+  sql = mysql.format(sql, inserts);
+  connection.query(sql, inserts, function(error, results) {
+    if (error) {
+      console.log("the err.Error object = ", error);
+      res.send(error);
+      return connection.rollback(function() {
+        // throw error;
+      });
+    }
+    res.json(results);
+  });
 });
 
 // returns the list of lessons
@@ -585,6 +609,24 @@ app.get("/student-list/:email/:courseID", function(req, res) {
     }
   });
 });
+
+// returns the list of courses the user with this email is in
+// PROBLEM: anyone could find out what classes anyone is in,
+// we should do something with an auth token or something.
+app.get("/my-courses/:email/:role", function(req, res) {
+  const { email, role } = req.params;
+  var sql =
+    "SELECT * FROM Course WHERE courseID IN (SELECT courseID FROM Participation WHERE role = ? AND userID = " +
+    "(SELECT userID FROM User WHERE email = ?)" +
+    ")";
+  inserts = [role, email];
+  sql = mysql.format(sql, inserts);
+  connection.query(sql, function(error, results) {
+    if (error) throw error;
+    res.json(results);
+  });
+});
+// Post Methods
 
 // Add this user as a student in this course to the Participation table, as long as
 // this course exists.
@@ -683,7 +725,6 @@ app.post("/create-course", function(req, res) {
               // throw error;
             });
           }
-
           connection.commit(function(err) {
             if (err) {
               return connection.rollback(function() {
@@ -732,23 +773,6 @@ app.post("/add-user", function(req, res) {
   });
 });
 
-// returns the list of courses the user with this email is in
-// PROBLEM: anyone could find out what classes anyone is in,
-// we should do something with an auth token or something.
-app.get("/my-courses/:email", function(req, res) {
-  const { email } = req.params;
-  var sql =
-    "select * from Course where courseID in (select courseID from Participation where userID = " +
-    "(select userID from User where email = ?)" +
-    ");";
-  inserts = [email];
-  sql = mysql.format(sql, inserts);
-  connection.query(sql, function(error, results) {
-    if (error) throw error;
-    res.json(results);
-  });
-});
-
 // Delete Methods
 
 // Delete a course
@@ -771,7 +795,6 @@ app.delete("/delete-course/:email/:courseID", function(req, res) {
       });
     }
     const role = results[0].role;
-    console.log("role=", role);
     // If this userID has the role "teacher" for this courseID
     if (role === "teacher") {
       var sql = "DELETE FROM Course WHERE courseID = ?";
@@ -791,6 +814,27 @@ app.delete("/delete-course/:email/:courseID", function(req, res) {
       // students should not be able to delete courses
       return;
     }
+  });
+});
+
+// Remove a student from a course
+// Parameters: The email and the courseID.
+// Deletes this course from the Course table.
+app.delete("/unenroll-student/:email/:courseID", function(req, res) {
+  const { email, courseID } = req.params;
+  var sql =
+    "DELETE FROM Participation WHERE courseID = ? AND userID = (SELECT userID FROM User WHERE email = ?)";
+  inserts = [courseID, email];
+  mysql.format(sql, inserts);
+  connection.query(sql, inserts, function(error, results) {
+    if (error) {
+      console.log("the err.Error object = ", error);
+      res.send(error);
+      return connection.rollback(function() {
+        // throw error;
+      });
+    }
+    res.send();
   });
 });
 
