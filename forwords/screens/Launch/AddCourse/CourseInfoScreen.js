@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import student from '../../../services/student';
-import course from '../../../services/course';
+import course from "../../../services/course";
+import student from "../../../services/student";
 import firebase from "firebase";
 import {
   Text,
@@ -8,11 +8,12 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
-  Alert,
+  Alert
 } from "react-native";
+import StudentList from "./components/StudentList";
 import forwordsStyles from "../../../constants/forwordsStyles";
 
-export default class AddCourse extends Component {
+export default class CourseInfoScreen extends Component {
   static navigationOptions = {
     header: null
   };
@@ -20,17 +21,19 @@ export default class AddCourse extends Component {
     super(props);
 
     this.state = {
-      students: [],
       isLoading: true,
-      recentGames: []
+      recentGames: [],
+      students: [],
+      role: ""
     };
   }
 
   async componentDidMount() {
     const email = firebase.auth().currentUser.email;
     const courseID = this.props.navigation.state.params.courseID;
+    let role = await course.getCourseRole(email, courseID);
     let students = await student.getStudents(email, courseID);
-    this.setState({ isLoading: false, students });
+    this.setState({ isLoading: false, role, students });
   }
 
   render() {
@@ -38,31 +41,46 @@ export default class AddCourse extends Component {
     const courseID = this.props.navigation.state.params.courseID;
     const courseTitle = this.props.navigation.state.params.courseTitle;
     const email = firebase.auth().currentUser.email;
-    let studentsList;
-    if (!this.state.isLoading && this.state.students.length > 0) {
-      <Text style={forwordsStyles.mainText}>Students in this class:</Text>;
-      studentsList = this.state.students.map(student => (
-        <TouchableOpacity
-          key={student.userID}
-          style={forwordsStyles.moreNarrowLongButton}
-          onPress={() => navigate("Home")}
-        >
-          <Text style={forwordsStyles.buttonText}>
-            {student.firstName + " " + student.lastName}
-          </Text>
-        </TouchableOpacity>
-      ));
-    } else if (!this.state.isLoading && this.state.students.length === 0) {
-      studentsList = (
-        <Text style={forwordsStyles.mainText}>
-          Students in this class: There are no students in this course.
-        </Text>
+    const { isLoading, recentGames, role } = this.state;
+
+    let deleteButton, studentList;
+    if (role === "teacher") {
+      studentList = (
+        <StudentList
+        navigation={this.props.navigation}
+        role={role}
+        courseID={courseID}
+      />
       );
-    } else if (!this.state.isLoading && this.state.students == "403") {
-      studentslist = null;
+      deleteButton = (
+        <TouchableOpacity
+          style={forwordsStyles.deleteNarrowLongButton}
+          onPress={() =>
+            Alert.alert(
+              "Are You Sure?",
+              `Are you sure you want to delete the (${courseID}) ${courseTitle} Course? ` +
+                "This action cannot be undone!",
+              [
+                {
+                  text: "Yes",
+                  onPress: () => {
+                    course.deleteCourse(email, courseID).then(() => {
+                      navigate("Home");
+                    });
+                  }
+                },
+                { text: "No" }
+              ]
+            )
+          }
+        >
+          <Text style={forwordsStyles.buttonText}>Delete Course</Text>
+        </TouchableOpacity>
+      );
     } else {
-      studentsList = <ActivityIndicator />;
+      deleteButton = null;
     }
+
 
     return (
       <View style={forwordsStyles.container}>
@@ -75,24 +93,11 @@ export default class AddCourse extends Component {
           <Text style={forwordsStyles.mainText}>
             Recent Activity from groups in this class:
           </Text>
-          {studentsList}
-          <TouchableOpacity
-            style={forwordsStyles.deleteNarrowLongButton}
-            onPress={() => 
-              Alert.alert('Are You Sure?', 
-                          `Are you sure you want to delete the (${courseID}) ${courseTitle} Course? ` +
-                          'This action cannot be undone!', 
-                          [{ text: 'Yes', onPress: () => {
-                            course.deleteCourse(email, courseID).then(() => {
-                              this.refresh();
-                            });
-                          } }, { text: 'No' }])
-            }
-          >
-            <Text style={forwordsStyles.buttonText}>Delete Course</Text>
-          </TouchableOpacity>
+          {studentList}
+          {deleteButton}
         </ScrollView>
       </View>
     );
   }
 }
+
