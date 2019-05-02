@@ -1,6 +1,7 @@
 import React from "react";
 import * as firebase from "firebase";
-import course from '../../services/course';
+import course from "../../services/course";
+import MyCourses from "./components/MyCourses";
 import {
   Button,
   ScrollView,
@@ -25,6 +26,10 @@ export default class HomeScreen extends React.Component {
   }
 
   async componentDidMount() {
+    this.loadMycourses();
+  }
+
+  async loadMycourses() {
     var email = firebase.auth().currentUser.email;
     let myCourses = await course.getMyCourses(email);
     this.setState({ myCourses });
@@ -45,31 +50,10 @@ export default class HomeScreen extends React.Component {
 
   render() {
     const { navigate } = this.props.navigation;
-    if (this.state.myCourses.length > 0) {
-      var myCourses = this.state.myCourses.map(course => (
-        <TouchableOpacity
-          key={course.courseID}
-          style={forwordsStyles.narrowLongButton}
-          onPress={() =>
-            navigate("CourseInfo", {
-              courseID: course.courseID,
-              courseTitle: course.title
-            })
-          }
-        >
-          <Text style={forwordsStyles.buttonText}>{course.title}</Text>
-        </TouchableOpacity>
-      ));
-    } else {
-    }
-
     return (
       <View style={forwordsStyles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={forwordsStyles.headingView}>
-            <Text style={forwordsStyles.headingText}>My Courses</Text>
-          </View>
-          {myCourses}
+          <MyCourses navigation={this.props.navigation} />
           <TouchableOpacity
             style={forwordsStyles.addCourseNarrowLongButton}
             onPress={() => navigate("RoleSelection")}
