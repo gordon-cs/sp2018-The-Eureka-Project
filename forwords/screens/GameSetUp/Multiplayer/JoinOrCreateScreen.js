@@ -109,6 +109,7 @@ export default class JoinOrCreateScreen extends Component {
               placeholderTextColor="black"
               returnKeyType="done"
               keyboardType="number-pad"
+              onSubmitEditing={() => this.joinOnPress()}
             />
 
             <TouchableOpacity
