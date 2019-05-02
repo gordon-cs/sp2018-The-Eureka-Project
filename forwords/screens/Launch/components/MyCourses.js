@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import * as firebase from "firebase";
 import course from "../../../services/course";
-import { TouchableOpacity, Text, View, } from "react-native";
+import { TouchableOpacity, Text, View } from "react-native";
 import forwordsStyles from "../../../constants/forwordsStyles";
 
-export default class MyCourses extends Component {
+export default class coursesITeach extends Component {
   static navigationOptions = {
     header: null
   };
@@ -13,21 +13,40 @@ export default class MyCourses extends Component {
     super(props);
 
     this.state = {
-      myCourses: []
+      coursesITeach: [],
+      coursesITake: []
     };
   }
 
   async componentDidMount() {
     const email = firebase.auth().currentUser.email;
-    let myCourses = await course.getMyCourses(email);
-    this.setState({ myCourses });
+    let coursesITeach = await course.getMyCourses(email, "teacher");
+    let coursesITake = await course.getMyCourses(email, "student");
+    this.setState({ coursesITeach, coursesITake });
   }
 
   render() {
     const { navigate } = this.props.navigation;
-    let myCourses;
-    if (this.state.myCourses.length > 0) {
-      myCourses = this.state.myCourses.map(course => (
+    const { coursesITeach, coursesITake } = this.state;
+    let listOfCoursesITeach, listOfCoursesITake;
+    if (coursesITeach.length > 0) {
+      listOfCoursesITeach = coursesITeach.map(course => (
+        <TouchableOpacity
+          key={course.courseID}
+          style={forwordsStyles.narrowLongButton}
+          onPress={() =>
+            navigate("CourseInfo", {
+              courseID: course.courseID,
+              courseTitle: course.title
+            })
+          }
+        >
+          <Text style={forwordsStyles.buttonText}>{course.title}</Text>
+        </TouchableOpacity>
+      ));
+    }
+    if (coursesITake.length > 0) {
+      listOfCoursesITake = coursesITake.map(course => (
         <TouchableOpacity
           key={course.courseID}
           style={forwordsStyles.narrowLongButton}
@@ -47,7 +66,10 @@ export default class MyCourses extends Component {
         <View style={forwordsStyles.headingView}>
           <Text style={forwordsStyles.headingText}>My Courses</Text>
         </View>
-        {myCourses}
+        <Text style={forwordsStyles.headingText}>Courses I Teach</Text>
+        {listOfCoursesITeach}
+        <Text style={forwordsStyles.headingText}>Courses I Am Enrolled In</Text>
+        {listOfCoursesITake}
       </View>
     );
   }
