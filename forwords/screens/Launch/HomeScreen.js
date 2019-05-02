@@ -5,13 +5,12 @@ import { httpsRoute } from "../../constants/API";
 import {
   Button,
   ScrollView,
-  StyleSheet,
   TouchableOpacity,
   View,
   Image,
   Text
 } from "react-native";
-import forwordsStyles from '../../constants/forwordsStyles';
+import forwordsStyles from "../../constants/forwordsStyles";
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -27,6 +26,20 @@ export default class HomeScreen extends React.Component {
   }
 
   async componentWillMount() {
+    var email = firebase.auth().currentUser.email;
+    try {
+      axios.get(`${httpsRoute}/my-courses/${email}`).then(res => {
+        const courses = res.data;
+        this.setState({
+          courses: courses
+        });
+      });
+    } catch (err) {
+      throw new Error("my-courses did not work");
+    }
+  }
+
+  async componentWillReceiveProps() {
     var email = firebase.auth().currentUser.email;
     try {
       axios.get(`${httpsRoute}/my-courses/${email}`).then(res => {
@@ -57,32 +70,35 @@ export default class HomeScreen extends React.Component {
     const { navigate } = this.props.navigation;
     if (this.state.courses.length > 0) {
       var courses = this.state.courses.map(course => (
-        <Button
+        <TouchableOpacity
           key={course.courseID}
-          color="#5b3b89"
-          title={course.title}
-          onPress={() => navigate("Register")}
-        />
+          style={forwordsStyles.narrowLongButton}
+          onPress={() =>
+            navigate("CourseInfo", {
+              courseID: course.courseID,
+              courseTitle: course.title
+            })
+          }
+        >
+          <Text style={forwordsStyles.buttonText}>{course.title}</Text>
+        </TouchableOpacity>
       ));
     } else {
-      var courses = (
-        <Button
-          color="#5b3b89"
-          title={"Add a course"}
-          onPress={() => navigate("RoleSelection")}
-        />
-      );
     }
 
     return (
       <View style={forwordsStyles.container}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-        >
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={forwordsStyles.headingView}>
             <Text style={forwordsStyles.headingText}>My Courses</Text>
           </View>
           {courses}
+          <TouchableOpacity
+            style={forwordsStyles.addCourseNarrowLongButton}
+            onPress={() => navigate("RoleSelection")}
+          >
+            <Text style={forwordsStyles.buttonText}>{"Add a course"}</Text>
+          </TouchableOpacity>
           <View style={forwordsStyles.headingView}>
             <TouchableOpacity
               style={forwordsStyles.headingView}

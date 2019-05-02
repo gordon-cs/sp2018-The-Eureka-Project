@@ -1,11 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { httpsRoute } from "../../../constants/API";
-import {
-  Button,
-  ActivityIndicator,
-  ScrollView
-} from "react-native";
+import { Button, ActivityIndicator, ScrollView, TouchableOpacity, Text, } from "react-native";
+import forwordsStyles from "../../../constants/forwordsStyles";
 
 export default class LessonSelection extends Component {
   static navigationOptions = {
@@ -82,12 +79,15 @@ export default class LessonSelection extends Component {
     // If the user is playing solo
     if (playerType == "solo") {
       buttons = lessons.map(lesson => (
-        <Button
+        <TouchableOpacity
           key={lesson.lessonID}
-          color="#5b3b89"
-          title={"Lesson " + lesson.lessonID + ": " + lesson.title}
+          style={forwordsStyles.narrowLongButton}
           onPress={() => this.createGame(lesson.lessonID)}
-        />
+        >
+          <Text style={forwordsStyles.buttonText}>
+            {"Lesson " + lesson.lessonID + ": " + lesson.title}
+          </Text>
+        </TouchableOpacity>
       ));
     }
     // If the user is a HOST (playing with others) route them to the Lobby

@@ -1,51 +1,81 @@
 import React, { Component } from "react";
+import axios from "axios";
 import {
   Text,
   View,
   TextInput,
   Picker,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from "react-native";
-import forwordsStyles from '../../../constants/forwordsStyles';
+import forwordsStyles from "../../../constants/forwordsStyles";
+import firebase from "firebase";
+import { httpsRoute } from "../../../constants/API";
 
 export default class AddCourse extends Component {
   static navigationOptions = {
-    header: null,
+    header: null
   };
   constructor(props) {
     super(props);
 
     this.state = {
-        courseCode: '',
-        courseTitle: '',
-        language: '',
+      courseCode: "",
+      courseTitle: "",
+      targetLanguage: "Chinese",
+      chosenIndex: ""
     };
   }
-
-
 
   // parameter courseCode: text input from the user about which course to add
   // then navigate back to the Home Screen
   async addCourseOnPress() {
     const { navigate } = this.props.navigation;
-    axios
-      .post(`${httpsRoute}/add-course`, {
-        courseCode: this.state.courseCode
-      })
-      .then(function(res) {
-        console.log("/add-course worked");
-        navigate("Home");
-      })
-      .catch(function(err) {
-        console.log("/add-course failed");
-      });
+    var email = firebase.auth().currentUser.email;
+    if (this.state.courseCode === "") {
+      Alert.alert("The Course Code field is required.");
+    } else {
+      axios
+        .post(`${httpsRoute}/add-course`, {
+          courseCode: this.state.courseCode,
+          email: email
+        })
+        .then(function(res) {
+          console.log("/add-course worked");
+          navigate("Home");
+        });
+    }
+  }
+
+  // parameter courseCode: text input from the user about which course to add
+  // then navigate back to the Home Screen
+  async createCourseOnPress() {
+    const { navigate } = this.props.navigation;
+    var email = firebase.auth().currentUser.email;
+    if (this.state.courseTitle === "") {
+      Alert.alert("The Course Title field is required.");
+    } else {
+      axios
+        .post(`${httpsRoute}/create-course`, {
+          title: this.state.courseTitle,
+          langauge: this.state.targetLanguage,
+          email: email
+        })
+        .then(res => {
+          if (res.data.errno === 1048) {
+            Alert.alert("The title cannot be left blank.");
+          } else {
+            console.log("/create-course worked!");
+            navigate("Home");
+          }
+        });
+    }
   }
 
   render() {
-    const { navigate } = this.props.navigation;
     const role = this.props.navigation.state.params.role; // host, member, or solo
 
-    if (role === 'student') {
+    if (role === "student") {
       return (
         <View style={forwordsStyles.container}>
           <View style={forwordsStyles.headingView}>
@@ -73,7 +103,7 @@ export default class AddCourse extends Component {
           </TouchableOpacity>
         </View>
       );
-    } else if (role === 'teacher') {
+    } else if (role === "teacher") {
       return (
         <View style={forwordsStyles.container}>
           <View style={forwordsStyles.headingView}>
@@ -83,41 +113,47 @@ export default class AddCourse extends Component {
             Enter the details of the course you are creating.
           </Text>
 
-
           <TextInput
             style={forwordsStyles.textInput}
             alignItems="center"
             placeholder="Course Title"
             onChangeText={courseTitle => this.setState({ courseTitle })}
-            autoCorrect={false}
-            autoCapitalize="none"
+            autoCorrect={true}
             placeholderTextColor="black"
             returnKeyType="done"
             keyboardType="default"
           />
 
-          <Picker
-            selectedValue={this.state.language}
-            style={{height: 50, width: 100}}
-            onValueChange={(itemValue, itemIndex) =>
-              this.setState({language: itemValue})
-            }>
-            <Picker.Item label="Chinese" value="Chinese" />
-            <Picker.Item label="Spanish" value="Spanish" />
-            <Picker.Item label="English" value="English" />
-          </Picker>
-
-
-
-          <TouchableOpacity
-            style={forwordsStyles.primaryButton}
-            onPress={() => this.addCourseOnPress()}
-          >
-            <Text style={forwordsStyles.buttonText}>Create Course</Text>
-          </TouchableOpacity>
+          <Text style={forwordsStyles.mainText}>
+            Select the target language of this course:
+          </Text>
+          <View style={{ flex: 1 }}>
+            <Picker
+              selectedValue={this.state.targetLanguage}
+              style={forwordsStyles.picker}
+              itemStyle={forwordsStyles.mainText}
+              onValueChange={(itemValue, itemIndex) =>
+                this.setState({
+                  targetLanguage: itemValue,
+                  choosenIndex: itemIndex
+                })
+              }
+            >
+              <Picker.Item key={"es"} label={"Spanish"} value={"Spanish"} />
+              <Picker.Item key={"en"} label={"English"} value={"English"} />
+              <Picker.Item key={"zh"} label={"Chinese"} value={"Chinese"} />
+            </Picker>
+          </View>
+          <View style={{ flex: 1 }}>
+            <TouchableOpacity
+              style={forwordsStyles.primaryButton}
+              onPress={() => this.createCourseOnPress()}
+            >
+              <Text style={forwordsStyles.buttonText}>Create Course</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       );
-      
     }
   }
 }

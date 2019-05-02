@@ -11,6 +11,7 @@ import LobbyScreen from '../screens/GameSetUp/Multiplayer/LobbyScreen';
 import GameOverScreen from "../screens/GamePlay/GameOverScreen";
 import AddCourseScreen from '../screens/Launch/AddCourse/AddCourseScreen';
 import RoleSelectionScreen from '../screens/Launch/AddCourse/RoleSelectionScreen';
+import CourseInfoScreen from '../screens/Launch/AddCourse/CourseInfoScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -59,17 +60,26 @@ const AddCourseStack = createStackNavigator({
 const RoleSelectionStack = createStackNavigator({
   RoleSelection: RoleSelectionScreen,
 });
+
+const CourseInfoStack = createStackNavigator({
+  CourseInfo: CourseInfoScreen,
+});
+
 export default createStackNavigator({
   LoginStack,
   HomeStack,
-  RegisterStack,
   AddCourseStack,
+  RoleSelectionStack,
+  HomeStack,
+  AddCourseStack,
+  LoginStack,
+  RegisterStack,
   GameSetUpStack,
   JoinOrCreateStack,
   ForgotPasswordStack,
   GamePlayStack,
   GameOverStack,
   InstructionsStack,
+  CourseInfoStack,
   LobbyStack,
-  RoleSelectionStack,
 });

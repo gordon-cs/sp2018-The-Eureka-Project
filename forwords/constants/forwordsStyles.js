@@ -31,9 +31,11 @@ export default StyleSheet.create({
   },
   buttonText: {
     textAlign: "center",
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: "bold",
-    color: "white"
+    color: "white",
+    textAlign: 'center',
+    padding: 9
   },
   primaryButton: {
     justifyContent: "center",
@@ -61,6 +63,42 @@ export default StyleSheet.create({
     height: 120,
     borderRadius: 20,
     backgroundColor: "#5b3b89"
+  },
+  narrowLongButton: {
+    justifyContent: "center",
+    flexDirection: "column",
+    margin: 1,
+    width: 280,
+    height: 50,
+    borderRadius: 15,
+    backgroundColor: "#5b3b89"
+  },
+  addCourseNarrowLongButton: {
+    justifyContent: "center",
+    flexDirection: "column",
+    margin: 1,
+    width: 280,
+    height: 40,
+    borderRadius: 15,
+    backgroundColor: "#1dafe3"
+  },
+  deleteNarrowLongButton: {
+    justifyContent: "center",
+    flexDirection: "column",
+    margin: 1,
+    width: 280,
+    height: 40,
+    borderRadius: 15,
+    backgroundColor: "red"
+  },
+  moreNarrowLongButton: {
+    justifyContent: "center",
+    flexDirection: "column",
+    margin: 1,
+    width: 280,
+    height: 40,
+    borderRadius: 15,
+    backgroundColor: "#5b3b89",
   },
   logo: {
     height: 60,
