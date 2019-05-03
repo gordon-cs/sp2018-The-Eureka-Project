@@ -8,8 +8,8 @@ var app = express();
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-var wsPort = 4445;
-var httpsPort = 9995;
+var wsPort = 3333;
+var httpsPort = 8888;
 
 // Send static images to frontend
 app.use(express.static("images"));
@@ -518,6 +518,14 @@ app.get("/", function(req, res) {
   res.send("Welcome to forwords!");
 });
 
+// returns the list of lessons
+app.get("/lesson-list", function(req, res) {
+  connection.query("SELECT * FROM Lesson;", function(error, results) {
+    if (error) throw error;
+    res.json(results);
+  });
+});
+
 // return the info for a given user with this email
 // TODO: make this so only authorized users who have auth'd with this email can access this info
 // OR only if they are a teacher of this student they can access this info
@@ -535,14 +543,6 @@ app.get("/:email", function(req, res) {
         // throw error;
       });
     }
-    res.json(results);
-  });
-});
-
-// returns the list of lessons
-app.get("/lesson-list", function(req, res) {
-  connection.query("SELECT * FROM Lesson;", function(error, results) {
-    if (error) throw error;
     res.json(results);
   });
 });
@@ -598,7 +598,7 @@ app.get("/student-list/:email/:courseID", function(req, res) {
           console.log("the err.Error object = ", error);
           res.send(error);
           return connection.rollback(function() {
-            console.log("/student-list erro");
+            console.log("/student-list error");
             // throw error;
           });
         }
