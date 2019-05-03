@@ -27,10 +27,6 @@ export default class GameOverScreen extends React.Component {
       }
     ]);
     global.ws.send(stringifiedRequest);
-
-
-
-    console.log("trying to go to home screen");
     navigate("Home");
   }
 

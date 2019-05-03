@@ -1,6 +1,5 @@
 import React from "react";
 import * as firebase from "firebase";
-import course from "../../services/course";
 import {
   Button,
   ScrollView,

@@ -60,13 +60,14 @@ connection.connect(function(err) {
 // Classes
 // Player Class
 class Player {
-  constructor(IP, ws, choices, prompt, gameID, playerType) {
+  constructor(IP, ws, choices, prompt, gameID, playerType, email) {
     this.IP = IP;
     this.ws = ws;
     this.choices = choices;
     this.prompt = prompt;
     this.gameID = gameID;
     this.playerType = playerType; // Either 'host', 'member', or 'solo'
+    this.email = email;
   }
 }
 // Game Class
@@ -105,7 +106,7 @@ ws.on("connection", function connection(ws, req) {
   console.log("Connection accepted:", IP);
 
   // Immediately create player & game objects, with this ws connection as one of their attributes
-  var player = new Player(IP, ws, [], {}, 0, "");
+  var player = new Player(IP, ws, [], {}, 0, '', '');
   var game = new Game(
     0,
     0,
@@ -131,9 +132,10 @@ ws.on("connection", function connection(ws, req) {
     message = JSON.parse(message);
 
     /* OPTIONS FOR WHAT THE USER WILL SEND:
-     * 'create' - they are either a single player, or the host of a multiplayer game
+     * 'create' - they are either a single player, or the host of a multiplayer game. Includes the lesson #.
+     * 'initGame' - 
      * 'join', gameID - they are trying to join a multiplayer game with that gameID
-     * 'choicesAndPrompt' - they are requesting their choices and prompts to be sent to them
+     * 'initChoicesAndPrompt' - they are requesting their choices and prompts to be sent to them
      */
 
     if (message[0].request == "create") {
@@ -141,11 +143,14 @@ ws.on("connection", function connection(ws, req) {
       var gameID = await getGameID(); // should return an int that is the next wordID available in the Game table
       player.gameID = gameID;
       player.playerType = "host";
+      const email = message[0].email;
+      player.email = email;
       var lessonID = message[0].lessonID;
       game.lessonID = lessonID;
       game.gameID = gameID;
       game.players = [player];
-      setGame(game);
+      insertGame(game);
+      insertPlayer(player);
       // Put this in the map --> key: gameID value: game Object
       gameMap.set(gameID, game);
       // Send gameID message
@@ -217,10 +222,13 @@ ws.on("connection", function connection(ws, req) {
 
     if (message[0].request == "join") {
       player.playerType = "member";
+      const email = message[0].email;
+      player.email = email;
       var gameID = parseInt(message[0].gameID);
       // look up in the map and see if any key equals that gameID they requested
       if (gameMap.has(gameID)) {
         player.gameID = gameID;
+        insertPlayer(player);
         // Get game at that gameID in the map, add the player to it
         gameMap.get(gameID).players.push(player);
         let joinGameIDMessage = JSON.stringify([{ isValidGameID: true }]); // Convert JSON to string inorder to send
@@ -254,6 +262,7 @@ ws.on("connection", function connection(ws, req) {
       var input = message[0].input;
 
       var inputGameID = checkGameIDOfWS(ws, gameMap);
+      var inputEmail = checkEmailOfWS(ws, gameMap);
       var inputGame = gameMap.get(inputGameID);
       /*
        * Given: [{"request":"input","inputGameID":1,"input":94}]
@@ -282,8 +291,7 @@ ws.on("connection", function connection(ws, req) {
         if (input == inputGame.players[i].prompt.wordID) {
           isCorrect = true;
           gameMap.get(inputGameID).correctAnswers++;
-          console.log(
-            "                             AFTER correctAnswers incremented:",
+          console.log("                             AFTER correctAnswers incremented:",
             gameMap.get(inputGameID).correctAnswers
           );
 
@@ -291,11 +299,7 @@ ws.on("connection", function connection(ws, req) {
             inputGame,
             inputGame.players[i].prompt
           );
-          if (
-            gameMap.get(inputGameID).correctAnswers %
-              (gameMap.get(inputGameID).players.length * 4) ==
-            0
-          ) {
+          if (gameMap.get(inputGameID).correctAnswers % (gameMap.get(inputGameID).players.length * 4) == 0) {
             gameMap.get(inputGameID).roundNumber++;
             gameMap.get(inputGameID).correctAnswers = 0;
           }
@@ -313,6 +317,7 @@ ws.on("connection", function connection(ws, req) {
               "       sent message1[1]:",
               newPromptAndValidationMessage
             );
+            insertInput(input, inputEmail, inputGameID, true);
             inputGame.players[i].prompt = newPrompt;
           }
           // I answered your prompt
@@ -355,6 +360,11 @@ ws.on("connection", function connection(ws, req) {
     }
 
     if (message[0].request == "endGame") {
+      const score = await getScore(player);
+      var scoreMessage = JSON.stringify(["score", { roundNumber: gameMap.get(player.gameID).roundNumber}, { score: score }]); // Convert JSON to string inorder to send;
+      console.log("         >>>>>>>>>>Sent message", scoreMessage);
+      ws.send(scoreMessage);
+
       gameMap.delete(game.gameID);
       // Clear out player & game objects once the game is over
       player = new Player(IP, ws, [], {}, 0);
@@ -367,8 +377,17 @@ function checkGameIDOfWS(ws, map) {
   for (const value of map.values()) {
     for (let i = 0; i < value.players.length; i++) {
       if (ws == value.players[i].ws) {
-        // console.log("checkGameIDOfWS: This player is  part of the game {",value.players[i].gameID,"}in the gameMap.")
         return value.players[i].gameID;
+      }
+    }
+  }
+}
+
+function checkEmailOfWS(ws, map) {
+  for (const value of map.values()) {
+    for (let i = 0; i < value.players.length; i++) {
+      if (ws == value.players[i].ws) {
+        return value.players[i].email;
       }
     }
   }
@@ -389,7 +408,7 @@ function getGameID() {
   });
 }
 
-function setGame(game) {
+function insertGame(game) {
   return new Promise(function(resolve, reject) {
     let lessonID = game.lessonID;
     let promptType = game.promptType;
@@ -409,6 +428,39 @@ function setGame(game) {
       function(error, results) {
         if (error) throw error;
         resolve("setGame completed!");
+      }
+    );
+  });
+}
+
+function insertPlayer(player) {
+  console.log("insertPlayer(", player.email,")!");
+  return new Promise(function(resolve, reject) {
+    let email = player.email;
+    let gameID = player.gameID;
+    var sql = "INSERT INTO Player VALUES ((SELECT userID FROM User WHERE email = ?), ?);"
+    var inserts = [email, gameID];
+    sql = mysql.format(sql, inserts);
+    connection.query(sql, inserts, function(error) {
+        if (error) throw error;
+        resolve("insertPlayer completed!");
+      }
+    );
+  });
+}
+
+// insertInput(input, inputEmail, gameID, true);
+function insertInput(wordID, email, gameID, wasAnsweredCorrectly) {
+  // console.log("insertInput()! params=wordID=", wordID, email, "gameID=", gameID, "correct?:", wasAnsweredCorrectly);
+  return new Promise(function(resolve, reject) {
+    let correctBit = wasAnsweredCorrectly ? 1 : 0;
+    var sql = "INSERT INTO InputHistory (wordID, userID, gameID, wasAnsweredCorrectly) VALUES " +
+    "(?, (SELECT userID FROM User WHERE email = ?), ?, ?);"
+    var inserts = [wordID, email, gameID, correctBit];
+    sql = mysql.format(sql, inserts);
+    connection.query(sql, inserts, function(error) {
+        if (error) throw error;
+        resolve("insertPlayer completed!");
       }
     );
   });
@@ -443,6 +495,24 @@ function getGameChoices(game) {
     );
   });
 }
+
+function getScore(player) {
+  return new Promise(function(resolve, reject) {
+    let email = player.email;
+    let gameID = player.gameID;
+    var sql = "SELECT * FROM InputHistory " +
+    "WHERE userID = (SELECT userID FROM User WHERE email = ?) AND gameID = ? AND wasAnsweredCorrectly = 1;";
+    var inserts = [email, gameID];
+    var sql = mysql.format(sql, inserts);
+    connection.query(sql, inserts, function(error, results) {
+      if (error) throw error;
+      let score = results.length;
+      resolve(score);
+    }
+  );
+});
+}
+
 
 // When initializing round, this code will generate prompts for each player.
 function getPrompts(game) {
@@ -508,6 +578,9 @@ Array.prototype.shuffle = function() {
   }
   return input;
 };
+
+
+
 
 // HTTP
 

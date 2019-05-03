@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import lesson from '../../../services/lesson'
 import { ActivityIndicator, ScrollView, TouchableOpacity, Text, } from "react-native";
 import forwordsStyles from "../../../constants/forwordsStyles";
+import * as firebase from "firebase";
 
 export default class LessonSelection extends Component {
   static navigationOptions = {
@@ -24,12 +25,14 @@ export default class LessonSelection extends Component {
   createGame(lessonID) {
     const { navigate } = this.props.navigation;
     const playerType = this.props.navigation.state.params.playerType; // host, member, or solo
+    const email = firebase.auth().currentUser.email;
 
     // Request to send to the server - must be stringified.
     var stringifiedRequest = JSON.stringify([
       {
         request: "create",
-        lessonID: lessonID
+        lessonID: lessonID,
+        email: email
       }
     ]);
     console.log(`LessonSelection: Sent message: ${stringifiedRequest}`);

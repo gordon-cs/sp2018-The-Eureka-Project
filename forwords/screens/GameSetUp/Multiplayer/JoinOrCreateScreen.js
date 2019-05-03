@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import * as firebase from "firebase";
 import {
   StyleSheet,
   Text,
@@ -19,7 +20,7 @@ export default class JoinOrCreateScreen extends Component {
     super(props);
 
     this.state = {
-      gameID: "1"
+      gameID: ""
     };
   }
 
@@ -32,6 +33,7 @@ export default class JoinOrCreateScreen extends Component {
 
   joinOnPress() {
     const { navigate } = this.props.navigation;
+    const email = firebase.auth().currentUser.email;
     var playerType = "member"; // First time it is set as 'member'
     var userInputGameID = parseInt(this.state.gameID);
     // Request to join a certain group
@@ -41,7 +43,8 @@ export default class JoinOrCreateScreen extends Component {
       var stringifiedRequest = JSON.stringify([
         {
           request: "join",
-          gameID: userInputGameID // only a host can send 'create'
+          gameID: userInputGameID, // only a host can send 'create'
+          email: email
         }
       ]);
       global.ws.send(stringifiedRequest);

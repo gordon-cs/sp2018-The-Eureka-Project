@@ -22,7 +22,8 @@ export default class GamePlayScreen extends Component {
       promptObj: {},
       roundNumber: 0,
       newRound: false,
-      resetTimer: true
+      resetTimer: true,
+      score: 0,
     };
     this.wasAnsweredCorrectly = this.wasAnsweredCorrectly.bind(this);
     this.endGame = this.endGame.bind(this);
@@ -114,6 +115,10 @@ export default class GamePlayScreen extends Component {
             answeredCorrectly: [receivedMessage[2].oldInput, 0]
           });
         }, 750);
+      }
+      else if (receivedMessage[0] == 'score') {
+        console.log("this.state.score=", this.state.score);
+        this.setState({ score: receivedMessage[0].score });
       }
       if (receivedMessage[1].roundNumber > this.state.roundNumber) {
         this.newRound(receivedMessage[1].roundNumber);
