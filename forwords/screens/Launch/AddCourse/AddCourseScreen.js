@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import forwordsStyles from "../../../constants/forwordsStyles";
 import firebase from "firebase";
+import course from "../../../services/course";
 import { httpsRoute } from "../../../constants/API";
 
 export default class AddCourseScreen extends Component {
@@ -40,8 +41,18 @@ export default class AddCourseScreen extends Component {
           courseCode: this.state.courseCode,
           email: email
         })
-        .then(function(res) {
-          navigate("UserProfile", { email: email })
+        .then(res => {
+          if (res.data.errno == 1062) {
+            Alert.alert(
+              `You are already part of the course with code '${this.state.courseCode}'.`
+            );
+          } else if (res.data.errno == 1452) {
+            Alert.alert(
+              `There is no course with code '${this.state.courseCode}'.`
+            );          
+          } else {
+            navigate("UserProfile", { email: email, refresh: 'heyo'});
+          }
         });
     }
   }
@@ -63,8 +74,9 @@ export default class AddCourseScreen extends Component {
         .then(res => {
           if (res.data.errno === 1048) {
             Alert.alert("The title cannot be left blank.");
-          } else {            
-            navigate("UserProfile", { email: email })}
+          } else {
+            navigate("UserProfile", { email: email, refresh: "whddup" });
+          }
         });
     }
   }
@@ -90,7 +102,7 @@ export default class AddCourseScreen extends Component {
             autoCapitalize="none"
             placeholderTextColor="black"
             returnKeyType="done"
-            keyboardType="default"
+            keyboardType="number-pad"
             onSubmitEditing={() => this.addCourseOnPress()}
           />
           <TouchableOpacity

@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { Component } from "React";
 import {
-  StyleSheet,
   Text,
   TextInput,
   View,
