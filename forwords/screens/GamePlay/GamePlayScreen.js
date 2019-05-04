@@ -4,7 +4,7 @@ import Choice from "./components/Choice";
 import Prompt from "./components/Prompt";
 import Timer from "./components/Timer";
 import forwordsStyles from '../../constants/forwordsStyles';
-import { View, StyleSheet, Platform, Text, Button } from "react-native";
+import { View, Text, } from "react-native";
 
 export default class GamePlayScreen extends Component {
   static navigationOptions = {
