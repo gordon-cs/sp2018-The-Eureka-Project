@@ -115,6 +115,9 @@ export default class GamePlayScreen extends Component {
           });
         }, 750);
       }
+      else if (receivedMessage[0] == "message5") {
+        this.newRound(receivedMessage[1].roundNumber);
+      }
       if (receivedMessage[1].roundNumber > this.state.roundNumber) {
         this.newRound(receivedMessage[1].roundNumber);
       }
