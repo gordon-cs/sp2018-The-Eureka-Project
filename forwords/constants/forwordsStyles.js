@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Platform } from "react-native";
 
 export default StyleSheet.create({
   container: {
@@ -147,5 +148,47 @@ export default StyleSheet.create({
   iconsContainer: {
     flexDirection: "row",
     margin: 10
+  },
+  choicesContainer: {
+    flex: 1,
+    flexDirection: "row",
+    margin: 10
+  },
+  timerContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 40,
+    borderColor: "white",
+    width: 75,
+    height: 75,
+    backgroundColor: "white"
+  },
+  mainContainer: {
+    alignItems: "center",
+    flex: 1,
+    paddingTop: Platform.OS === "ios" ? 20 : 0,
+    backgroundColor: "#5b3b89"
+  },
+  splashContainer: {
+    alignItems: "center",
+    flex: 1,
+    paddingTop: Platform.OS === "ios" ? 20 : 0,
+    backgroundColor: "white"
+  },
+  bulletText: {
+    alignItems: "center",
+    marginTop: 10,
+    marginBottom: 10,
+    marginLeft: 25,
+    marginRight: 25,
+    fontSize: 25,
+    color: "#5b3b89"
+  },
+  instructionsContainer: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    paddingTop: Platform.OS === "ios" ? 20 : 0,
+    backgroundColor: "#fff"
   },
 });

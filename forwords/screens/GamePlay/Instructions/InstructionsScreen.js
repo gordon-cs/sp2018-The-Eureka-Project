@@ -8,6 +8,7 @@ import {
   ScrollView
 } from "react-native";
 import TimerMixin from "react-timer-mixin";
+import forwordsStyles from "../../../constants/forwordsStyles";
 
 export default class InstructionScreen extends React.Component {
   static navigationOptions = {
@@ -43,28 +44,28 @@ export default class InstructionScreen extends React.Component {
   }
 
   render() {
-    const playerType = this.props.navigation.state.params.playerType;
+    // const playerType = this.props.navigation.state.params.playerType;
+    const playerType = "solo";
     if (playerType == "solo") {
       return (
-        <View style={styles.container}>
-          <ScrollView
-            style={styles.container}
-            contentContainerStyle={styles.contentContainer}
-          >
-            <View style={styles.mainContainer}>
-              <Text style={styles.headingText}>How To Play</Text>
-              <Text style={styles.bulletText}>
+        <View style={forwordsStyles.container}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={forwordsStyles.instructionsContainer}>
+              <View style={forwordsStyles.headingView}>
+                <Text style={forwordsStyles.headingText}>How To Play</Text>
+              </View>
+              <Text style={forwordsStyles.bulletText}>
                 1. Read the prompt at the top
               </Text>
-              <Text style={styles.bulletText}>
+              <Text style={forwordsStyles.bulletText}>
                 2. Select the correct answer from the choices at the bottom
               </Text>
-              <View style={styles.buttonContainer}>
+              <View style={forwordsStyles.headingView}>
                 <TouchableOpacity
-                  style={styles.button}
+                  style={forwordsStyles.primaryButton}
                   onPress={() => this.proceedOnPress()}
                 >
-                  <Text style={styles.buttonText}>Proceed</Text>
+                  <Text style={forwordsStyles.buttonText}>Proceed</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -73,35 +74,24 @@ export default class InstructionScreen extends React.Component {
       );
     } else {
       return (
-        <View style={styles.container}>
-          <ScrollView
-            style={styles.container}
-            contentContainerStyle={styles.contentContainer}
-          >
-            <View style={styles.mainContainer}>
-              <Text style={styles.headingText}>How To Play</Text>
-              <Text style={styles.bulletText}>
+        <View style={forwordsStyles.instructionsContainer}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={forwordsStyles.instructionsContainer}>
+              <View style={forwordsStyles.headingView}>
+                <Text style={forwordsStyles.headingText}>How To Play</Text>
+              </View>
+              <Text style={forwordsStyles.bulletText}>
                 1. Everyone gets a prompt at the top, with answer options at the
                 bottom.
               </Text>
-              <Text style={styles.bulletText}>
+              <Text style={forwordsStyles.bulletText}>
                 2. The trick is, the answers are most likely on one of your
                 teammates' screens!
               </Text>
-              <Text style={styles.bulletText}>
-                3. Say your prompt out loud in  your target language in order for them to
-                click the right option on their screen.
+              <Text style={forwordsStyles.bulletText}>
+                3. Say your prompt out loud in your target language in order for
+                them to click the right option on their screen.
               </Text>
-              {/*
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => navigate("GamePlay", { lesson: lesson.ID, gameID: gameID })}
-            >
-              <Text style={styles.buttonText}>Proceed</Text>
-            </TouchableOpacity>
-          </View>
-          */}
             </View>
           </ScrollView>
         </View>
@@ -109,58 +99,3 @@ export default class InstructionScreen extends React.Component {
     }
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff"
-  },
-  contentContainer: {
-    paddingTop: 30
-  },
-  mainContainer: {
-    flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
-    paddingTop: Platform.OS === "ios" ? 20 : 0,
-    backgroundColor: "#fff"
-  },
-  headingText: {
-    marginTop: 30,
-    marginBottom: 50,
-    marginLeft: 50,
-    fontSize: 50,
-    color: "black",
-    fontWeight: "bold"
-  },
-  bulletText: {
-    alignItems: "center",
-    marginTop: 10,
-    marginBottom: 10,
-    marginLeft: 25,
-    marginRight: 25,
-    fontSize: 25,
-    color: "#5b3b89"
-  },
-  button: {
-    justifyContent: "center",
-    flexDirection: "column",
-    margin: 10,
-    width: 120,
-    height: 120,
-    borderRadius: 80,
-    backgroundColor: "#5b3b89"
-  },
-  buttonContainer: {
-    alignItems: "center",
-    flex: 1,
-    borderRadius: 80,
-    margin: 10
-  },
-  buttonText: {
-    textAlign: "center",
-    fontSize: 25,
-    fontWeight: "bold",
-    color: "white"
-  }
-});

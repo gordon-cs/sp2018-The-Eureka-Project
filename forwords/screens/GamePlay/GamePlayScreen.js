@@ -3,6 +3,7 @@ import TimerMixin from "react-timer-mixin";
 import Choice from "./components/Choice";
 import Prompt from "./components/Prompt";
 import Timer from "./components/Timer";
+import forwordsStyles from '../../constants/forwordsStyles';
 import { View, StyleSheet, Platform, Text, Button } from "react-native";
 
 export default class GamePlayScreen extends Component {
@@ -187,26 +188,26 @@ export default class GamePlayScreen extends Component {
     const resetTimer = this.state.resetTimer;
     if (this.state.isLoading && this.state.roundNumber == 0 && !this.state.newRound) {
       return (
-        <View style={styles.splashContainer}>
-          <Text style={styles.headingText}>Get ready to play!</Text>
+        <View style={forwordsStyles.splashContainer}>
+          <Text style={forwordsStyles.headingText}>Get ready to play!</Text>
         </View>
       );
     } else if (this.state.newRound) {
       return (
-        <View style={styles.splashContainer}>
-          <Text style={styles.headingText}>You have advanced to round {this.state.roundNumber}</Text>
+        <View style={forwordsStyles.splashContainer}>
+          <Text style={forwordsStyles.headingText}>You have advanced to round {this.state.roundNumber}</Text>
         </View>
       );    
     } else if (!this.state.isLoading && !this.state.newRound) {
       return (
-        <View style={styles.mainContainer}>
-          <View style={styles.choicesTopContainer}>
+        <View style={forwordsStyles.mainContainer}>
+          <View style={forwordsStyles.choicesContainer}>
             <Prompt promptObj={promptObj} />
           </View>
-          <View style={styles.timerContainer}>
+          <View style={forwordsStyles.timerContainer}>
             <Timer resetTimer={resetTimer} endGame={this.endGame}/>
           </View>
-          <View style={styles.choicesTopContainer}>
+          <View style={forwordsStyles.choicesContainer}>
             <Choice
               text={topLeftChoice.targetLangauge}
               promptID={promptID}
@@ -222,7 +223,7 @@ export default class GamePlayScreen extends Component {
               wasAnsweredCorrectly={this.wasAnsweredCorrectly}
             />
           </View>
-          <View style={styles.choicesBottomContainer}>
+          <View style={forwordsStyles.choicesContainer}>
             <Choice
               text={bottomLeftChoice.targetLangauge}
               promptID={promptID}
@@ -243,43 +244,3 @@ export default class GamePlayScreen extends Component {
     }
   }
 }
-
-const styles = StyleSheet.create({
-  mainContainer: {
-    alignItems: "center",
-    flex: 1,
-    paddingTop: Platform.OS === "ios" ? 20 : 0,
-    backgroundColor: "#5b3b89"
-  },
-  choicesTopContainer: {
-    flex: 1,
-    flexDirection: "row",
-    margin: 10
-  },
-  choicesBottomContainer: {
-    flex: 1,
-    flexDirection: "row",
-    margin: 10
-  },
-  timerContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 40,
-    borderColor: "white",
-    width: 75,
-    height: 75,
-    backgroundColor: "white"
-  },
-  headingText: {
-    fontWeight: "bold",
-    fontSize: 30,
-    color: "black",
-    margin: 10
-  },
-  splashContainer: {
-    alignItems: "center",
-    flex: 1,
-    paddingTop: Platform.OS === "ios" ? 20 : 0,
-    backgroundColor: "white"
-  }
-});
