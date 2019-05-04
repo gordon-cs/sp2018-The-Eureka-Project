@@ -38,6 +38,13 @@ export default class UserProfileScreen extends Component {
     }
   }
 
+  // check params from addCourse and courseinfo screen to see if this profile screen should update
+  // shouldComponentUpdate() {
+  //   if (this.props.navigation.params.state.refresh !== undefined) {
+  //     console.log(this.props.navigation.params.state.refresh);
+  //   }
+  // }
+
   onSignOutPress = () => {
     const { navigate } = this.props.navigation;
     firebase.auth().signOut();
