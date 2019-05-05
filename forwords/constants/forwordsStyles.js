@@ -3,13 +3,22 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#fff"
+  },
+  specialContainer: {
+    flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
-  headingView: {
+  contentContainer: {
     alignItems: "center",
     justifyContent: "center",
+    paddingVertical: 50
+  },
+  headingView: {
+    alignItems: "center",
+    justifyContent: "center"
   },
   headingText: {
     fontWeight: "bold",
@@ -35,7 +44,7 @@ export default StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "white",
-    textAlign: 'center',
+    textAlign: "center",
     padding: 9
   },
   primaryButton: {
@@ -90,7 +99,7 @@ export default StyleSheet.create({
     width: 280,
     height: 40,
     borderRadius: 15,
-    backgroundColor: "red",
+    backgroundColor: "red"
   },
   signOutNarrowLongButton: {
     justifyContent: "center",
@@ -99,7 +108,7 @@ export default StyleSheet.create({
     width: 140,
     height: 40,
     borderRadius: 15,
-    backgroundColor: "black",
+    backgroundColor: "black"
   },
   moreNarrowLongButton: {
     justifyContent: "center",
@@ -108,13 +117,13 @@ export default StyleSheet.create({
     width: 280,
     height: 40,
     borderRadius: 15,
-    backgroundColor: "#5b3b89",
+    backgroundColor: "#5b3b89"
   },
   logo: {
     height: 60,
     width: 280,
     resizeMode: "contain",
-    margin: 20,
+    margin: 20
   },
   textButton: {
     alignItems: "center",
@@ -125,7 +134,7 @@ export default StyleSheet.create({
   contentContainer: {
     alignItems: "center",
     marginHorizontal: 50,
-    marginVertical: 50,
+    marginVertical: 50
   },
   mainText: {
     alignItems: "center",
@@ -137,7 +146,7 @@ export default StyleSheet.create({
   },
   picker: {
     width: 280,
-    height: 120,
+    height: 120
   },
   playerImage: {
     resizeMode: "contain",
@@ -147,5 +156,5 @@ export default StyleSheet.create({
   iconsContainer: {
     flexDirection: "row",
     margin: 10
-  },
+  }
 });

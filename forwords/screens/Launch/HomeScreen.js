@@ -13,7 +13,7 @@ import forwordsStyles from "../../constants/forwordsStyles";
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
-    header: null
+    title: 'Home',
   };
 
   constructor(props) {
@@ -36,13 +36,9 @@ export default class HomeScreen extends React.Component {
     const email = firebase.auth().currentUser.email;
     return (
       <View style={forwordsStyles.container}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <Button
-            style={forwordsStyles.textButton}
-            title="My Profile"
-            onPress={() => navigate("UserProfile", { email: email })}
-            color="purple"
-          />
+        <ScrollView showsVerticalScrollIndicator={false} style={forwordsStyles.container}
+        contentContainerStyle={forwordsStyles.contentContainer}
+        >
           <View style={forwordsStyles.headingView}>
             <TouchableOpacity
               style={forwordsStyles.headingView}

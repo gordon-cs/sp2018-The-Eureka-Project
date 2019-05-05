@@ -21,7 +21,6 @@ export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: "",
       email: "",
       password: ""
     };
@@ -45,7 +44,11 @@ export default class LoginScreen extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <KeyboardAvoidingView behavior="padding" style={forwordsStyles.container}>
+      <View style={forwordsStyles.container}>
+        <KeyboardAvoidingView
+          behavior="padding"
+          style={forwordsStyles.contentContainer}
+        >
           <Image
             style={forwordsStyles.logo}
             source={require("../../assets/images/forwordsFullLogo.png")}
@@ -95,7 +98,8 @@ export default class LoginScreen extends React.Component {
             }
             color="purple"
           />
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </View>
     );
   }
 }

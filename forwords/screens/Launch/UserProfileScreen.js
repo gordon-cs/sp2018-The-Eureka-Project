@@ -16,8 +16,9 @@ import forwordsStyles from "../../constants/forwordsStyles";
 
 export default class UserProfileScreen extends Component {
   static navigationOptions = {
-    header: null
+    title: 'Profile',
   };
+
   constructor(props) {
     super(props);
 
@@ -29,7 +30,7 @@ export default class UserProfileScreen extends Component {
   }
 
   async componentDidMount() {
-    const { email } = this.props.navigation.state.params;
+    const email = firebase.auth().currentUser.email;
     let userInfo = await user.getUserInfo(email); // full name
     this.setState({ isLoading: false, userInfo });
 
@@ -45,59 +46,69 @@ export default class UserProfileScreen extends Component {
   };
 
   render() {
-    const { email } = this.props.navigation.state.params;
+    const email = firebase.auth().currentUser.email;
     const { userInfo, isMyProfile } = this.state;
     const { navigate } = this.props.navigation;
 
     if (isMyProfile) {
       return (
-        <View style={forwordsStyles.container}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={forwordsStyles.headingView}>
-              <Image
-                style={forwordsStyles.playerImage}
-                source={require("../../assets/images/person.png")}
-              />
-              <Text style={forwordsStyles.headingText}>
-                {userInfo.firstName} {userInfo.lastName}
-              </Text>
-            </View>
-            <Text style={forwordsStyles.mainText}>email: {email}</Text>
-            <Text style={forwordsStyles.mainText}>
-              username: {userInfo.username}
+        <View 
+        style={forwordsStyles.container}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={forwordsStyles.container}
+          contentContainerStyle={forwordsStyles.contentContainer}
+        >
+          <View style={forwordsStyles.headingView}>
+            <Image
+              style={forwordsStyles.playerImage}
+              source={require("../../assets/images/person.png")}
+            />
+            <Text style={forwordsStyles.headingText}>
+              {userInfo.firstName} {userInfo.lastName}
             </Text>
-            <MyCourses navigation={this.props.navigation} />
+          </View>
+          <Text style={forwordsStyles.mainText}>email: {email}</Text>
+          <Text style={forwordsStyles.mainText}>
+            username: {userInfo.username}
+          </Text>
+          <MyCourses navigation={this.props.navigation} />
+          <TouchableOpacity
+            style={forwordsStyles.addCourseNarrowLongButton}
+            onPress={() => navigate("RoleSelection")}
+          >
+            <Text style={forwordsStyles.buttonText}>{"Add a course"}</Text>
+          </TouchableOpacity>
+          <View style={forwordsStyles.headingView}>
+            <Text style={forwordsStyles.headingText}>Recent Activity</Text>
+            <Text style={forwordsStyles.mainText}>
+              This will show game scores soon...:')
+            </Text>
+          </View>
+          <View style={forwordsStyles.headingView}>
             <TouchableOpacity
-              style={forwordsStyles.addCourseNarrowLongButton}
-              onPress={() => navigate("RoleSelection")}
+              style={forwordsStyles.signOutNarrowLongButton}
+              onPress={() => this.onSignOutPress()}
             >
-              <Text style={forwordsStyles.buttonText}>{"Add a course"}</Text>
+              <Text style={forwordsStyles.buttonText}>Sign Out</Text>
             </TouchableOpacity>
-            <View style={forwordsStyles.headingView}>
-              <Text style={forwordsStyles.headingText}>Recent Activity</Text>
-              <Text style={forwordsStyles.mainText}>
-                This will show game scores soon...:')
-              </Text>
-            </View>
-            <View style={forwordsStyles.headingView}>
-              <TouchableOpacity
-                style={forwordsStyles.signOutNarrowLongButton}
-                onPress={() => this.onSignOutPress()}
-              >
-                <Text style={forwordsStyles.buttonText}>Sign Out</Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
+          </View>
+        </ScrollView>
         </View>
       );
     } else {
       return (
+
         <View style={forwordsStyles.container}>
-          <Image
-            style={forwordsStyles.playerImage}
-            source={require("../../assets/images/person.png")}
-          />
-          <ScrollView>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={forwordsStyles.container}
+            contentContainerStyle={forwordsStyles.contentContainer}
+          >
+            <Image
+              style={forwordsStyles.playerImage}
+              source={require("../../assets/images/person.png")}
+            />
             <View style={forwordsStyles.headingView}>
               <Text style={forwordsStyles.headingText}>
                 {userInfo.firstName} {userInfo.lastName}
