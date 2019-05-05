@@ -42,7 +42,7 @@ export default class App extends React.Component {
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
           {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
           {/* {(this.state.isAuthenticated) ? <MainTabNavigator/> : <AppNavigator />} */}
-          {(false) ? <MainTabNavigator/> : <AppNavigator />}
+          {(this.state.isAuthenticated) ? <MainTabNavigator/> : <AppNavigator />}
 
         
         </View>

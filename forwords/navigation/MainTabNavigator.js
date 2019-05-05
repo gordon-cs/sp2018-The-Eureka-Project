@@ -1,91 +1,131 @@
-import { createStackNavigator } from 'react-navigation';
-import HomeScreen from '../screens/Launch/HomeScreen';
-import LoginScreen from '../screens/Authentication/LoginScreen';
-import GamePlayScreen from '../screens/GamePlay/GamePlayScreen';
-import JoinOrCreateScreen from '../screens/GameSetUp/Multiplayer/JoinOrCreateScreen';
-import GameSetUpScreen from '../screens/GameSetUp/GameSetUpScreen';
-import RegisterScreen from '../screens/Authentication/RegisterScreen';
-import InstructionsScreen from '../screens/GamePlay/Instructions/InstructionsScreen';
-import ForgotPasswordScreen from '../screens/Authentication/ForgotPasswordScreen';
-import LobbyScreen from '../screens/GameSetUp/Multiplayer/LobbyScreen';
-import GameOverScreen from "../screens/GamePlay/GameOverScreen";
-import AddCourseScreen from '../screens/Launch/AddCourse/AddCourseScreen';
-import RoleSelectionScreen from '../screens/Launch/AddCourse/RoleSelectionScreen';
-import CourseInfoScreen from '../screens/Launch/AddCourse/CourseInfoScreen';
-import UserProfileScreen from '../screens/Launch/UserProfileScreen';
+import React from "react";
+import { Platform } from "react-native";
+import {
+  createStackNavigator,
+  createBottomTabNavigator,
+  createSwitchNavigator
+} from "react-navigation";
 
+import TabBarIcon from "../components/TabBarIcon";
+
+// Main Tabs
+import HomeScreen from "../screens/Launch/HomeScreen";
+import UserProfileScreen from "../screens/Launch/UserProfileScreen";
+
+// Screens for tabs' stacks:
+/*
+ * Home:
+ * GamePlaySetUpStack
+ * GamePlaySwitch
+ * GameOverSwitch
+ *
+ *
+ * Profile:
+ * AddCoursesStack
+ * CourseInfoStack
+ */
+
+// import HomeScreen from '../screens/Launch/HomeScreen';
+// import LoginScreen from '../screens/Authentication/LoginScreen';
+// import GamePlayScreen from '../screens/GamePlay/GamePlayScreen';
+// import JoinOrCreateScreen from '../screens/GameSetUp/Multiplayer/JoinOrCreateScreen';
+// import GameSetUpScreen from '../screens/GameSetUp/GameSetUpScreen';
+// import RegisterScreen from '../screens/Authentication/RegisterScreen';
+// import InstructionsScreen from '../screens/GamePlay/Instructions/InstructionsScreen';
+// import ForgotPasswordScreen from '../screens/Authentication/ForgotPasswordScreen';
+// import LobbyScreen from '../screens/GameSetUp/Multiplayer/LobbyScreen';
+// import GameOverScreen from "../screens/GamePlay/GameOverScreen";
+import AddCourseScreen from "../screens/Launch/AddCourse/AddCourseScreen";
+import RoleSelectionScreen from "../screens/Launch/AddCourse/RoleSelectionScreen";
+import CourseInfoScreen from "../screens/Launch/AddCourse/CourseInfoScreen";
+
+// Main Tabs
+// Home Tab
 const HomeStack = createStackNavigator({
-  Home: HomeScreen,
+  Home: HomeScreen
 });
 
-const LoginStack = createStackNavigator({
-  Login: LoginScreen,
+HomeStack.navigationOptions = {
+  tabBarLabel: "Home",
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={
+        Platform.OS === "ios"
+          ? `ios-information-circle${focused ? "" : "-outline"}`
+          : "md-information-circle"
+      }
+    />
+  )
+};
+// Profile Tab
+const ProfileStack = createStackNavigator({
+  UserProfile: UserProfileScreen
 });
 
-const ForgotPasswordStack = createStackNavigator({
-  ForgotPassword: ForgotPasswordScreen,
+ProfileStack.navigationOptions = {
+  tabBarLabel: "Profile",
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === "ios" ? "ios-link" : "md-link"}
+    />
+  )
+};
+
+// Game Play Stack Navigator
+
+// Game Play Switch Navigator
+import GamePlayScreen from "../screens/GamePlay/GamePlayScreen";
+
+const GamePlayNavigator = createSwitchNavigator({
+  GamePlay: GamePlayScreen
 });
 
-const RegisterStack = createStackNavigator({
-  Register: RegisterScreen,
-});
 
-const JoinOrCreateStack = createStackNavigator({
-  JoinOrCreate: JoinOrCreateScreen,
-});
 
-const GameSetUpStack = createStackNavigator({
-  GameSetUp: GameSetUpScreen,
-});
 
-const LobbyStack = createStackNavigator({
-  Lobby: LobbyScreen,
-}); 
+// Adding/Creating Courses Stack
+const CourseStack = createStackNavigator(
+  {
+    RoleSelection: RoleSelectionScreen,
+    AddCourse: AddCourseScreen,
+    UserProfile: UserProfileScreen,
+    CourseInfo: CourseInfoScreen
+  },
+  {
+    initialRouteName: "UserProfile"
+  }
+);
 
-const GamePlayStack = createStackNavigator({
-  GamePlay: GamePlayScreen,
-});
+// Create Tab Navigator
+export default createBottomTabNavigator(
+  {
+    Home: HomeStack,
+    Profile: CourseStack
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, horizontal, tintColor }) => {
+        const { routeName } = navigation.state;
+        let IconComponent = Ionicons;
+        let iconName;
+        if (routeName === "Home") {
+          iconName = `ios-information-circle${focused ? "" : "-outline"}`;
+          // Sometimes we want to add badges to some icons.
+          // You can check the implementation below.
+          IconComponent = HomeIconWithBadge;
+        } else if (routeName === "Profile") {
+          iconName = `ios-options`;
+        }
 
-const GameOverStack = createStackNavigator({
-  GameOver: GameOverScreen,
-});
-
-const InstructionsStack = createStackNavigator({
-  Instructions: InstructionsScreen,
-});
-
-const AddCourseStack = createStackNavigator({
-  AddCourse: AddCourseScreen,
-});
-
-const RoleSelectionStack = createStackNavigator({
-  RoleSelection: RoleSelectionScreen,
-});
-
-const CourseInfoStack = createStackNavigator({
-  CourseInfo: CourseInfoScreen,
-});
-
-const UserProfileStack = createStackNavigator({
-  UserProfile: UserProfileScreen,
-});
-
-export default createStackNavigator({
-  LoginStack,
-  HomeStack,
-  AddCourseStack,
-  RoleSelectionStack,
-  HomeStack,
-  AddCourseStack,
-  LoginStack,
-  RegisterStack,
-  GameSetUpStack,
-  JoinOrCreateStack,
-  ForgotPasswordStack,
-  GamePlayStack,
-  GameOverStack,
-  InstructionsStack,
-  CourseInfoStack,
-  LobbyStack,
-  UserProfileStack,
-});
+        // You can return any component that you like here!
+        return <IconComponent name={iconName} size={25} color={'#5b3b89'} />;
+      }
+    }),
+    tabBarOptions: {
+      activeTintColor: "#5b3b89",
+      inactiveTintColor: "gray"
+    }
+  }
+);
