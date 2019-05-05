@@ -86,7 +86,7 @@ export default class AddCourseScreen extends Component {
 
     if (role === "student") {
       return (
-        <View style={forwordsStyles.container}>
+        <View style={forwordsStyles.specialContainer}>
           <View style={forwordsStyles.headingView}>
             <Text style={forwordsStyles.headingText}>Add a Course</Text>
           </View>

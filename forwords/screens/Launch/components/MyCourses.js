@@ -62,14 +62,14 @@ export default class coursesITeach extends Component {
       ));
     }
     return (
-      <View>
+      <View styles={forwordsStyles.specialContainer}>
         <View style={forwordsStyles.headingView}>
           <Text style={forwordsStyles.headingText}>My Courses</Text>
         </View>
         <Text style={forwordsStyles.headingText}>Courses I Teach</Text>
-        {listOfCoursesITeach}
+        <View style={forwordsStyles.headingView}>{listOfCoursesITeach}</View>
         <Text style={forwordsStyles.headingText}>Courses I Am Enrolled In</Text>
-        {listOfCoursesITake}
+        <View style={forwordsStyles.headingView}>{listOfCoursesITake}</View>
       </View>
     );
   }

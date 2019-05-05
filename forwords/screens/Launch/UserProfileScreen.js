@@ -16,7 +16,7 @@ import forwordsStyles from "../../constants/forwordsStyles";
 
 export default class UserProfileScreen extends Component {
   static navigationOptions = {
-    title: "Profile",
+    title: "Profile"
   };
 
   constructor(props) {
@@ -55,7 +55,6 @@ export default class UserProfileScreen extends Component {
         <View style={forwordsStyles.container}>
           <ScrollView
             showsVerticalScrollIndicator={false}
-            style={forwordsStyles.container}
             contentContainerStyle={forwordsStyles.specialContainer}
           >
             <View style={forwordsStyles.headingView}>
@@ -72,12 +71,14 @@ export default class UserProfileScreen extends Component {
               username: {userInfo.username}
             </Text>
             <MyCourses navigation={this.props.navigation} />
-            <TouchableOpacity
-              style={forwordsStyles.addCourseNarrowLongButton}
-              onPress={() => navigate("RoleSelection")}
-            >
-              <Text style={forwordsStyles.buttonText}>{"Add a course"}</Text>
-            </TouchableOpacity>
+            <View style={forwordsStyles.headingView}>
+              <TouchableOpacity
+                style={forwordsStyles.addCourseNarrowLongButton}
+                onPress={() => navigate("RoleSelection")}
+              >
+                <Text style={forwordsStyles.buttonText}>{"Add a course"}</Text>
+              </TouchableOpacity>
+            </View>
             <View style={forwordsStyles.headingView}>
               <Text style={forwordsStyles.headingText}>Recent Activity</Text>
               <Text style={forwordsStyles.mainText}>
