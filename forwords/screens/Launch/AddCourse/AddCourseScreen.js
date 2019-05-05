@@ -6,7 +6,8 @@ import {
   TextInput,
   Picker,
   TouchableOpacity,
-  Alert
+  Alert,
+  ScrollView
 } from "react-native";
 import forwordsStyles from "../../../constants/forwordsStyles";
 import firebase from "firebase";
@@ -15,7 +16,7 @@ import { httpsRoute } from "../../../constants/API";
 
 export default class AddCourseScreen extends Component {
   static navigationOptions = {
-    header: null
+    title: 'Course',
   };
   constructor(props) {
     super(props);
@@ -44,14 +45,16 @@ export default class AddCourseScreen extends Component {
         .then(res => {
           if (res.data.errno == 1062) {
             Alert.alert(
-              `You are already part of the course with code '${this.state.courseCode}'.`
+              `You are already part of the course with code '${
+                this.state.courseCode
+              }'.`
             );
           } else if (res.data.errno == 1452) {
             Alert.alert(
               `There is no course with code '${this.state.courseCode}'.`
-            );          
+            );
           } else {
-            navigate("UserProfile", { email: email, refresh: 'heyo'});
+            navigate("UserProfile", { email: email, refresh: "heyo" });
           }
         });
     }
@@ -116,52 +119,58 @@ export default class AddCourseScreen extends Component {
     } else if (role === "teacher") {
       return (
         <View style={forwordsStyles.container}>
-          <View style={forwordsStyles.headingView}>
-            <Text style={forwordsStyles.headingText}>Create a Course</Text>
-          </View>
-          <Text style={forwordsStyles.mainText}>
-            Enter the details of the course you are creating.
-          </Text>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={forwordsStyles.container}
+            contentContainerStyle={forwordsStyles.specialContainer}
+          >
+            <View style={forwordsStyles.headingView}>
+              <Text style={forwordsStyles.headingText}>Create a Course</Text>
+            </View>
+            <Text style={forwordsStyles.mainText}>
+              Enter the details of the course you are creating.
+            </Text>
 
-          <TextInput
-            style={forwordsStyles.textInput}
-            alignItems="center"
-            placeholder="Course Title"
-            onChangeText={courseTitle => this.setState({ courseTitle })}
-            autoCorrect={true}
-            placeholderTextColor="black"
-            returnKeyType="done"
-            keyboardType="default"
-          />
+            <TextInput
+              style={forwordsStyles.textInput}
+              alignItems="center"
+              placeholder="Course Title"
+              onChangeText={courseTitle => this.setState({ courseTitle })}
+              autoCorrect={true}
+              placeholderTextColor="black"
+              returnKeyType="done"
+              keyboardType="default"
+            />
 
-          <Text style={forwordsStyles.mainText}>
-            Select the target language of this course:
-          </Text>
-          <View style={{ flex: 1 }}>
-            <Picker
-              selectedValue={this.state.targetLanguage}
-              style={forwordsStyles.picker}
-              itemStyle={forwordsStyles.mainText}
-              onValueChange={(itemValue, itemIndex) =>
-                this.setState({
-                  targetLanguage: itemValue,
-                  choosenIndex: itemIndex
-                })
-              }
-            >
-              <Picker.Item key={"es"} label={"Spanish"} value={"Spanish"} />
-              <Picker.Item key={"en"} label={"English"} value={"English"} />
-              <Picker.Item key={"zh"} label={"Chinese"} value={"Chinese"} />
-            </Picker>
-          </View>
-          <View style={{ flex: 1 }}>
-            <TouchableOpacity
-              style={forwordsStyles.primaryButton}
-              onPress={() => this.createCourseOnPress()}
-            >
-              <Text style={forwordsStyles.buttonText}>Create Course</Text>
-            </TouchableOpacity>
-          </View>
+            <Text style={forwordsStyles.mainText}>
+              Select the target language of this course:
+            </Text>
+            <View style={{ flex: 1 }}>
+              <Picker
+                selectedValue={this.state.targetLanguage}
+                style={forwordsStyles.picker}
+                itemStyle={forwordsStyles.mainText}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({
+                    targetLanguage: itemValue,
+                    choosenIndex: itemIndex
+                  })
+                }
+              >
+                <Picker.Item key={"es"} label={"Spanish"} value={"Spanish"} />
+                <Picker.Item key={"en"} label={"English"} value={"English"} />
+                <Picker.Item key={"zh"} label={"Chinese"} value={"Chinese"} />
+              </Picker>
+            </View>
+            <View style={{ flex: 1 }}>
+              <TouchableOpacity
+                style={forwordsStyles.primaryButton}
+                onPress={() => this.createCourseOnPress()}
+              >
+                <Text style={forwordsStyles.buttonText}>Create Course</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
         </View>
       );
     }

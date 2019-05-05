@@ -39,7 +39,7 @@ export default class RoleSelectionScreen extends Component {
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={forwordsStyles.container}
-          contentContainerStyle={forwordsStyles.contentContainer}
+          contentContainerStyle={forwordsStyles.specialContainer}
         >
           <View style={forwordsStyles.headingView}>
             <Text style={forwordsStyles.headingText}>
