@@ -290,6 +290,7 @@ ws.on("connection", function connection(ws, req) {
       for (let i = 0; i < inputGame.players.length; i++) {
         if (input == inputGame.players[i].prompt.wordID) {
           isCorrect = true;
+          insertInput(input, inputEmail, inputGameID, true);
           gameMap.get(inputGameID).correctAnswers++;
           console.log("                             AFTER correctAnswers incremented:",
             gameMap.get(inputGameID).correctAnswers
@@ -317,7 +318,6 @@ ws.on("connection", function connection(ws, req) {
               "       sent message1[1]:",
               newPromptAndValidationMessage
             );
-            insertInput(input, inputEmail, inputGameID, true);
             inputGame.players[i].prompt = newPrompt;
           }
           // I answered your prompt
@@ -354,6 +354,7 @@ ws.on("connection", function connection(ws, req) {
         { oldInput: input }
       ]);
       if (!isCorrect) {
+        insertInput(input, inputEmail, inputGameID, false);
         ws.send(validationMessage);
         console.log("       sent message4");
       }
