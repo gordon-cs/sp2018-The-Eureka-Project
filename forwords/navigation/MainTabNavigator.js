@@ -12,37 +12,96 @@ import TabBarIcon from "../components/TabBarIcon";
 import HomeScreen from "../screens/Launch/HomeScreen";
 import UserProfileScreen from "../screens/Launch/UserProfileScreen";
 
-// Screens for tabs' stacks:
-/*
- * Home:
- * GamePlaySetUpStack
- * GamePlaySwitch
- * GameOverSwitch
- *
- *
- * Profile:
- * AddCoursesStack
- * CourseInfoStack
- */
+import LoginScreen from "../screens/Authentication/LoginScreen";
 
-// import HomeScreen from '../screens/Launch/HomeScreen';
-// import LoginScreen from '../screens/Authentication/LoginScreen';
-// import GamePlayScreen from '../screens/GamePlay/GamePlayScreen';
-// import JoinOrCreateScreen from '../screens/GameSetUp/Multiplayer/JoinOrCreateScreen';
-// import GameSetUpScreen from '../screens/GameSetUp/GameSetUpScreen';
-// import RegisterScreen from '../screens/Authentication/RegisterScreen';
-// import InstructionsScreen from '../screens/GamePlay/Instructions/InstructionsScreen';
-// import ForgotPasswordScreen from '../screens/Authentication/ForgotPasswordScreen';
-// import LobbyScreen from '../screens/GameSetUp/Multiplayer/LobbyScreen';
-// import GameOverScreen from "../screens/GamePlay/GameOverScreen";
+// Rest of the Screens
+import GamePlayScreen from "../screens/GamePlay/GamePlayScreen";
+import JoinOrCreateScreen from "../screens/GameSetUp/Multiplayer/JoinOrCreateScreen";
+import GameSetUpScreen from "../screens/GameSetUp/GameSetUpScreen";
+import InstructionsScreen from "../screens/GamePlay/Instructions/InstructionsScreen";
+import LobbyScreen from "../screens/GameSetUp/Multiplayer/LobbyScreen";
+import GameOverScreen from "../screens/GamePlay/GameOverScreen";
 import AddCourseScreen from "../screens/Launch/AddCourse/AddCourseScreen";
 import RoleSelectionScreen from "../screens/Launch/AddCourse/RoleSelectionScreen";
 import CourseInfoScreen from "../screens/Launch/AddCourse/CourseInfoScreen";
 
+/* Total Explanation for the stacks/switches/etc
+ * A. Home Tab:
+ * should get to both multiplayer and singleplayer mode
+ * both multiplayer & singleplayer mode should get to gamesetup
+ * both should get to instructions/gameplay/gameover
+ * One Big SwitchNavigator(
+ * 1.1. GamePlaySwitch
+ * InstructionsScreen
+ * GamePlayScreen
+ * GameOverScreen
+ * 1.2. GamePlaySetUpStack   ---> COMBINE BOTH SINGLE AND MULTIPLAYER
+ * JoinOrCreateScreen
+ * GameSetUpScreen
+ * LobbyScreen
+ * GamePlaySwitch
+ * 1.3 SinglePlayerSetUpStack
+ * GameSetUpScreen
+ * GamePlaySwitch
+ * )
+ *
+ * 2. Profile Tab:
+ * should get to profile screen
+ * should be able to add a course for teacher or student
+ *
+ * 2.1. UserProfileStack
+ * UserProfileScreen
+ * RoleSelectionScreen
+ * AddCourseScreen
+ * CourseInfoScreen
+ */
+
 // Main Tabs
+// Profile Tab
+const UserProfileStack = createStackNavigator({
+  UserProfile: UserProfileScreen,
+  RoleSelection: RoleSelectionScreen,
+  AddCourse: AddCourseScreen,
+  UserProfile: UserProfileScreen,
+  CourseInfo: CourseInfoScreen
+});
+
+UserProfileStack.navigationOptions = {
+  tabBarLabel: "Profile",
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={Platform.OS === "ios" ? "ios-link" : "md-link"}
+    />
+  )
+};
+
 // Home Tab
+const GamePlaySwitch = createSwitchNavigator({
+  Instructions: InstructionsScreen,
+  GamePlay: GamePlayScreen,
+  GameOver: GameOverScreen
+});
+
+const MultiplayerGamePlaySetUpStack = createStackNavigator({
+  JoinOrCreate: JoinOrCreateScreen,
+  GameSetUp: GameSetUpScreen,
+  Lobby: LobbyScreen,
+});
+
+const MultiplayerSwitch = createSwitchNavigator({
+  MultiplayerGamePlaySetUp: MultiplayerGamePlaySetUpStack,
+  GamePlay: GamePlaySwitch,
+});
+
+const SinglePlayerSwitch = createSwitchNavigator({
+  GameSetUp: GameSetUpScreen,
+  GamePlay: GamePlaySwitch,
+});
+
 const HomeStack = createStackNavigator({
-  Home: HomeScreen
+  Home: HomeScreen,
+  Login: LoginScreen
 });
 
 HomeStack.navigationOptions = {
@@ -58,51 +117,12 @@ HomeStack.navigationOptions = {
     />
   )
 };
-// Profile Tab
-const ProfileStack = createStackNavigator({
-  UserProfile: UserProfileScreen
-});
-
-ProfileStack.navigationOptions = {
-  tabBarLabel: "Profile",
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === "ios" ? "ios-link" : "md-link"}
-    />
-  )
-};
-
-// Game Play Stack Navigator
-
-// Game Play Switch Navigator
-import GamePlayScreen from "../screens/GamePlay/GamePlayScreen";
-
-const GamePlayNavigator = createSwitchNavigator({
-  GamePlay: GamePlayScreen
-});
-
-
-
-
-// Adding/Creating Courses Stack
-const CourseStack = createStackNavigator(
-  {
-    RoleSelection: RoleSelectionScreen,
-    AddCourse: AddCourseScreen,
-    UserProfile: UserProfileScreen,
-    CourseInfo: CourseInfoScreen
-  },
-  {
-    initialRouteName: "UserProfile"
-  }
-);
 
 // Create Tab Navigator
-export default createBottomTabNavigator(
+const TabNavigator = createBottomTabNavigator(
   {
     Home: HomeStack,
-    Profile: CourseStack
+    Profile: UserProfileStack
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
@@ -120,7 +140,7 @@ export default createBottomTabNavigator(
         }
 
         // You can return any component that you like here!
-        return <IconComponent name={iconName} size={25} color={'#5b3b89'} />;
+        return <IconComponent name={iconName} size={25} color={"#5b3b89"} />;
       }
     }),
     tabBarOptions: {
@@ -129,3 +149,10 @@ export default createBottomTabNavigator(
     }
   }
 );
+
+// Whatever is with the Tabs here will not have tabs on their screen:
+export default createSwitchNavigator({
+  Tabs: TabNavigator,
+  Multiplayer: MultiplayerSwitch,
+  SinglePlayer: SinglePlayerSwitch,
+});
