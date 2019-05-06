@@ -74,7 +74,7 @@ export default class LessonSelection extends Component {
         style={forwordsStyles.narrowLongButton}
         onPress={() => this.createGame(lesson.lessonID)}
       >
-        <Text style={forwordsStyles.buttonText}>
+        <Text style={forwordsStyles.lessonButtonText}>
           {"Lesson " + lesson.lessonID + ": " + lesson.title}
         </Text>
       </TouchableOpacity>

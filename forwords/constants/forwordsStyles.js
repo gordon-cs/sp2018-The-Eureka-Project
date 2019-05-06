@@ -36,7 +36,13 @@ export default StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "white",
-    textAlign: 'center',
+    padding: 9
+  },
+  lessonButtonText: {
+    textAlign: "left",
+    fontSize: 17,
+    fontWeight: "bold",
+    color: "white",
     padding: 9
   },
   primaryButton: {
@@ -68,7 +74,6 @@ export default StyleSheet.create({
   },
   narrowLongButton: {
     justifyContent: "center",
-    flexDirection: "column",
     margin: 1,
     width: 280,
     height: 50,
