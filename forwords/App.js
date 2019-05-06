@@ -5,7 +5,6 @@ import AppNavigator from './navigation/AppNavigator';
 import MainTabNavigator from './navigation/MainTabNavigator';
 import ApiKeys from './constants/ApiKeys';
 import * as firebase from 'firebase';
-import HomeScreen from './screens/Launch/HomeScreen';
 import { wsRoute } from './constants/API';
 global.ws = new WebSocket(wsRoute);
 
@@ -24,7 +23,7 @@ export default class App extends React.Component {
 
   onAuthStateChanged = (user) => {
     this.setState({isAuthenticationReady: true});
-    this.setState({isAuthenticated: !!user});
+    this.setState({isAuthenticated: !user});
   }
 
   render() {
@@ -42,9 +41,7 @@ export default class App extends React.Component {
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
           {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
           {/* {(this.state.isAuthenticated) ? <MainTabNavigator/> : <AppNavigator />} */}
-          {(false) ? <MainTabNavigator/> : <AppNavigator />}
-
-        
+          {(this.state.isAuthenticated) ? <MainTabNavigator/> : <AppNavigator />}
         </View>
       );
     }

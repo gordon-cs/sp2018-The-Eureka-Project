@@ -11,7 +11,7 @@ import forwordsStyles from "../../constants/forwordsStyles";
 
 export default class GameSetUpScreen extends Component {
   static navigationOptions = {
-    header: null
+    title: 'Game Setup'
   };
   constructor(props) {
     super(props);

@@ -104,81 +104,83 @@ export default class RegisterScreen extends Component {
     const { navigate } = this.props.navigation;
     return (
       <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={forwordsStyles.container}
-        keyboardShouldPersistTaps="always"
-      >
-        <KeyboardAvoidingView behavior="padding">
-          <View style={forwordsStyles.headingView}>
-            <Text style={forwordsStyles.headingText}>Register!</Text>
+          style={forwordsStyles.container}
+          contentContainerStyle={forwordsStyles.contentContainer}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="always"
+        >
+          <KeyboardAvoidingView behavior="padding">
+            <View style={forwordsStyles.headingView}>
+              <Text style={forwordsStyles.headingText}>Register!</Text>
+            </View>
+            <TextInput
+              onChangeText={firstName => this.setState({ firstName })}
+              placeholder="First Name"
+              returnKeyType="next"
+              placeholderTextColor="black"
+              textContentType="givenName"
+              style={forwordsStyles.textInput}
+            />
+            <TextInput
+              onChangeText={lastName => this.setState({ lastName })}
+              placeholder="Last Name"
+              returnKeyType="next"
+              placeholderTextColor="black"
+              textContentType="familyName"
+              style={forwordsStyles.textInput}
+            />
+            <TextInput
+              onChangeText={email => this.setState({ email })}
+              placeholder="Email"
+              returnKeyType="next"
+              placeholderTextColor="black"
+              textContentType="emailAddress"
+              keyboardType="email-address"
+              style={forwordsStyles.textInput}
+            />
+            <TextInput
+              onChangeText={username => this.setState({ username })}
+              placeholder="Username"
+              returnKeyType="next"
+              placeholderTextColor="black"
+              textContentType="username"
+              style={forwordsStyles.textInput}
+            />
+            <TextInput
+              onChangeText={password => this.setState({ password })}
+              placeholder="Password"
+              returnKeyType="next"
+              secureTextEntry={true}
+              placeholderTextColor="black"
+              style={forwordsStyles.textInput}
+            />
+            <TextInput
+              onChangeText={confirmPassword =>
+                this.setState({ confirmPassword })
+              }
+              placeholder="Confirm Password"
+              secureTextEntry={true}
+              placeholderTextColor="black"
+              style={forwordsStyles.textInput}
+              onSubmitEditing={() => this.addUser()}
+            />
+          <View style={forwordsStyles.rowButtonsContainer}>
+            <TouchableOpacity
+              style={forwordsStyles.secondaryButton}
+              onPress={() => navigate("Login")}
+            >
+              <Text style={forwordsStyles.buttonText}>Cancel</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={forwordsStyles.primaryButton}
+              onPress={() => this.addUser()}
+            >
+              <Text style={forwordsStyles.buttonText}>Register</Text>
+            </TouchableOpacity>
           </View>
-          <TextInput
-            onChangeText={firstName => this.setState({ firstName })}
-            placeholder="First Name"
-            returnKeyType="next"
-            placeholderTextColor="black"
-            textContentType="givenName"
-            style={forwordsStyles.textInput}
-          />
-          <TextInput
-            onChangeText={lastName => this.setState({ lastName })}
-            placeholder="Last Name"
-            returnKeyType="next"
-            placeholderTextColor="black"
-            textContentType="familyName"
-            style={forwordsStyles.textInput}
-          />
-          <TextInput
-            onChangeText={email => this.setState({ email })}
-            placeholder="Email"
-            returnKeyType="next"
-            placeholderTextColor="black"
-            textContentType="emailAddress"
-            keyboardType="email-address"
-            style={forwordsStyles.textInput}
-          />
-          <TextInput
-            onChangeText={username => this.setState({ username })}
-            placeholder="Username"
-            returnKeyType="next"
-            placeholderTextColor="black"
-            textContentType="username"
-            style={forwordsStyles.textInput}
-          />
-          <TextInput
-            onChangeText={password => this.setState({ password })}
-            placeholder="Password"
-            returnKeyType="next"
-            secureTextEntry={true}
-            placeholderTextColor="black"
-            style={forwordsStyles.textInput}
-          />
-          <TextInput
-            onChangeText={confirmPassword => this.setState({ confirmPassword })}
-            placeholder="Confirm Password"
-            secureTextEntry={true}
-            placeholderTextColor="black"
-            style={forwordsStyles.textInput}
-            onSubmitEditing={() => this.addUser()}
-          />
-        </KeyboardAvoidingView>
-
-        <View style={forwordsStyles.rowButtonsContainer}>
-          <TouchableOpacity
-            style={forwordsStyles.secondaryButton}
-            onPress={() => navigate("Login")}
-          >
-            <Text style={forwordsStyles.buttonText}>Cancel</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={forwordsStyles.primaryButton}
-            onPress={() => this.addUser()}
-          >
-            <Text style={forwordsStyles.buttonText}>Register</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+          </KeyboardAvoidingView>
+        </ScrollView>
     );
   }
 }

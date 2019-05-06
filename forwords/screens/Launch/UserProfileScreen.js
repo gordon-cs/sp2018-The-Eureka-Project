@@ -7,8 +7,9 @@ import forwordsStyles from "../../constants/forwordsStyles";
 
 export default class UserProfileScreen extends Component {
   static navigationOptions = {
-    header: null
+    title: "Profile"
   };
+
   constructor(props) {
     super(props);
 
@@ -65,7 +66,10 @@ export default class UserProfileScreen extends Component {
     if (isMyProfile) {
       return (
         <View style={forwordsStyles.container}>
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={forwordsStyles.specialContainer}
+          >
             <View style={forwordsStyles.headingView}>
               <Image
                 style={forwordsStyles.playerImage}
@@ -102,11 +106,15 @@ export default class UserProfileScreen extends Component {
     } else {
       return (
         <View style={forwordsStyles.container}>
-          <Image
-            style={forwordsStyles.playerImage}
-            source={require("../../assets/images/person.png")}
-          />
-          <ScrollView>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={forwordsStyles.container}
+            contentContainerStyle={forwordsStyles.contentContainer}
+          >
+            <Image
+              style={forwordsStyles.playerImage}
+              source={require("../../assets/images/person.png")}
+            />
             <View style={forwordsStyles.headingView}>
               <Text style={forwordsStyles.headingText}>
                 {userInfo.firstName} {userInfo.lastName}

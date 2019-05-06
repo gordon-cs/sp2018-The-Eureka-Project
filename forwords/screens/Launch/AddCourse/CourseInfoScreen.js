@@ -14,7 +14,7 @@ import forwordsStyles from "../../../constants/forwordsStyles";
 
 export default class CourseInfoScreen extends Component {
   static navigationOptions = {
-    header: null
+    title: 'Course'
   };
   constructor(props) {
     super(props);
@@ -97,7 +97,11 @@ export default class CourseInfoScreen extends Component {
 
     return (
       <View style={forwordsStyles.container}>
-        <ScrollView>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={forwordsStyles.container}
+          contentContainerStyle={forwordsStyles.contentContainer}
+        >
           <View style={forwordsStyles.headingView}>
             <Text style={forwordsStyles.headingText}>
               ({courseID}) {courseTitle} Course

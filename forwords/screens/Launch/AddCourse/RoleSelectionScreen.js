@@ -31,33 +31,36 @@ export default class RoleSelectionScreen extends Component {
 
   render() {
     return (
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={forwordsStyles.container}
-      >
-        <View style={forwordsStyles.headingView}>
-          <Text style={forwordsStyles.headingText}>
-            Which best describes the kind of course you want to add?
-          </Text>
-        </View>
-        <TouchableOpacity
-          style={forwordsStyles.longButton}
-          onPress={() => this.teacherAddCourse()}
+      <View style={forwordsStyles.container}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={forwordsStyles.container}
+          contentContainerStyle={forwordsStyles.specialContainer}
         >
-          <Text style={forwordsStyles.buttonText}>
-            I am a teacher creating a course.
-          </Text>
-        </TouchableOpacity>
+          <View style={forwordsStyles.headingView}>
+            <Text style={forwordsStyles.headingText}>
+              Which best describes the kind of course you want to add?
+            </Text>
+          </View>
+          <TouchableOpacity
+            style={forwordsStyles.longButton}
+            onPress={() => this.teacherAddCourse()}
+          >
+            <Text style={forwordsStyles.buttonText}>
+              I am a teacher creating a course.
+            </Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={forwordsStyles.longButton}
-          onPress={() => this.studentAddCourse()}
-        >
-          <Text style={forwordsStyles.buttonText}>
-            I am a student joining a course.
-          </Text>
-        </TouchableOpacity>
-      </ScrollView>
+          <TouchableOpacity
+            style={forwordsStyles.longButton}
+            onPress={() => this.studentAddCourse()}
+          >
+            <Text style={forwordsStyles.buttonText}>
+              I am a student joining a course.
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
     );
   }
 }
