@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { StackActions, NavigationActions } from 'react-navigation';
 import { Text, View, Image, TouchableOpacity } from "react-native";
 import forwordsStyles from "../../../constants/forwordsStyles";
 
@@ -15,6 +16,10 @@ export default class LobbyScreenRoom extends Component {
   }
 
   componentDidMount() {
+    const resetAction = StackActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: "GamePlay", gameID: gameID, lesson: lesson })],
+    });
     var lesson = this.props.navigation.state.params.lesson;
     var gameID = this.props.navigation.state.params.gameID;
     const { navigate } = this.props.navigation;
@@ -35,7 +40,9 @@ export default class LobbyScreenRoom extends Component {
         this.setState({ numberOfPlayers: receivedMessage[0].numberOfPlayers });
       }
       if (receivedMessage[0].isGameInitialized) {
-        navigate("Instructions", { gameID: gameID, lesson: lesson });
+        // this.props.navigation.dispatch(resetAction, {gameID: gameID, lesson: lesson})
+        // navigate("Instructions", { gameID: gameID, lesson: lesson });
+        this.props.navigation.dispatch(resetAction);
       }
     };
   }

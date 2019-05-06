@@ -76,32 +76,9 @@ UserProfileStack.navigationOptions = {
   )
 };
 
-// Home Tab
-const GamePlaySwitch = createSwitchNavigator({
-  Instructions: InstructionsScreen,
-  GamePlay: GamePlayScreen,
-  GameOver: GameOverScreen
-});
-
-const MultiplayerGamePlaySetUpStack = createStackNavigator({
-  JoinOrCreate: JoinOrCreateScreen,
-  GameSetUp: GameSetUpScreen,
-  Lobby: LobbyScreen,
-});
-
-const MultiplayerSwitch = createSwitchNavigator({
-  MultiplayerGamePlaySetUp: MultiplayerGamePlaySetUpStack,
-  GamePlay: GamePlaySwitch,
-});
-
-const SinglePlayerSwitch = createSwitchNavigator({
-  SingleGameSetUp: GameSetUpScreen,
-  GamePlay: GamePlaySwitch,
-});
-
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
-  Login: LoginScreen
+  Login: LoginScreen,
 });
 
 HomeStack.navigationOptions = {
@@ -118,10 +95,14 @@ HomeStack.navigationOptions = {
   )
 };
 
+// const MainStack = createStackNavigator({
+
+
+// })
 // Create Tab Navigator
 const TabNavigator = createBottomTabNavigator(
   {
-    Home: HomeStack,
+    Home: HomeScreen,
     Profile: UserProfileStack
   },
   {
@@ -138,6 +119,9 @@ const TabNavigator = createBottomTabNavigator(
         } else if (routeName === "Profile") {
           iconName = `ios-options`;
         }
+        else {
+
+        }
 
         // You can return any component that you like here!
         return <IconComponent name={iconName} size={25} color={"#5b3b89"} />;
@@ -151,8 +135,13 @@ const TabNavigator = createBottomTabNavigator(
 );
 
 // Whatever is with the Tabs here will not have tabs on their screen:
-export default createSwitchNavigator({
+export default createStackNavigator({
   Tabs: TabNavigator,
-  Multiplayer: MultiplayerSwitch,
-  SinglePlayer: SinglePlayerSwitch,
+  // Home: HomeStack,
+  JoinOrCreate: JoinOrCreateScreen,
+  GameSetUp: GameSetUpScreen,
+  Lobby: LobbyScreen,
+  Instructions: InstructionsScreen,
+  GamePlay: GamePlayScreen,
+  GameOver: GameOverScreen,
 });
