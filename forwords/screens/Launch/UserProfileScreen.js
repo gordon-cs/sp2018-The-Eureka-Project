@@ -7,7 +7,7 @@ import forwordsStyles from "../../constants/forwordsStyles";
 
 export default class UserProfileScreen extends Component {
   static navigationOptions = {
-    title: "Profile"
+    header: null
   };
 
   constructor(props) {
@@ -22,7 +22,10 @@ export default class UserProfileScreen extends Component {
   }
 
   async componentDidMount() {
-    const { email } = this.props.navigation.state.params;
+    const email = firebase.auth().currentUser.email;
+    // const { email } = this.props.navigation.setParam({email: firebase.auth().currentUser.email});
+
+    // const { email } = this.props.navigation.getParam('email', 't@y.com')
     let userInfo = await user.getUserInfo(email);
     let recentGames = await user.getMyRecentGames(email);
     this.setState({ isLoading: false, userInfo, recentGames });
@@ -46,7 +49,6 @@ export default class UserProfileScreen extends Component {
   };
 
   render() {
-    const { email } = this.props.navigation.state.params;
     const { userInfo, isMyProfile, recentGames } = this.state;
     const { navigate } = this.props.navigation;
     let recentGamesList;
@@ -68,6 +70,7 @@ export default class UserProfileScreen extends Component {
         <View style={forwordsStyles.container}>
           <ScrollView
             showsVerticalScrollIndicator={false}
+            styles={forwordsStyles.container}
             contentContainerStyle={forwordsStyles.specialContainer}
           >
             <View style={forwordsStyles.headingView}>
@@ -79,7 +82,6 @@ export default class UserProfileScreen extends Component {
                 {userInfo.firstName} {userInfo.lastName}
               </Text>
             </View>
-            <Text style={forwordsStyles.mainText}>email: {email}</Text>
             <Text style={forwordsStyles.mainText}>
               username: {userInfo.username}
             </Text>

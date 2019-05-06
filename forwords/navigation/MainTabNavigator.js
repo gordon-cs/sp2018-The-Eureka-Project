@@ -71,7 +71,7 @@ UserProfileStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === "ios" ? "ios-link" : "md-link"}
+      name={Platform.OS === "ios" ? "ios-person" : "md-link"}
     />
   )
 };
@@ -86,19 +86,12 @@ HomeStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === "ios"
-          ? `ios-information-circle${focused ? "" : "-outline"}`
-          : "md-information-circle"
-      }
+      name={Platform.OS === "ios" ? "ios-options" : "md-link"}
+
     />
   )
 };
 
-// const MainStack = createStackNavigator({
-
-
-// })
 // Create Tab Navigator
 const TabNavigator = createBottomTabNavigator(
   {
@@ -117,7 +110,7 @@ const TabNavigator = createBottomTabNavigator(
           // You can check the implementation below.
           IconComponent = HomeIconWithBadge;
         } else if (routeName === "Profile") {
-          iconName = `ios-options`;
+          iconName = `ios-home`;
         }
         else {
 
