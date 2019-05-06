@@ -92,7 +92,6 @@ export default class CourseInfoScreen extends Component {
         >
           <Text style={forwordsStyles.buttonText}>Unenroll From Course</Text>
         </TouchableOpacity>
-
       );
     }
 
@@ -108,14 +107,13 @@ export default class CourseInfoScreen extends Component {
             Recent Activity from groups in this class:
           </Text>
           <StudentList
-          navigation={this.props.navigation}
-          role={role}
-          courseID={courseID}
-        />
-          {deleteButton}
+            navigation={this.props.navigation}
+            role={role}
+            courseID={courseID}
+          />
+          <View style={forwordsStyles.headingView}>{deleteButton}</View>
         </ScrollView>
       </View>
     );
   }
 }
-

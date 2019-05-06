@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import forwordsStyles from "../../../constants/forwordsStyles";
 import firebase from "firebase";
+import course from "../../../services/course";
 import { httpsRoute } from "../../../constants/API";
 
 export default class AddCourseScreen extends Component {
@@ -43,8 +44,12 @@ export default class AddCourseScreen extends Component {
         .then(res => {
           if (res.data.errno == 1062) {
             Alert.alert(
-              `You are already enrolled as a student in the course with code '${this.state.courseCode}'.`
+              `You are already part of the course with code '${this.state.courseCode}'.`
             );
+          } else if (res.data.errno == 1452) {
+            Alert.alert(
+              `There is no course with code '${this.state.courseCode}'.`
+            );          
           } else {
             navigate("UserProfile", { email: email, refresh: 'heyo'});
           }
@@ -70,7 +75,7 @@ export default class AddCourseScreen extends Component {
           if (res.data.errno === 1048) {
             Alert.alert("The title cannot be left blank.");
           } else {
-            navigate("UserProfile", { email: email, refresh: 'whddup' });
+            navigate("UserProfile", { email: email });
           }
         });
     }

@@ -6,6 +6,13 @@ async function getMyCourses(email, role) {
     return response.data;
 }
 
+// Not used yet, don't know how to figure out the .then with the error messages
+// if using this function in another file.
+async function addCourse(courseID, email) {
+    axios.post(`${httpsRoute}/add-course`, {courseCode: courseID, email: email});
+    return response.data;
+}
+
 async function deleteCourse(email, courseID) {
     axios.delete(`${httpsRoute}/delete-course/${email}/${courseID}`);
 }
@@ -24,4 +31,5 @@ export default {
     deleteCourse,
     removeStudentFromCourse,
     getCourseRole,
+    addCourse,
 }
