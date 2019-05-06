@@ -123,12 +123,12 @@ ws.on("connection", function connection(ws, req) {
 
   // Now, code for when receiving specific messages :)
   ws.on("message", async function incoming(message) {
-    console.log(
-      "<<<<<<<<<<         Received message: ",
-      message,
-      "from: ",
-      player.IP
-    );
+    // console.log(
+    //   "<<<<<<<<<<         Received message: ",
+    //   message,
+    //   "from: ",
+    //   player.IP
+    // );
     message = JSON.parse(message);
 
     /* OPTIONS FOR WHAT THE USER WILL SEND:
@@ -155,7 +155,7 @@ ws.on("connection", function connection(ws, req) {
       gameMap.set(gameID, game);
       // Send gameID message
       let gameIDMessage = JSON.stringify([{ gameID: gameID }]); // Convert JSON to string inorder to send
-      console.log("         >>>>>>>>>>Sent message", gameIDMessage);
+      // console.log("         >>>>>>>>>>Sent message", gameIDMessage);
       ws.send(gameIDMessage);
     }
 
@@ -164,12 +164,12 @@ ws.on("connection", function connection(ws, req) {
       if (gameMap.get(gameID).players.length > 1) {
         var initGameMessage = JSON.stringify([{ isGameInitialized: true }]); // Convert JSON to string inorder to send;
         for (let i = 0; i < gameMap.get(gameID).players.length; i++) {
-          console.log("         >>>>>>>>>>Sent message", initGameMessage);
+          // console.log("         >>>>>>>>>>Sent message", initGameMessage);
           gameMap.get(gameID).players[i].ws.send(initGameMessage);
         }
       } else {
         var initGameMessage = JSON.stringify([{ isGameInitialized: false }]); // Convert JSON to string inorder to send;
-        console.log("         >>>>>>>>>>Sent message", initGameMessage);
+        // console.log("         >>>>>>>>>>Sent message", initGameMessage);
         ws.send(initGameMessage);
       }
     }
@@ -232,7 +232,7 @@ ws.on("connection", function connection(ws, req) {
         // Get game at that gameID in the map, add the player to it
         gameMap.get(gameID).players.push(player);
         let joinGameIDMessage = JSON.stringify([{ isValidGameID: true }]); // Convert JSON to string inorder to send
-        console.log("         >>>>>>>>>>Sent message", joinGameIDMessage);
+        // console.log("         >>>>>>>>>>Sent message", joinGameIDMessage);
         ws.send(joinGameIDMessage);
 
         var numberOfPlayers = gameMap.get(gameID).players.length;
@@ -245,10 +245,10 @@ ws.on("connection", function connection(ws, req) {
           { numberOfPlayers: playersArray }
         ]); // Convert JSON to string inorder to send
         for (let i = 0; i < numberOfPlayers; i++) {
-          console.log(
-            "         >>>>>>>>>>Sent message",
-            numberOfPlayersMessage
-          );
+          // console.log(
+          //   "         >>>>>>>>>>Sent message",
+          //   numberOfPlayersMessage
+          // );
           gameMap.get(gameID).players[i].ws.send(numberOfPlayersMessage);
         }
       } else {
@@ -292,9 +292,6 @@ ws.on("connection", function connection(ws, req) {
           isCorrect = true;
           insertInput(input, inputEmail, inputGameID, true);
           gameMap.get(inputGameID).correctAnswers++;
-          console.log("                             AFTER correctAnswers incremented:",
-            gameMap.get(inputGameID).correctAnswers
-          );
 
           let newPrompt = getSinglePrompt(
             inputGame,

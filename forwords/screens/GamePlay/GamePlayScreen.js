@@ -21,7 +21,7 @@ export default class GamePlayScreen extends Component {
       bottomLeftChoice: {},
       bottomRightChoice: {},
       promptObj: {},
-      roundNumber: 0,
+      roundNumber: 1,
       newRound: false,
       resetTimer: true,
       score: 0,
@@ -186,10 +186,10 @@ export default class GamePlayScreen extends Component {
     const promptID = this.state.promptObj.wordID;
     const answeredCorrectly = this.state.answeredCorrectly;
     const resetTimer = this.state.resetTimer;
-    if (this.state.isLoading && this.state.roundNumber == 0 && !this.state.newRound) {
+    if (this.state.isLoading && this.state.roundNumber == 1 && !this.state.newRound) {
       return (
         <View style={forwordsStyles.splashContainer}>
-          <Text style={forwordsStyles.headingText}>Get ready to play!</Text>
+          <Text style={forwordsStyles.headingText}>Get ready to play! Remember to say your prompt out loud!</Text>
         </View>
       );
     } else if (this.state.newRound) {
