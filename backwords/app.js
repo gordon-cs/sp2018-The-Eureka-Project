@@ -107,19 +107,7 @@ ws.on("connection", function connection(ws, req) {
 
   // Immediately create player & game objects, with this ws connection as one of their attributes
   var player = new Player(IP, ws, [], {}, 0, '', '');
-  var game = new Game(
-    0,
-    0,
-    [],
-    [],
-    [],
-    false,
-    "pinyin",
-    "Chinese",
-    "NULL",
-    1,
-    0
-  );
+  var game = new Game(0,0,[],[],[],false,"pinyin","Chinese","NULL",1,0);
 
   // Now, code for when receiving specific messages :)
   ws.on("message", async function incoming(message) {
@@ -290,9 +278,12 @@ ws.on("connection", function connection(ws, req) {
       for (let i = 0; i < inputGame.players.length; i++) {
         if (input == inputGame.players[i].prompt.wordID) {
           isCorrect = true;
+          console.log("BEFORE correctAnswers incremented: correctAnswers=", gameMap.get(inputGameID).correctAnswers,
+          "round#=", gameMap.get(inputGameID).roundNumber);
+         
           insertInput(input, inputEmail, inputGameID, true);
           gameMap.get(inputGameID).correctAnswers++;
-
+          console.log("AFTER correctAnswers incremented:", gameMap.get(inputGameID).correctAnswers, "round#=", gameMap.get(inputGameID).roundNumber);
           let newPrompt = getSinglePrompt(
             inputGame,
             inputGame.players[i].prompt
@@ -366,7 +357,7 @@ ws.on("connection", function connection(ws, req) {
       gameMap.delete(game.gameID);
       // Clear out player & game objects once the game is over
       player = new Player(IP, ws, [], {}, 0);
-      game = new Game(0, 0, [], [], [], false, "pinyin", "Chinese", "NULL", 0);
+      game = new Game(0, 0, [], [], [], false, "pinyin", "Chinese", "NULL", 1, 0);
     }
   });
 });
