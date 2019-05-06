@@ -11,11 +11,11 @@ export default class Prompt extends Component {
       imageURL: this.props
     };
   }
+  
   render() {
     const promptObj = this.props.promptObj;
     let image;
-
-    if (promptObj.lessonID == 21) {
+    if (promptObj.lessonID == 21 || promptObj.lessonID == 22) {
           image = (
             <Image
               source={{uri: `${httpsRoute}/_${promptObj.meaning}_.png`}}
