@@ -278,12 +278,8 @@ ws.on("connection", function connection(ws, req) {
       for (let i = 0; i < inputGame.players.length; i++) {
         if (input == inputGame.players[i].prompt.wordID) {
           isCorrect = true;
-          console.log("BEFORE correctAnswers incremented: correctAnswers=", gameMap.get(inputGameID).correctAnswers,
-          "round#=", gameMap.get(inputGameID).roundNumber);
-         
           insertInput(input, inputEmail, inputGameID, true);
           gameMap.get(inputGameID).correctAnswers++;
-          console.log("AFTER correctAnswers incremented:", gameMap.get(inputGameID).correctAnswers, "round#=", gameMap.get(inputGameID).roundNumber);
           let newPrompt = getSinglePrompt(
             inputGame,
             inputGame.players[i].prompt
@@ -423,7 +419,6 @@ function insertGame(game) {
 }
 
 function insertPlayer(player) {
-  console.log("insertPlayer(", player.email,")!");
   return new Promise(function(resolve, reject) {
     let email = player.email;
     let gameID = player.gameID;
