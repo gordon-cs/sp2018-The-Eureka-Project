@@ -95,7 +95,7 @@ const MultiplayerSwitch = createSwitchNavigator({
 });
 
 const SinglePlayerSwitch = createSwitchNavigator({
-  GameSetUp: GameSetUpScreen,
+  SingleGameSetUp: GameSetUpScreen,
   GamePlay: GamePlaySwitch,
 });
 

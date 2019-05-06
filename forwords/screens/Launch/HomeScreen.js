@@ -28,7 +28,7 @@ export default class HomeScreen extends React.Component {
   onPressSinglePlayerMode = () => {
     const { navigate } = this.props.navigation;
     const playerType = "solo";
-    navigate("GameSetUp", { playerType: playerType });
+    navigate("SingleGameSetUp", { playerType: playerType });
   };
 
   // onSignOutPress = () => {
