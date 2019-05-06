@@ -36,14 +36,13 @@ export default class InstructionScreen extends React.Component {
 
   // For solo users only
   proceedOnPress() {
+    const { navigate } = this.props.navigation;
+    const lesson = this.props.navigation.state.params.lesson;
+    const gameID = this.props.navigation.state.params.gameID;
     const resetAction = StackActions.reset({
       index: 0,
       actions: [NavigationActions.navigate({ routeName: "GamePlay", lesson: lesson, gameID: gameID})],
     });
-    const { navigate } = this.props.navigation;
-    const lesson = this.props.navigation.state.params.lesson;
-    const gameID = this.props.navigation.state.params.gameID;
-    // navigate("GamePlay", { lesson: lesson, gameID: gameID });
     this.props.navigation.dispatch(resetAction);
   }
 

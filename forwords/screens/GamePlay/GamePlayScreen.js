@@ -119,8 +119,7 @@ export default class GamePlayScreen extends Component {
       } else if (receivedMessage[0] == "score") {
         console.log("this.state.score=", this.state.score);
         this.setState({ score: receivedMessage[0].score });
-      }
-      else if (receivedMessage[0] == "message5") {
+      } else if (receivedMessage[0] == "message5") {
         this.newRound(receivedMessage[1].roundNumber);
       }
       if (receivedMessage[1].roundNumber > this.state.roundNumber) {
@@ -168,9 +167,8 @@ export default class GamePlayScreen extends Component {
   }
 
   wasAnsweredCorrectly(choiceIDGiven) {
-    var gameID = parseInt(this.props.navigation.state.params.gameID);
+    var gameID = parseInt(this.props.navigation.getParam('gameID', 0));
     // send up the input: choice, gameID
-
     // Request to send to the server - must be stringified.
     var stringifiedRequest = JSON.stringify([
       {
@@ -212,15 +210,15 @@ export default class GamePlayScreen extends Component {
       !this.state.newRound
     ) {
       return (
-        <View style={forwordsStyles.splashContainer}>
-          <Text style={forwordsStyles.headingText}>
-            Get ready to play! Remember to say your prompt out loud!
-          </Text>
+          <View style={forwordsStyles.specialContainer}>
+            <Text style={forwordsStyles.headingText}>
+              Get ready to play! Remember to say your prompt out loud!
+            </Text>
         </View>
       );
     } else if (this.state.newRound) {
       return (
-        <View style={forwordsStyles.splashContainer}>
+        <View style={forwordsStyles.specialContainer}>
           <Text style={forwordsStyles.headingText}>
             You have advanced to round {this.state.roundNumber}
           </Text>

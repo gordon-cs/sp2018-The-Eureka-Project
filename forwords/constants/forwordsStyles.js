@@ -191,12 +191,6 @@ export default StyleSheet.create({
     paddingTop: Platform.OS === "ios" ? 20 : 0,
     backgroundColor: "#5b3b89"
   },
-  splashContainer: {
-    alignItems: "center",
-    flex: 1,
-    paddingTop: Platform.OS === "ios" ? 20 : 0,
-    backgroundColor: "white"
-  },
   bulletText: {
     alignItems: "center",
     marginTop: 10,
