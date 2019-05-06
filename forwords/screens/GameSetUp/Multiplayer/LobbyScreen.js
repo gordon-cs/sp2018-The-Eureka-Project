@@ -4,13 +4,13 @@ import forwordsStyles from "../../../constants/forwordsStyles";
 
 export default class LobbyScreenRoom extends Component {
   static navigationOptions = {
-    header: null
+    title: 'Lobby'
   };
   constructor(props) {
     super(props);
 
     this.state = {
-      numberOfPlayers: ['1']
+      numberOfPlayers: ['1'],
     };
   }
 

@@ -14,7 +14,7 @@ import forwordsStyles from "../../../constants/forwordsStyles";
 
 export default class CourseInfoScreen extends Component {
   static navigationOptions = {
-    header: null
+    title: 'Course'
   };
   constructor(props) {
     super(props);

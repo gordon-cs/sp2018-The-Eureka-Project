@@ -11,7 +11,7 @@ import TimerMixin from "react-timer-mixin";
 
 export default class InstructionScreen extends React.Component {
   static navigationOptions = {
-    header: null
+    title: 'Instructions',
   };
   constructor(props) {
     super(props);

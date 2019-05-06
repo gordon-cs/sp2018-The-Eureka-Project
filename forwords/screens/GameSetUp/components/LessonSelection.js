@@ -1,12 +1,18 @@
 import React, { Component } from "react";
-import lesson from '../../../services/lesson'
-import { ActivityIndicator, ScrollView, TouchableOpacity, Text, } from "react-native";
+import lesson from "../../../services/lesson";
+import {
+  ActivityIndicator,
+  ScrollView,
+  TouchableOpacity,
+  Text
+} from "react-native";
 import forwordsStyles from "../../../constants/forwordsStyles";
 
 export default class LessonSelection extends Component {
   static navigationOptions = {
-    header: null
+    header: null,
   };
+  
   constructor(props) {
     super(props);
 
@@ -79,6 +85,15 @@ export default class LessonSelection extends Component {
 
     if (this.state.isLoading) {
       return <ActivityIndicator />;
-    } else return <ScrollView>{buttons}</ScrollView>;
+    } else
+      return (
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={forwordsStyles.container}
+          contentContainerStyle={forwordsStyles.contentContainer}
+        >
+          {buttons}
+        </ScrollView>
+      );
   }
 }
