@@ -11,7 +11,13 @@ async function getStudents(email, courseID) {
     return response.data;
 }
 
+async function getMyRecentGames(email) {
+    const response = await axios.get(`${httpsRoute}/my-recent-games/${email}`);
+    return response.data;
+}
+
 export default {
     getUserInfo,
     getStudents,
+    getMyRecentGames,
 }

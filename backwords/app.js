@@ -502,6 +502,21 @@ function getScore(player) {
 });
 }
 
+function getRecentGameScore(email, gameID) {
+  return new Promise(function(resolve, reject) {
+    var sql = "SELECT * FROM InputHistory " +
+    "WHERE userID = (SELECT userID FROM User WHERE email = ?) AND gameID = ? AND wasAnsweredCorrectly = 1;";
+    var inserts = [email, gameID];
+    var sql = mysql.format(sql, inserts);
+    connection.query(sql, inserts, function(error, results) {
+      if (error) throw error;
+      let score = results.length;
+      resolve(score);
+    }
+  );
+});
+}
+
 
 // When initializing round, this code will generate prompts for each player.
 function getPrompts(game) {
@@ -688,6 +703,30 @@ app.get("/my-courses/:email/:role", function(req, res) {
     res.json(results);
   });
 });
+
+// returns the last 5 games this student played in & their scores
+app.get("/my-recent-games/:email", function(req, res) {
+  const { email } = req.params;
+  var sql =
+    "SELECT DISTINCT gameID " +
+    "FROM InputHistory WHERE userID = (SELECT userID FROM User WHERE email = ?) " +
+    "ORDER BY gameID DESC LIMIT 5;"
+  inserts = [email];
+  sql = mysql.format(sql, inserts);
+  connection.query(sql, async function(error, results) {
+    if (error) throw error;
+    let recentScores = [];
+    let score;
+    for (let i = 0; i < results.length; i++) {
+      score = await getRecentGameScore(email, results[i].gameID);
+      var recentGameScore = {gameID: results[i].gameID, score: score};
+      recentScores.push(recentGameScore);
+    }
+    res.json(recentScores);
+  });  
+});
+
+
 // Post Methods
 
 // Add this user as a student in this course to the Participation table, as long as

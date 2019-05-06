@@ -69,7 +69,7 @@ export default class coursesITeach extends Component {
         <Text style={forwordsStyles.headingText}>Courses I Teach</Text>
         {listOfCoursesITeach}
         <Text style={forwordsStyles.headingText}>Courses I Am Enrolled In</Text>
-        {listOfCoursesITake}
+        <View style={forwordsStyles.headingView}>{listOfCoursesITake}</View>
       </View>
     );
   }

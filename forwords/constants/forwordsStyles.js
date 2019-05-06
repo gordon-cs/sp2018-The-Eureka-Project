@@ -75,6 +75,15 @@ export default StyleSheet.create({
     borderRadius: 15,
     backgroundColor: "#5b3b89"
   },
+  recentGameLongButton: {
+    justifyContent: "center",
+    flexDirection: "column",
+    margin: 1,
+    width: 280,
+    height: 40,
+    borderRadius: 15,
+    backgroundColor: "#5b3b89"
+  },
   addCourseNarrowLongButton: {
     justifyContent: "center",
     flexDirection: "column",
@@ -190,5 +199,10 @@ export default StyleSheet.create({
     justifyContent: "center",
     paddingTop: Platform.OS === "ios" ? 20 : 0,
     backgroundColor: "#fff"
+  },
+  recentGamesView: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
