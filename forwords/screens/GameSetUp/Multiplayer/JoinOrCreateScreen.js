@@ -13,7 +13,7 @@ import forwordsStyles from '../../../constants/forwordsStyles';
 
 export default class JoinOrCreateScreen extends Component {
   static navigationOptions = {
-    header: null
+    title: 'Create or Join a Game'
   };
   constructor(props) {
     super(props);
