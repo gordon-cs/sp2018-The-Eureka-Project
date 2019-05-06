@@ -16,23 +16,28 @@ export default class GameOverScreen extends React.Component {
     super(props);
   }
 
-  // For solo users only
   goToLaunchScreen() {
     const { navigate } = this.props.navigation;
-
-    // Request to send to the server - must be stringified.
-    var stringifiedRequest = JSON.stringify([
-      {
-        request: "endGame",
-      }
-    ]);
-    global.ws.send(stringifiedRequest);
     navigate("Home");
   }
 
   render() {
-    const navigate = this.props.navigation;
     const roundNumber = this.props.navigation.state.params.roundNumber;
+    const score = this.props.navigation.state.params.score;
+    let scoreMessage;
+    if (score > 1) {
+      scoreMessage = (
+        <Text style={styles.bulletText}>Your final score was {score} right answers!</Text>
+      );
+    } else if (score == 1) {
+      scoreMessage = (
+        <Text style={styles.bulletText}>Your final score was just {score} right answer...</Text>
+      );
+    } else if (score == 0) {
+      scoreMessage = (
+        <Text style={styles.bulletText}>Better luck next time, you got none right...Keep studying!</Text>
+      );
+    }
     return (
       <View style={styles.container}>
         <ScrollView
@@ -42,6 +47,7 @@ export default class GameOverScreen extends React.Component {
           <View style={styles.mainContainer}>
             <Text style={styles.headingText}>Game Over!</Text>
             <Text style={styles.bulletText}>Great job!!! You made it to round {roundNumber}!</Text>
+            {scoreMessage}
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={styles.button}

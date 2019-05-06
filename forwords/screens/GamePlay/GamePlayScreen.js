@@ -3,8 +3,8 @@ import TimerMixin from "react-timer-mixin";
 import Choice from "./components/Choice";
 import Prompt from "./components/Prompt";
 import Timer from "./components/Timer";
-import forwordsStyles from '../../constants/forwordsStyles';
-import { View, Text, } from "react-native";
+import forwordsStyles from "../../constants/forwordsStyles";
+import { View, Text } from "react-native";
 
 export default class GamePlayScreen extends Component {
   static navigationOptions = {
@@ -24,7 +24,7 @@ export default class GamePlayScreen extends Component {
       roundNumber: 1,
       newRound: false,
       resetTimer: true,
-      score: 0,
+      score: 0
     };
     this.wasAnsweredCorrectly = this.wasAnsweredCorrectly.bind(this);
     this.endGame = this.endGame.bind(this);
@@ -69,10 +69,10 @@ export default class GamePlayScreen extends Component {
           topRightChoice: shuffledChoices[1],
           bottomLeftChoice: shuffledChoices[2],
           bottomRightChoice: shuffledChoices[3],
-          promptObj: receivedMessage[2],
+          promptObj: receivedMessage[2]
         });
       }
-      // Answer Validation and Prompt Changing 
+      // Answer Validation and Prompt Changing
       // Turn every received message into a JSON immediately to access it
 
       // if it was your prompt, change ur answer to green and change ur prompt to new prompt
@@ -116,8 +116,7 @@ export default class GamePlayScreen extends Component {
             answeredCorrectly: [receivedMessage[2].oldInput, 0]
           });
         }, 750);
-      }
-      else if (receivedMessage[0] == 'score') {
+      } else if (receivedMessage[0] == "score") {
         console.log("this.state.score=", this.state.score);
         this.setState({ score: receivedMessage[0].score });
       }
@@ -127,23 +126,42 @@ export default class GamePlayScreen extends Component {
     };
   }
 
-
   newRound(newRoundNumber) {
     this.setState({
-      newRound: true, 
-      roundNumber: newRoundNumber,
+      newRound: true,
+      roundNumber: newRoundNumber
     });
     this.initChoicesAndPrompt();
 
     TimerMixin.setTimeout(() => {
-      this.setState({newRound: false});
+      this.setState({ newRound: false });
     }, 2000);
-
   }
 
   endGame() {
     const { navigate } = this.props.navigation;
-    navigate("GameOver", {roundNumber: this.state.roundNumber});
+
+    // Request to send to the server - must be stringified.
+    var stringifiedRequest = JSON.stringify([
+      {
+        request: "endGame"
+      }
+    ]);
+    console.log("endGame() sent:", stringifiedRequest);
+    global.ws.send(stringifiedRequest);
+
+    // What to do when receiving a message
+    global.ws.onmessage = event => {
+      // Turn every received message into a JSON immediately to access it
+      var receivedMessage = JSON.parse(event.data);
+      if (receivedMessage[0] == "score") {
+        this.setState({ score: receivedMessage[2].score });
+      }
+      navigate("GameOver", {
+        roundNumber: this.state.roundNumber,
+        score: this.state.score
+      });
+    };
   }
 
   wasAnsweredCorrectly(choiceIDGiven) {
@@ -162,11 +180,10 @@ export default class GamePlayScreen extends Component {
   }
 
   initChoicesAndPrompt() {
-
     // Request to send to the server - must be stringified.
     var stringifiedRequest = JSON.stringify([
       {
-        request: "initChoicesAndPrompt",
+        request: "initChoicesAndPrompt"
       }
     ]);
     global.ws.send(stringifiedRequest);
@@ -186,18 +203,26 @@ export default class GamePlayScreen extends Component {
     const promptID = this.state.promptObj.wordID;
     const answeredCorrectly = this.state.answeredCorrectly;
     const resetTimer = this.state.resetTimer;
-    if (this.state.isLoading && this.state.roundNumber == 1 && !this.state.newRound) {
+    if (
+      this.state.isLoading &&
+      this.state.roundNumber == 1 &&
+      !this.state.newRound
+    ) {
       return (
         <View style={forwordsStyles.splashContainer}>
-          <Text style={forwordsStyles.headingText}>Get ready to play! Remember to say your prompt out loud!</Text>
+          <Text style={forwordsStyles.headingText}>
+            Get ready to play! Remember to say your prompt out loud!
+          </Text>
         </View>
       );
     } else if (this.state.newRound) {
       return (
         <View style={forwordsStyles.splashContainer}>
-          <Text style={forwordsStyles.headingText}>You have advanced to round {this.state.roundNumber}</Text>
+          <Text style={forwordsStyles.headingText}>
+            You have advanced to round {this.state.roundNumber}
+          </Text>
         </View>
-      );    
+      );
     } else if (!this.state.isLoading && !this.state.newRound) {
       return (
         <View style={forwordsStyles.mainContainer}>
@@ -205,7 +230,7 @@ export default class GamePlayScreen extends Component {
             <Prompt promptObj={promptObj} />
           </View>
           <View style={forwordsStyles.timerContainer}>
-            <Timer resetTimer={resetTimer} endGame={this.endGame}/>
+            <Timer resetTimer={resetTimer} endGame={this.endGame} />
           </View>
           <View style={forwordsStyles.choicesContainer}>
             <Choice
