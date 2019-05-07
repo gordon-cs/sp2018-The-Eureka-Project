@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
+import { httpsRoute } from '../../../constants/API';
 
 export default class Prompt extends Component {
   constructor(props) {
@@ -10,14 +11,14 @@ export default class Prompt extends Component {
       imageURL: this.props
     };
   }
+  
   render() {
     const promptObj = this.props.promptObj;
     let image;
-
-    if (promptObj.lessonID == 21) {
+    if (promptObj.lessonID == 21 || promptObj.lessonID == 22) {
           image = (
             <Image
-              source={{uri: 'http://172.27.43.141:9999/_'+promptObj.meaning+'_.png'}}
+              source={{uri: `${httpsRoute}/_${promptObj.meaning}_.png`}}
               style={styles.promptImage}
             />
           ); 
@@ -25,7 +26,7 @@ export default class Prompt extends Component {
       } else {
       return (
         <View style={styles.mainContainer}>
-          <Text style={styles.promptText}>{promptObj.pinyin}</Text>
+          <Text style={styles.promptText}>{promptObj.romanization}</Text>
         </View>
       );
     }

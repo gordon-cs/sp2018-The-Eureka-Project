@@ -1,9 +1,17 @@
 import React, { Component } from "react";
-import { Button, StyleSheet, Platform, Text, View, ScrollView, TextInput, Image, } from "react-native";
-import LessonSelection from './components/LessonSelection';
+import {
+  Platform,
+  Text,
+  View,
+  ScrollView,
+  Image
+} from "react-native";
+import LessonSelection from "./components/LessonSelection";
+import forwordsStyles from "../../constants/forwordsStyles";
+
 export default class GameSetUpScreen extends Component {
   static navigationOptions = {
-    header: null
+    title: 'Game Setup'
   };
   constructor(props) {
     super(props);
@@ -11,18 +19,17 @@ export default class GameSetUpScreen extends Component {
 
   render() {
     const playerType = this.props.navigation.state.params.playerType; // host, member, or solo
-    console.log("GameSetUpScreen: playertype:", playerType);
     let content;
 
     // If the user is playing solo
-    if (playerType == 'solo') {
+    if (playerType == "solo") {
       content = (
         <ScrollView>
-          <View style={styles.MainContainer}>
-            <View style={styles.headingView}>
-              <Text style={styles.headingText}>Single Player Mode</Text>
+          <View style={forwordsStyles.container}>
+            <View style={forwordsStyles.headingView}>
+              <Text style={forwordsStyles.headingText}>Single Player Mode</Text>
               <Image
-                style={styles.singlePlayerImage}
+                style={forwordsStyles.playerImage}
                 source={require("../../assets/images/person.png")}
               />
             </View>
@@ -35,18 +42,22 @@ export default class GameSetUpScreen extends Component {
       );
     }
     // If the user is a HOST (playing with others)
-    else if (playerType == 'host') {
+    else if (playerType == "host") {
       content = (
         <ScrollView>
-          <View style={styles.MainContainer}>
-            <View style={styles.headingView}>
-              <Text style={styles.headingText}>Multiplayer Mode</Text>
+          <View style={forwordsStyles.container}>
+            <View style={forwordsStyles.headingView}>
+              <Text style={forwordsStyles.headingText}>Multiplayer Mode</Text>
               <Image
-                style={styles.multiplayerImage}
+                style={forwordsStyles.playerImage}
                 source={require("../../assets/images/people.png")}
               />
-              <Text style={styles.subheadingText}>You will receive a group code once you select a lesson!</Text>
-              <Text style={styles.subheadingText}>Select a lesson for your group to play with!</Text>
+              <Text style={forwordsStyles.mainText}>
+                You will receive a group code once you select a lesson!
+              </Text>
+              <Text style={forwordsStyles.mainText}>
+                Select a lesson for your group to play with!
+              </Text>
             </View>
 
             <LessonSelection
@@ -57,55 +68,6 @@ export default class GameSetUpScreen extends Component {
         </ScrollView>
       );
     }
-    return (
-      <View>
-        {content}
-      </View>
-    )
+    return <View>{content}</View>;
   }
 }
-
-const styles = StyleSheet.create({
-  MainContainer: {
-    flex: 1,
-    paddingTop: Platform.OS === "ios" ? 20 : 0,
-    backgroundColor: '#fff'
-  },
-  mainText: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 10,
-    marginLeft: 10,
-    fontSize: 25,
-    color: 'black',
-    fontWeight: "bold",
-  },
-  headingText: {
-    fontWeight: "bold",
-    fontSize: 30,
-    color: 'black',
-  },
-  subheadingText: {
-    alignItems: 'center',
-    margin: 10,
-    fontSize: 20,
-    color: 'black',
-  },
-  multiplayerImage: {
-    width: 70,
-    height: 70,
-    flex: 1,
-    resizeMode: 'contain',
-  },
-  singlePlayerImage: {
-    width: 70, 
-    height: 70, 
-    flex: 1,
-    resizeMode: 'contain',
-  },
-  headingView: {
-    alignItems: "center",
-    marginTop: 10,
-    marginBottom: 10,
-  },
-});

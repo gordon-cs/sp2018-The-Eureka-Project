@@ -1,106 +1,78 @@
 import React from "react";
+import * as firebase from "firebase";
 import {
   Button,
   ScrollView,
-  StyleSheet,
   TouchableOpacity,
   View,
   Image,
-  Text,
+  Text
 } from "react-native";
-import * as firebase from "firebase";
+import forwordsStyles from "../../constants/forwordsStyles";
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
-    header: null
+    title: 'Home'
   };
 
   constructor(props) {
     super(props);
-  }
-  onSignOutPress = () => {
-    const { navigate } = this.props.navigation;
-    firebase.auth().signOut();
-    navigate("Login");
-  };
 
-// User wants to play solo
+    this.state = {
+      myCourses: []
+    };
+  }
+
+  // User wants to play solo
   onPressSinglePlayerMode = () => {
     const { navigate } = this.props.navigation;
-    const playerType = 'solo';
-    navigate("GameSetUp", { playerType: playerType});
-  }
+    const playerType = "solo";
+    navigate("GameSetUp", { playerType: playerType });
+  };
+
+  // onSignOutPress = () => {
+  //   const { navigate } = this.props.navigation;
+  //   // firebase.auth().signOut();
+  //   navigate("Login");
+  // };
 
   render() {
+
     const { navigate } = this.props.navigation;
+    const email = firebase.auth().currentUser.email;
     return (
-      <View style={styles.container}>
+      <View style={forwordsStyles.container}>
         <ScrollView
-          contentContainerStyle={styles.contentContainer}
+          showsVerticalScrollIndicator={false}
+          style={forwordsStyles.container}
+          contentContainerStyle={forwordsStyles.contentContainer}
         >
-        <View style={styles.headingView}>
-          <TouchableOpacity
-          style={styles.imageContainer}
-            onPress={() => navigate("JoinOrCreate")}
-          >
-          <Text style={styles.headingText}>Multiplayer Mode</Text>
-            <Image
-              style={{ width: 200, height: 200 }}
-              source={require("../../assets/images/people.png")}
-            />
-          </TouchableOpacity>
-        </View>
-          <View style={styles.headingView}>
+          <View style={forwordsStyles.headingView}>
             <TouchableOpacity
-              style={styles.imageContainer}
+              style={forwordsStyles.headingView}
+              onPress={() => navigate("JoinOrCreate")}
+            >
+              <Text style={forwordsStyles.headingText}>Multiplayer Mode</Text>
+              <Image
+                style={{ width: 200, height: 200 }}
+                source={require("../../assets/images/people.png")}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={forwordsStyles.headingView}>
+            <TouchableOpacity
+              style={forwordsStyles.headingView}
               onPress={() => this.onPressSinglePlayerMode()}
             >
-            <Text style={styles.headingText}>Single Player Mode</Text>
+              <Text style={forwordsStyles.headingText}>Single Player Mode</Text>
               <Image
                 style={{ width: 200, height: 200 }}
                 source={require("../../assets/images/person.png")}
               />
             </TouchableOpacity>
           </View>
-          <Button
-            style={styles.button}
-            title="Sign Out"
-            onPress={() => this.onSignOutPress()}
-            color="purple"
-          />
         </ScrollView>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-  },
-  imageContainer: {
-    alignItems: "center",
-  },
-  headingView: {
-    alignItems: "center",
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  contentContainer: {
-    paddingTop: 30
-  },
-  button: {
-    alignItems: "center",
-    color: "#800080",
-    borderRadius: 50,
-    width: 160,
-  },
-  headingText: {
-    fontWeight: "bold",
-    fontSize: 30,
-    color: 'black',
-    margin: 10,
-  },
-});

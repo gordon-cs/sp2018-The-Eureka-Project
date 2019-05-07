@@ -1,10 +1,27 @@
-import React from 'react';
-import { createSwitchNavigator } from 'react-navigation';
+import React from "react";
+import { createSwitchNavigator } from "react-navigation";
 
-import MainTabNavigator from './MainTabNavigator';
+import MainTabNavigator from "./MainTabNavigator";
+import { createStackNavigator } from "react-navigation";
+import LoginScreen from "../screens/Authentication/LoginScreen";
+import RegisterScreen from "../screens/Authentication/RegisterScreen";
+import ForgotPasswordScreen from "../screens/Authentication/ForgotPasswordScreen";
 
-export default createSwitchNavigator({
-  // You could add another route here for authentication.
-  // Read more at https://reactnavigation.org/docs/en/auth-flow.html
-  Main: MainTabNavigator,
+const AuthenticationStack = createStackNavigator({
+  Login: LoginScreen,
+  ForgotPassword: ForgotPasswordScreen,
+  Register: RegisterScreen
 });
+
+// Use a switch navigator for the tabs so that you cannot hit the backbutton on screens to move between tabs.
+
+// You could add another route here for authentication.
+// Read more at https://reactnavigation.org/docs/en/auth-flow.html
+// This is the BottomTabNavigator, which has stacks inside of it.
+// Put all stacks in here
+export default createSwitchNavigator(
+  {
+    Authentication: AuthenticationStack,
+    Main: MainTabNavigator
+  }
+);
