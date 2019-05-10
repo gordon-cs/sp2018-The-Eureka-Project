@@ -24,8 +24,15 @@ export default class GameOverScreen extends React.Component {
   }
 
   goToLaunchScreen() {
-    const { navigate } = this.props.navigation;
-    navigate("Home");
+    var resetAction = StackActions.reset({
+      index: 0,
+      actions: [
+        NavigationActions.navigate({
+          routeName: "Tabs"
+        })
+      ]
+    });
+    this.props.navigation.dispatch(resetAction);
   }
 
   componentWillMount() {}
