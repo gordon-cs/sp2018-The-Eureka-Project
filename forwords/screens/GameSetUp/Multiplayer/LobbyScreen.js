@@ -1,24 +1,30 @@
 import React, { Component } from "react";
-import { StackActions, NavigationActions } from 'react-navigation';
-import { Text, View, Image, TouchableOpacity } from "react-native";
+import { StackActions, NavigationActions } from "react-navigation";
+import { Text, View, Image, TouchableOpacity, ScrollView } from "react-native";
 import forwordsStyles from "../../../constants/forwordsStyles";
 
 export default class LobbyScreenRoom extends Component {
   static navigationOptions = {
-    title: 'Lobby'
+    title: "Lobby"
   };
   constructor(props) {
     super(props);
 
     this.state = {
-      numberOfPlayers: ['1'],
+      numberOfPlayers: ["1"]
     };
   }
 
   componentDidMount() {
     const resetAction = StackActions.reset({
       index: 0,
-      actions: [NavigationActions.navigate({ routeName: "GamePlay", gameID: gameID, lesson: lesson })],
+      actions: [
+        NavigationActions.navigate({
+          routeName: "GamePlay",
+          gameID: gameID,
+          lesson: lesson
+        })
+      ]
     });
     var lesson = this.props.navigation.state.params.lesson;
     var gameID = this.props.navigation.state.params.gameID;
@@ -115,6 +121,15 @@ export default class LobbyScreenRoom extends Component {
         </View>
       );
     }
-    return <View style={forwordsStyles.container}>{content}</View>;
+    return (
+      <View style={forwordsStyles.container}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={forwordsStyles.flexContentContainer}
+        >
+          {content}
+        </ScrollView>
+      </View>
+    );
   }
 }
