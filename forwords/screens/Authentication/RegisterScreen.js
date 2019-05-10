@@ -15,7 +15,7 @@ import { httpsRoute } from "../../constants/API";
 
 export default class RegisterScreen extends Component {
   static navigationOptions = {
-    header: null
+    title: "Register"
   };
   constructor(props) {
     super(props);
@@ -103,16 +103,13 @@ export default class RegisterScreen extends Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <ScrollView
-          style={forwordsStyles.container}
+      <View style={forwordsStyles.container}>
+        <ScrollView
           contentContainerStyle={forwordsStyles.contentContainer}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="always"
         >
           <KeyboardAvoidingView behavior="padding">
-            <View style={forwordsStyles.headingView}>
-              <Text style={forwordsStyles.headingText}>Register!</Text>
-            </View>
             <TextInput
               onChangeText={firstName => this.setState({ firstName })}
               placeholder="First Name"
@@ -164,23 +161,24 @@ export default class RegisterScreen extends Component {
               style={forwordsStyles.textInput}
               onSubmitEditing={() => this.addUser()}
             />
-          <View style={forwordsStyles.rowButtonsContainer}>
-            <TouchableOpacity
-              style={forwordsStyles.secondaryButton}
-              onPress={() => navigate("Login")}
-            >
-              <Text style={forwordsStyles.buttonText}>Cancel</Text>
-            </TouchableOpacity>
+            <View style={forwordsStyles.rowButtonsContainer}>
+              <TouchableOpacity
+                style={forwordsStyles.secondaryButton}
+                onPress={() => navigate("Login")}
+              >
+                <Text style={forwordsStyles.buttonText}>Cancel</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              style={forwordsStyles.primaryButton}
-              onPress={() => this.addUser()}
-            >
-              <Text style={forwordsStyles.buttonText}>Register</Text>
-            </TouchableOpacity>
-          </View>
+              <TouchableOpacity
+                style={forwordsStyles.primaryButton}
+                onPress={() => this.addUser()}
+              >
+                <Text style={forwordsStyles.buttonText}>Register</Text>
+              </TouchableOpacity>
+            </View>
           </KeyboardAvoidingView>
         </ScrollView>
+      </View>
     );
   }
 }
