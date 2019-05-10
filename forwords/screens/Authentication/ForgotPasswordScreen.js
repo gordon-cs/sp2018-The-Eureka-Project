@@ -1,21 +1,19 @@
 import React from "react";
 import {
-  StyleSheet,
   View,
   Text,
   TextInput,
-  Button,
   Alert,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView
 } from "react-native";
-import forwordsStyles from '../../constants/forwordsStyles';
+import forwordsStyles from "../../constants/forwordsStyles";
 import * as firebase from "firebase";
 
 export default class ForgotPasswordScreen extends React.Component {
   static navigationOptions = {
-    header: null
+    title: 'Reset Password'
   };
-
   constructor(props) {
     super(props);
     this.state = {
@@ -41,47 +39,47 @@ export default class ForgotPasswordScreen extends React.Component {
     const { navigate } = this.props.navigation;
     var email = this.props.navigation.state.params.email;
     return (
-      <View style={styles.container}>
-        <View style={forwordsStyles.headingView}>
-          <Text style={forwordsStyles.headingText}>Reset Password</Text>
-        </View>
-        <TextInput
-          onChangeText={email => {
-            this.setState({ email });
-          }}
-          autoCorrect={false}
-          placeholder={email}
-          autoCapitalize="none"
-          returnKeyType="done"
-          keyboardType="email-address"
-          placeholderTextColor="black"
-          style={forwordsStyles.textInput}
-        />
-        <View style={forwordsStyles.rowButtonsContainer}>
-          <TouchableOpacity
-            style={forwordsStyles.secondaryButton}
-            onPress={() => navigate("Login")}
-          >
-            <Text style={forwordsStyles.buttonText}>Cancel</Text>
-          </TouchableOpacity>
+      <View style={forwordsStyles.container}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={forwordsStyles.flexContentContainer}
+        >
+          <View style={forwordsStyles.headingView}>
+            <Text style={forwordsStyles.mainText}>
+              Enter the email to your account and you will receive a link to
+              reset your password.
+            </Text>
+          </View>
 
-          <TouchableOpacity
-            style={forwordsStyles.primaryButton}
-            onPress={() => this.onResetPasswordPress()}
-          >
-            <Text style={forwordsStyles.buttonText}>Reset Password</Text>
-          </TouchableOpacity>
-        </View>
+          <TextInput
+            onChangeText={email => {
+              this.setState({ email });
+            }}
+            autoCorrect={false}
+            placeholder={email}
+            autoCapitalize="none"
+            returnKeyType="done"
+            keyboardType="email-address"
+            placeholderTextColor="black"
+            style={forwordsStyles.textInput}
+          />
+          <View style={forwordsStyles.rowButtonsContainer}>
+            <TouchableOpacity
+              style={forwordsStyles.secondaryButton}
+              onPress={() => navigate("Login")}
+            >
+              <Text style={forwordsStyles.buttonText}>Cancel</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={forwordsStyles.primaryButton}
+              onPress={() => this.onResetPasswordPress()}
+            >
+              <Text style={forwordsStyles.buttonText}>Reset Password</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
-  },
-});
