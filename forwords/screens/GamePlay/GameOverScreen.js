@@ -7,14 +7,20 @@ import {
   TouchableOpacity,
   ScrollView
 } from "react-native";
+import { StackActions, NavigationActions } from "react-navigation";
 import forwordsStyles from "../../constants/forwordsStyles";
 
 export default class GameOverScreen extends React.Component {
   static navigationOptions = {
     header: null
   };
+
   constructor(props) {
     super(props);
+    this.state = {
+      roundNumber: parseInt(this.props.navigation.getParam("roundNumber", 1)),
+      score: this.props.navigation.getParam("score", 'error')
+    };
   }
 
   goToLaunchScreen() {
@@ -22,9 +28,12 @@ export default class GameOverScreen extends React.Component {
     navigate("Home");
   }
 
+  componentWillMount() {}
+
   render() {
-    const roundNumber = this.props.navigation.state.params.roundNumber;
-    const score = this.props.navigation.state.params.score;
+    const score = this.state.score;
+    const roundNumber = this.state.roundNumber;
+
     let scoreMessage;
     if (score > 1) {
       scoreMessage = (
@@ -44,6 +53,10 @@ export default class GameOverScreen extends React.Component {
           Better luck next time, you didn't get any this time...Keep studying!
         </Text>
       );
+    } else if (score == 'error') {
+      scoreMessage = (
+        null
+      );
     }
     return (
       <View style={forwordsStyles.container}>
@@ -51,12 +64,12 @@ export default class GameOverScreen extends React.Component {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={forwordsStyles.flexContentContainer}
         >
+        <View style={forwordsStyles.headingView}>
           <Text style={forwordsStyles.headingText}>Game Over!</Text>
           <Text style={forwordsStyles.bulletText}>
             Great job!!! You made it to round {roundNumber}!
           </Text>
           {scoreMessage}
-          <View style={forwordsStyles.headingView}>
             <TouchableOpacity
               style={forwordsStyles.primaryButton}
               onPress={() => this.goToLaunchScreen()}

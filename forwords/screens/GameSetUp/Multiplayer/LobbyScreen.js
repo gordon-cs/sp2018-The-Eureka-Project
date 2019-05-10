@@ -21,12 +21,13 @@ export default class LobbyScreenRoom extends Component {
       actions: [
         NavigationActions.navigate({
           routeName: "GamePlay",
-          gameID: gameID,
+          params: {
+            gameID: gameID,
+          }
         })
       ]
     });
     var gameID = this.props.navigation.state.params.gameID;
-    const { navigate } = this.props.navigation;
     // What to do when receiving a message
     global.ws.onmessage = event => {
       let receivedMessage = JSON.parse(event.data);
