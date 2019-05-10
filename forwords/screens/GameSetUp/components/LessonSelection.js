@@ -1,19 +1,14 @@
 import React, { Component } from "react";
 import lesson from "../../../services/lesson";
-import {
-  ActivityIndicator,
-  ScrollView,
-  TouchableOpacity,
-  Text
-} from "react-native";
+import { ActivityIndicator, ScrollView, TouchableOpacity, Text, View } from "react-native";
 import forwordsStyles from "../../../constants/forwordsStyles";
 import * as firebase from "firebase";
 
 export default class LessonSelection extends Component {
   static navigationOptions = {
-    header: null,
+    header: null
   };
-  
+
   constructor(props) {
     super(props);
 
@@ -90,13 +85,14 @@ export default class LessonSelection extends Component {
       return <ActivityIndicator />;
     } else
       return (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={forwordsStyles.container}
-          contentContainerStyle={forwordsStyles.contentContainer}
-        >
-          {buttons}
-        </ScrollView>
+        <View style={forwordsStyles.container}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={forwordsStyles.specialContainer}
+          >
+            {buttons}
+          </ScrollView>
+        </View>
       );
   }
 }
