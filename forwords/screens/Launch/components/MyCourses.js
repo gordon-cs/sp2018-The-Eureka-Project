@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import * as firebase from "firebase";
 import course from "../../../services/course";
-import { TouchableOpacity, Text, View } from "react-native";
+import { TouchableOpacity, Text, View, ActivityIndicator, } from "react-native";
 import forwordsStyles from "../../../constants/forwordsStyles";
 
 export default class coursesITeach extends Component {
@@ -14,7 +14,8 @@ export default class coursesITeach extends Component {
 
     this.state = {
       coursesITeach: [],
-      coursesITake: []
+      coursesITake: [], 
+      isLoading: true,
     };
   }
 
@@ -22,13 +23,25 @@ export default class coursesITeach extends Component {
     const email = firebase.auth().currentUser.email;
     let coursesITeach = await course.getMyCourses(email, "teacher");
     let coursesITake = await course.getMyCourses(email, "student");
-    this.setState({ coursesITeach, coursesITake });
+    this.setState({ coursesITeach, coursesITake, isLoading: false });
   }
 
   render() {
     const { navigate } = this.props.navigation;
-    const { coursesITeach, coursesITake } = this.state;
+    const { coursesITeach, coursesITake, isLoading } = this.state;
     let listOfCoursesITeach, listOfCoursesITake;
+    if (isLoading) {
+      listOfCoursesITake = (
+        <View>
+          <ActivityIndicator/>
+        </View>
+      );
+      listOfCoursesITeach = (
+        <View>
+          <ActivityIndicator/>
+        </View>
+      );
+    }
     if (coursesITeach.length > 0) {
       listOfCoursesITeach = coursesITeach.map(course => (
         <TouchableOpacity
