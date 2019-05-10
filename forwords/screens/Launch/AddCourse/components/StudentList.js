@@ -51,14 +51,14 @@ export default class StudentList extends Component {
         if (students.length > 0) {
           return (
             <View>
-              <Text style={forwordsStyles.mainText}>Students in this class:</Text>
+              <Text style={forwordsStyles.mainText}>Students in this course:</Text>
               {studentList}
             </View>
           );
         } else {
           return (
             <View>
-              <Text style={forwordsStyles.mainText}>There are no students in this class yet. They can join by entering the Class Code!</Text>
+              <Text style={forwordsStyles.mainText}>There are no students in this course yet. They can join by entering the course code!</Text>
             </View>
           );          
         }
