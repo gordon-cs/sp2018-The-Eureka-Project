@@ -26,10 +26,6 @@ import CourseInfoScreen from "../screens/Launch/AddCourse/CourseInfoScreen";
 // Profile Tab
 const UserProfileStack = createStackNavigator({
   UserProfile: UserProfileScreen,
-  RoleSelection: RoleSelectionScreen,
-  AddCourse: AddCourseScreen,
-  UserProfile: UserProfileScreen,
-  CourseInfo: CourseInfoScreen,
 });
 
 UserProfileStack.navigationOptions = {
@@ -70,6 +66,27 @@ const TabNavigator = createBottomTabNavigator(
   }
 );
 
+TabNavigator.navigationOptions = ({ navigation }) => {
+  const { routeName } = navigation.state.routes[navigation.state.index];
+
+  // You can do whatever you like here to pick the title based on the route name
+  var headerTitle;
+  switch(routeName) {
+    case("HomeStack"):
+      headerTitle = "Home";
+      break;
+    case("UserProfileStack"):
+      headerTitle = "Profile";
+      break;
+    default:
+    headerTitle = routeName
+  }
+  
+  return {
+    headerTitle,
+  };
+};
+
 // Whatever is with the Tabs here will not have tabs on their screen:
 export default createStackNavigator({
   Tabs: TabNavigator,
@@ -79,4 +96,8 @@ export default createStackNavigator({
   Instructions: InstructionsScreen,
   GamePlay: GamePlayScreen,
   GameOver: GameOverScreen,
+  RoleSelection: RoleSelectionScreen,
+  AddCourse: AddCourseScreen,
+  UserProfile: UserProfileScreen,
+  CourseInfo: CourseInfoScreen,
 });

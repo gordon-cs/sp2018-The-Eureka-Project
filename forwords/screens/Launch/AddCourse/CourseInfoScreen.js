@@ -13,8 +13,15 @@ import StudentList from "./components/StudentList";
 import forwordsStyles from "../../../constants/forwordsStyles";
 
 export default class CourseInfoScreen extends Component {
-  static navigationOptions = {
-    title: 'Course'
+  static navigationOptions = ({ navigation }) => {
+    if (navigation.getParam('role', 'student') == 'teacher') {
+      title = "Create a Course";
+    } else {
+      title = "Add a Course";
+    }
+    return {
+      title: navigation.getParam('courseTitle', 'Course Info')
+    };
   };
   constructor(props) {
     super(props);
@@ -99,16 +106,15 @@ export default class CourseInfoScreen extends Component {
       <View style={forwordsStyles.container}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          style={forwordsStyles.container}
-          contentContainerStyle={forwordsStyles.contentContainer}
+          contentContainerStyle={forwordsStyles.flexContentContainer}
         >
           <View style={forwordsStyles.headingView}>
             <Text style={forwordsStyles.headingText}>
-              ({courseID}) {courseTitle} Course
+              Course Code: ({courseID})
             </Text>
           </View>
           <Text style={forwordsStyles.mainText}>
-            Recent Activity from groups in this class:
+            Recent Activity from groups in this course:
           </Text>
           <StudentList
             navigation={this.props.navigation}

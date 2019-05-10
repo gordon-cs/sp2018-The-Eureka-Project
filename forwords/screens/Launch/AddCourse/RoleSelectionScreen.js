@@ -9,7 +9,7 @@ import forwordsStyles from "../../../constants/forwordsStyles";
 
 export default class RoleSelectionScreen extends Component {
   static navigationOptions = {
-    header: null
+    title: 'Create or Join a Course'
   };
   constructor(props) {
     super(props);
@@ -34,8 +34,7 @@ export default class RoleSelectionScreen extends Component {
       <View style={forwordsStyles.container}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          style={forwordsStyles.container}
-          contentContainerStyle={forwordsStyles.specialContainer}
+          contentContainerStyle={forwordsStyles.flexContentContainer}
         >
           <View style={forwordsStyles.headingView}>
             <Text style={forwordsStyles.headingText}>

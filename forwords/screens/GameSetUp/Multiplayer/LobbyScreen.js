@@ -22,11 +22,9 @@ export default class LobbyScreenRoom extends Component {
         NavigationActions.navigate({
           routeName: "GamePlay",
           gameID: gameID,
-          lesson: lesson
         })
       ]
     });
-    var lesson = this.props.navigation.state.params.lesson;
     var gameID = this.props.navigation.state.params.gameID;
     const { navigate } = this.props.navigation;
     // What to do when receiving a message

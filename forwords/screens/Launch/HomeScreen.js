@@ -12,7 +12,7 @@ import forwordsStyles from "../../constants/forwordsStyles";
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
-    title: 'Home'
+    header: null,
   };
 
   constructor(props) {
