@@ -57,7 +57,7 @@ export default class InstructionScreen extends React.Component {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={forwordsStyles.flexContentContainer}
           >
-            <View style={forwordsStyles.instructionsContainer}>
+            <View style={forwordsStyles.whiteContainer}>
               <View style={forwordsStyles.headingView}>
                 <Text style={forwordsStyles.headingText}>How To Play</Text>
               </View>
@@ -81,12 +81,12 @@ export default class InstructionScreen extends React.Component {
       );
     } else {
       return (
-        <View style={forwordsStyles.instructionsContainer}>
+        <View style={forwordsStyles.container}>
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={forwordsStyles.flexContentContainer}
         >
-            <View style={forwordsStyles.instructionsContainer}>
+            <View style={forwordsStyles.whiteContainer}>
               <View style={forwordsStyles.headingView}>
                 <Text style={forwordsStyles.headingText}>How To Play</Text>
               </View>
