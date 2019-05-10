@@ -36,8 +36,7 @@ export default class HomeScreen extends React.Component {
       <View style={forwordsStyles.container}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          style={forwordsStyles.container}
-          contentContainerStyle={forwordsStyles.contentContainer}
+          contentContainerStyle={forwordsStyles.specialContainer}
         >
           <View style={forwordsStyles.headingView}>
             <TouchableOpacity
@@ -50,8 +49,6 @@ export default class HomeScreen extends React.Component {
                 source={require("../../assets/images/people.png")}
               />
             </TouchableOpacity>
-          </View>
-          <View style={forwordsStyles.headingView}>
             <TouchableOpacity
               style={forwordsStyles.headingView}
               onPress={() => this.onPressSinglePlayerMode()}
