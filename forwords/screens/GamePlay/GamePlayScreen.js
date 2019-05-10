@@ -210,7 +210,7 @@ export default class GamePlayScreen extends Component {
       !this.state.newRound
     ) {
       return (
-          <View style={forwordsStyles.specialContainer}>
+          <View style={forwordsStyles.whiteContainer}>
             <Text style={forwordsStyles.headingText}>
               Get ready to play! Remember to say your prompt out loud!
             </Text>
@@ -218,7 +218,7 @@ export default class GamePlayScreen extends Component {
       );
     } else if (this.state.newRound) {
       return (
-        <View style={forwordsStyles.specialContainer}>
+        <View style={forwordsStyles.whiteContainer}>
           <Text style={forwordsStyles.headingText}>
             You have advanced to round {this.state.roundNumber}
           </Text>
@@ -226,7 +226,7 @@ export default class GamePlayScreen extends Component {
       );
     } else if (!this.state.isLoading && !this.state.newRound) {
       return (
-        <View style={forwordsStyles.mainContainer}>
+        <View style={forwordsStyles.gamePlayContainer}>
           <View style={forwordsStyles.choicesContainer}>
             <Prompt promptObj={promptObj} />
           </View>

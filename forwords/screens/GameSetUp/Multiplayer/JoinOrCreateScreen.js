@@ -85,7 +85,7 @@ export default class JoinOrCreateScreen extends Component {
       <View style={forwordsStyles.container}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={forwordsStyles.specialContainer}
+          contentContainerStyle={forwordsStyles.flexContentContainer}
         >
 
           <View style={forwordsStyles.headingView}>

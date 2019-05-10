@@ -188,7 +188,7 @@ export default StyleSheet.create({
     height: 75,
     backgroundColor: "white"
   },
-  mainContainer: {
+  gamePlayContainer: {
     alignItems: "center",
     flex: 1,
     paddingTop: Platform.OS === "ios" ? 20 : 0,
@@ -203,7 +203,7 @@ export default StyleSheet.create({
     fontSize: 25,
     color: "#5b3b89"
   },
-  instructionsContainer: {
+  whiteContainer: {
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",
