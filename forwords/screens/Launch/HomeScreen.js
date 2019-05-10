@@ -30,16 +30,8 @@ export default class HomeScreen extends React.Component {
     navigate("GameSetUp", { playerType: playerType });
   };
 
-  // onSignOutPress = () => {
-  //   const { navigate } = this.props.navigation;
-  //   // firebase.auth().signOut();
-  //   navigate("Login");
-  // };
-
   render() {
-
     const { navigate } = this.props.navigation;
-    const email = firebase.auth().currentUser.email;
     return (
       <View style={forwordsStyles.container}>
         <ScrollView

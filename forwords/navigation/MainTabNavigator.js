@@ -25,37 +25,6 @@ import AddCourseScreen from "../screens/Launch/AddCourse/AddCourseScreen";
 import RoleSelectionScreen from "../screens/Launch/AddCourse/RoleSelectionScreen";
 import CourseInfoScreen from "../screens/Launch/AddCourse/CourseInfoScreen";
 
-/* Total Explanation for the stacks/switches/etc
- * A. Home Tab:
- * should get to both multiplayer and singleplayer mode
- * both multiplayer & singleplayer mode should get to gamesetup
- * both should get to instructions/gameplay/gameover
- * One Big SwitchNavigator(
- * 1.1. GamePlaySwitch
- * InstructionsScreen
- * GamePlayScreen
- * GameOverScreen
- * 1.2. GamePlaySetUpStack   ---> COMBINE BOTH SINGLE AND MULTIPLAYER
- * JoinOrCreateScreen
- * GameSetUpScreen
- * LobbyScreen
- * GamePlaySwitch
- * 1.3 SinglePlayerSetUpStack
- * GameSetUpScreen
- * GamePlaySwitch
- * )
- *
- * 2. Profile Tab:
- * should get to profile screen
- * should be able to add a course for teacher or student
- *
- * 2.1. UserProfileStack
- * UserProfileScreen
- * RoleSelectionScreen
- * AddCourseScreen
- * CourseInfoScreen
- */
-
 // Main Tabs
 // Profile Tab
 const UserProfileStack = createStackNavigator({
@@ -63,7 +32,7 @@ const UserProfileStack = createStackNavigator({
   RoleSelection: RoleSelectionScreen,
   AddCourse: AddCourseScreen,
   UserProfile: UserProfileScreen,
-  CourseInfo: CourseInfoScreen
+  CourseInfo: CourseInfoScreen,
 });
 
 UserProfileStack.navigationOptions = {
@@ -78,7 +47,6 @@ UserProfileStack.navigationOptions = {
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
-  Login: LoginScreen,
 });
 
 HomeStack.navigationOptions = {
@@ -94,9 +62,9 @@ HomeStack.navigationOptions = {
 
 // Create Tab Navigator
 const TabNavigator = createBottomTabNavigator(
-  {
+  {    
     Home: HomeScreen,
-    Profile: UserProfileStack
+    Profile: UserProfileStack,
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
@@ -130,7 +98,6 @@ const TabNavigator = createBottomTabNavigator(
 // Whatever is with the Tabs here will not have tabs on their screen:
 export default createStackNavigator({
   Tabs: TabNavigator,
-  // Home: HomeStack,
   JoinOrCreate: JoinOrCreateScreen,
   GameSetUp: GameSetUpScreen,
   Lobby: LobbyScreen,

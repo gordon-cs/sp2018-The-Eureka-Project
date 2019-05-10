@@ -45,7 +45,7 @@ export default class UserProfileScreen extends Component {
   onSignOutPress = () => {
     const { navigate } = this.props.navigation;
     firebase.auth().signOut();
-    navigate("Login");
+    navigate("Authentication");
   };
 
   render() {
@@ -70,7 +70,6 @@ export default class UserProfileScreen extends Component {
         <View style={forwordsStyles.container}>
           <ScrollView
             showsVerticalScrollIndicator={false}
-            styles={forwordsStyles.container}
             contentContainerStyle={forwordsStyles.specialContainer}
           >
             <View style={forwordsStyles.headingView}>
@@ -110,7 +109,6 @@ export default class UserProfileScreen extends Component {
         <View style={forwordsStyles.container}>
           <ScrollView
             showsVerticalScrollIndicator={false}
-            style={forwordsStyles.container}
             contentContainerStyle={forwordsStyles.contentContainer}
           >
             <Image

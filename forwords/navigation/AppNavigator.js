@@ -1,4 +1,3 @@
-import React from "react";
 import { createSwitchNavigator } from "react-navigation";
 
 import MainTabNavigator from "./MainTabNavigator";
@@ -13,10 +12,9 @@ const AuthenticationStack = createStackNavigator({
   Register: RegisterScreen
 });
 
-// Use a switch navigator for the tabs so that you cannot hit the backbutton on screens to move between tabs.
-
 // You could add another route here for authentication.
 // Read more at https://reactnavigation.org/docs/en/auth-flow.html
+
 // This is the BottomTabNavigator, which has stacks inside of it.
 // Put all stacks in here
 export default createSwitchNavigator(
