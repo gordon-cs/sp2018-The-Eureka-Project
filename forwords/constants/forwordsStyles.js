@@ -7,10 +7,13 @@ export default StyleSheet.create({
     backgroundColor: "#fff",
   },
   specialContainer: {
-    flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  flexContentContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex:1
   },
   contentContainer: {
     alignItems: "center",
