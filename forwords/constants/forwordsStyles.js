@@ -215,4 +215,35 @@ export default StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  individualChoiceContainer: {
+    justifyContent: "center",
+    flex: 1,
+    margin: 10,
+    width: 120,
+    height: 100,
+    borderRadius: 80
+  },
+  individualChoiceText: {
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "bold"
+  },
+  promptContainer: {
+    justifyContent: "center",
+    flex: 1,
+    margin: 10,
+    borderRadius: 80,
+    backgroundColor: "white"
+  },
+  promptText: {
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "bold"
+  },
+  promptImage: {
+    width: undefined,
+    height: undefined,
+    flex: 1,
+    resizeMode: "contain"
+  },
 });

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
+import forwordsStyles from '../../../constants/forwordsStyles';
 
 export default class Choice extends Component {
   constructor(props) {
@@ -42,29 +43,13 @@ export default class Choice extends Component {
     }
     return (
       <TouchableOpacity
-        style={[styles.mainContainer, backgroundColor]}
+        style={[forwordsStyles.individualChoiceContainer, backgroundColor]}
         onPress={() => {
           this.handleAttempt(choiceID);
         }}
       >
-        <Text style={styles.choiceText}>{text}</Text>
+        <Text style={forwordsStyles.individualChoiceText}>{text}</Text>
       </TouchableOpacity>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  mainContainer: {
-    justifyContent: "center",
-    flex: 1,
-    margin: 10,
-    width: 120,
-    height: 100,
-    borderRadius: 80
-  },
-  choiceText: {
-    textAlign: "center",
-    fontSize: 20,
-    fontWeight: "bold"
-  }
-});
