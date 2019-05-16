@@ -1,3 +1,5 @@
+![alt text](https://user-images.githubusercontent.com/33534985/57822874-7468be80-7763-11e9-808c-e306adca5936.png)
+
 # The-Eureka-Project
 An interactive language learning platform for students and educators alike to promote collaborative and fun education.
 
@@ -11,6 +13,11 @@ An interactive language learning platform for students and educators alike to pr
 
 
 
+
+# Our Tech Stack
+![Full Stack Diagram](https://user-images.githubusercontent.com/33534985/57822927-ae39c500-7763-11e9-9516-66c28ee03222.png)
+
+
 Our VM will run our backend.
 On this VM, we will install
 * Node.js,
@@ -19,18 +26,17 @@ On this VM, we will install
 
 
 We will use 'create-react-native-app' as opposed to 'react-native init' because of the following reasons expressed on the [CRNA's GitHub page:](https://github.com/react-community/create-react-native-app)
-* "**Minimal "Time to Hello World"**: Create React Native App should reduce the setup time it takes to try building a mobile app to the absolute minimum, ideally on par with React web development (especially as seen with Create React App).
+* **Minimal "Time to Hello World"**: Create React Native App should reduce the setup time it takes to try building a mobile app to the absolute minimum, ideally on par with React web development (especially as seen with Create React App).
 * **Develop on Your Device**: It should be easy to develop on a physical device when you want to test how your app feels and responds to inputs.
 * **One Build Tool**: If you just want to get started with React Native, you shouldn't need to install Xcode, Android Studio, NDKs, or mess with environment variables.
-* **No Lock-In**: You can always "eject" to your own build setup if you need to write custom native code or modify how your app is built."
+* **No Lock-In**: You can always "eject" to your own build setup if you need to write custom native code or modify how your app is built.
 
 React Native Documentation can be found [here.](https://github.com/facebook/react-native)
-
 
 For authentication, we will use [Firebase.](https://firebase.googleblog.com/2016/01/the-beginners-guide-to-react-native-and_84.html)
 
 
-# Tools/Libraries/Stuff
+# VM SetUp: Tools/Libraries/Etc.
 ### 1. Node.js
 First, we must install the latest version of [Node.js.](https://nodejs.org/en/)
 > sudo apt install nodejs
@@ -38,7 +44,42 @@ First, we must install the latest version of [Node.js.](https://nodejs.org/en/)
 To check that it was installed:
 > node -v
 
-### 2. Yarn
+### 2. SQL
+This was all written by Stephen Macomber, thank you!
+
+To install MySQL:
+
+> sudo apt update
+
+> sudo apt install mysql-server
+
+How to make MySQL accessible without sudo privileges:
+
+> sudo mysql -u root
+
+> mysql> USE mysql;
+
+> mysql> UPDATE user SET plugin='mysql_native_password' WHERE User='root';
+
+> mysql> FLUSH PRIVILEGES;
+
+> mysql> exit;
+
+(https://stackoverflow.com/questions/39281594/error-1698-28000-access-denied-for-user-rootlocalhost)
+
+P.S. This site (https://www.w3schools.com/sql/default.asp) is really useful for learning SQL commands. The handy sidebar on the left is your friend! :)
+
+P.S.2 This site (https://www.terlici.com/2015/08/13/mysql-node-express.html) shows codes on how to connect MySQL with Node and Express.
+
+
+To access MySQL:
+> mysql -u root
+
+Our DB is called "forwords."
+
+> USE forwords; 
+
+### 3. Yarn
 Next, we will [install yarn (a package manager).](https://yarnpkg.com/en/docs/install#debian-stable)
 
 (Make sure curl is installed first):
@@ -59,7 +100,7 @@ Add the ability to execute the CRNA command:
 > yarn global add create-react-native-app@1.0.0
 (the @1.0.0 is the version of CRNA to install, we could potentially do a newer version)
 
-### 3. Expo CLI
+### 4. Expo CLI
 (Expo is a platform that helps build fully functional React Native apps without having to write native code; AKA no XCode for iOS or Android Studio for Android.)
 (Make sure npm command is installed first):
 > sudo apt install npm
@@ -78,7 +119,7 @@ To run the app:
 > cd forwords
 
 > expo start
-### 4. Express
+### 5. Express
 [Express](https://expressjs.com/en/starter/installing.html) is a web application framework for web/mobile applications. 
 
 
@@ -113,41 +154,6 @@ Once Node is installed, we can build our [first web server with Node.js.](https:
 
 [How does Node.js work? Click here.](https://medium.freecodecamp.org/what-exactly-is-node-js-ae36e97449f5)
 
-
-### 5. SQL
-This was all written by Stephen Macomber, thank you!
-
-To install MySQL:
-
-> sudo apt update
-
-> sudo apt install mysql-server
-
-How to make MySQL accessible without sudo privileges:
-
-> sudo mysql -u root
-
-> mysql> USE mysql;
-
-> mysql> UPDATE user SET plugin='mysql_native_password' WHERE User='root';
-
-> mysql> FLUSH PRIVILEGES;
-
-> mysql> exit;
-
-(https://stackoverflow.com/questions/39281594/error-1698-28000-access-denied-for-user-rootlocalhost)
-
-P.S. This site (https://www.w3schools.com/sql/default.asp) is really useful for learning SQL commands. The handy sidebar on the left is your friend! :)
-
-P.S.2 This site (https://www.terlici.com/2015/08/13/mysql-node-express.html) shows codes on how to connect MySQL with Node and Express.
-
-
-To access MySQL:
-> mysql -u root
-
-Our DB is called "forwords."
-
-> USE forwords; 
 
 # Our Linux VM: EurekaProjectVM on HyperV-Lab1
 (Created through Hyper V Lab) It is a server VM, not a workstation VM.
