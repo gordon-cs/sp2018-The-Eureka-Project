@@ -14,13 +14,13 @@ import forwordsStyles from "../../../constants/forwordsStyles";
 
 export default class CourseInfoScreen extends Component {
   static navigationOptions = ({ navigation }) => {
-    if (navigation.getParam('role', 'student') == 'teacher') {
+    if (navigation.getParam("role", "student") == "teacher") {
       title = "Create a Course";
     } else {
       title = "Add a Course";
     }
     return {
-      title: navigation.getParam('courseTitle', 'Course Info')
+      title: navigation.getParam("courseTitle", "Course Info")
     };
   };
   constructor(props) {
@@ -108,11 +108,9 @@ export default class CourseInfoScreen extends Component {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={forwordsStyles.flexContentContainer}
         >
-          <View style={forwordsStyles.headingView}>
             <Text style={forwordsStyles.headingText}>
               Course Code: ({courseID})
             </Text>
-          </View>
           <Text style={forwordsStyles.mainText}>
             Recent Activity from groups in this course:
           </Text>
