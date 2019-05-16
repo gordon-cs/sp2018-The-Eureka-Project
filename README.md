@@ -11,35 +11,24 @@ An interactive language learning platform for students and educators alike to pr
 
 
 
-We need to have a VM in order for us to have admin privileges.
+Our VM will run our backend.
 On this VM, we will install
 * Node.js,
 * SQL, and
 * React Native;
 
-As for applications, we will install
-* Visual Studio Code and
-* some kind of SQL server manager
 
-For authentication, we will use Firebase:
-* https://firebase.googleblog.com/2016/01/the-beginners-guide-to-react-native-and_84.html
-
-We will use 'create-react-native-app' as opposed to 'react-native init' because of the following reasons expressed on the CRNA's github page:
+We will use 'create-react-native-app' as opposed to 'react-native init' because of the following reasons expressed on the [CRNA's GitHub page:](https://github.com/react-community/create-react-native-app)
 * "**Minimal "Time to Hello World"**: Create React Native App should reduce the setup time it takes to try building a mobile app to the absolute minimum, ideally on par with React web development (especially as seen with Create React App).
 * **Develop on Your Device**: It should be easy to develop on a physical device when you want to test how your app feels and responds to inputs.
 * **One Build Tool**: If you just want to get started with React Native, you shouldn't need to install Xcode, Android Studio, NDKs, or mess with environment variables.
 * **No Lock-In**: You can always "eject" to your own build setup if you need to write custom native code or modify how your app is built."
-(source: https://github.com/react-community/create-react-native-app)
 
-React Native Documentation: https://github.com/facebook/react-native
-
-(https://firebase.googleblog.com/2016/01/the-beginners-guide-to-react-native-and_84.html)
+React Native Documentation can be found [here.](https://github.com/facebook/react-native)
 
 
-# Applications
-### 1. Visual Studio
-To install the code editor:
-https://code.visualstudio.com/download
+For authentication, we will use [Firebase.](https://firebase.googleblog.com/2016/01/the-beginners-guide-to-react-native-and_84.html)
+
 
 # Tools/Libraries/Stuff
 ### 1. Node.js
@@ -169,23 +158,10 @@ Root/Sudoer Privileges:
 
 > first name: Eureka Project
 
-ssh offcampus to @nabi.cs.gordon.edu and then ssh into anything on campus that has an ssh server, which means we would just need to put in the local IP of our server (10.100.150.128) to get in.
+ssh offcampus to @nabi.cs.gordon.edu and then ssh into anything on campus that has an ssh server, which means we would just need to put in the local IP of our server to get in.
 
 
 # Libraries & Helpful Sources of Information 
-
-https://medium.com/@miguelhaba/my-first-game-with-react-native-40a83aa91274
-
-Passing params:
-
-https://reactnavigation.org/docs/en/params.html
-
-
-# Misc
-
-**The forwords email:**
-forwordsinc@gmail.com
-
 
 **SFTP**
 
@@ -209,6 +185,12 @@ If you create a file that has a lot of SQL commands to execute, this is the way 
 
 > mysql -u root forwords < sqlCommandsMan101.text 
 
+# Misc
+
+**The forwords email:**
+forwordsinc@gmail.com
+
+
 ## Troubleshooting
 
 **If Expo won't connect to VM**
@@ -220,5 +202,3 @@ Shutdown the VM, then changed the Network settings: we clicked "Attached to" and
 **If Expo won't build on your iPhone**
 
 On MetroBuilder, where it says "Connection" change it to `Tunnel`, and that should fix it.
-
-
