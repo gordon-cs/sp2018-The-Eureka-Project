@@ -4,6 +4,7 @@ import Choice from "./components/Choice";
 import Prompt from "./components/Prompt";
 import Timer from "./components/Timer";
 import forwordsStyles from "../../constants/forwordsStyles";
+import { StackActions, NavigationActions } from "react-navigation";
 import { View, Text } from "react-native";
 
 export default class GamePlayScreen extends Component {
@@ -117,7 +118,6 @@ export default class GamePlayScreen extends Component {
           });
         }, 750);
       } else if (receivedMessage[0] == "score") {
-        console.log("this.state.score=", this.state.score);
         this.setState({ score: receivedMessage[0].score });
       } else if (receivedMessage[0] == "message5") {
         this.newRound(receivedMessage[1].roundNumber);
@@ -141,15 +141,12 @@ export default class GamePlayScreen extends Component {
   }
 
   endGame() {
-    const { navigate } = this.props.navigation;
-
     // Request to send to the server - must be stringified.
     var stringifiedRequest = JSON.stringify([
       {
         request: "endGame"
       }
     ]);
-    console.log("endGame() sent:", stringifiedRequest);
     global.ws.send(stringifiedRequest);
 
     // What to do when receiving a message
@@ -157,17 +154,30 @@ export default class GamePlayScreen extends Component {
       // Turn every received message into a JSON immediately to access it
       var receivedMessage = JSON.parse(event.data);
       if (receivedMessage[0] == "score") {
-        this.setState({ score: receivedMessage[2].score });
+        this.setState({
+          score: receivedMessage[2].score,
+          roundNumber: receivedMessage[1].roundNumber
+        });
       }
-      navigate("GameOver", {
-        roundNumber: this.state.roundNumber,
-        score: this.state.score
+
+      var resetAction = StackActions.reset({
+        index: 0,
+        actions: [
+          NavigationActions.navigate({
+            routeName: "GameOver",
+            params: {
+              roundNumber: this.state.roundNumber,
+              score: this.state.score
+            }
+          })
+        ]
       });
+      this.props.navigation.dispatch(resetAction);
     };
   }
 
   wasAnsweredCorrectly(choiceIDGiven) {
-    var gameID = parseInt(this.props.navigation.getParam('gameID', 0));
+    var gameID = parseInt(this.props.navigation.getParam("gameID", 0));
     // send up the input: choice, gameID
     // Request to send to the server - must be stringified.
     var stringifiedRequest = JSON.stringify([
@@ -210,15 +220,15 @@ export default class GamePlayScreen extends Component {
       !this.state.newRound
     ) {
       return (
-          <View style={forwordsStyles.specialContainer}>
-            <Text style={forwordsStyles.headingText}>
-              Get ready to play! Remember to say your prompt out loud!
-            </Text>
+        <View style={forwordsStyles.whiteContainer}>
+          <Text style={forwordsStyles.headingText}>
+            Get ready to play! Remember to say your prompt out loud!
+          </Text>
         </View>
       );
     } else if (this.state.newRound) {
       return (
-        <View style={forwordsStyles.specialContainer}>
+        <View style={forwordsStyles.whiteContainer}>
           <Text style={forwordsStyles.headingText}>
             You have advanced to round {this.state.roundNumber}
           </Text>
@@ -226,7 +236,7 @@ export default class GamePlayScreen extends Component {
       );
     } else if (!this.state.isLoading && !this.state.newRound) {
       return (
-        <View style={forwordsStyles.mainContainer}>
+        <View style={forwordsStyles.gamePlayContainer}>
           <View style={forwordsStyles.choicesContainer}>
             <Prompt promptObj={promptObj} />
           </View>

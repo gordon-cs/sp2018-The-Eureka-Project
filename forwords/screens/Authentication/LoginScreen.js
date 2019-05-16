@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import {
   Button,
-  StyleSheet,
+  ScrollView,
   Alert,
   View,
   Image,
@@ -45,6 +45,10 @@ export default class LoginScreen extends React.Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={forwordsStyles.container}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={forwordsStyles.flexContentContainer}
+      >
         <KeyboardAvoidingView
           behavior="padding"
           style={forwordsStyles.contentContainer}
@@ -99,6 +103,7 @@ export default class LoginScreen extends React.Component {
             color="purple"
           />
         </KeyboardAvoidingView>
+        </ScrollView>
       </View>
     );
   }

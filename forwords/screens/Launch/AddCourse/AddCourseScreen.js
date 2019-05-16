@@ -15,9 +15,17 @@ import course from "../../../services/course";
 import { httpsRoute } from "../../../constants/API";
 
 export default class AddCourseScreen extends Component {
-  static navigationOptions = {
-    title: 'Course',
+  static navigationOptions = ({ navigation }) => {
+    if (navigation.getParam('role', 'student') == 'teacher') {
+      title = "Create a Course";
+    } else {
+      title = "Add a Course";
+    }
+    return {
+      title: title
+    };
   };
+  
   constructor(props) {
     super(props);
 
@@ -89,31 +97,33 @@ export default class AddCourseScreen extends Component {
 
     if (role === "student") {
       return (
-        <View style={forwordsStyles.specialContainer}>
-          <View style={forwordsStyles.headingView}>
-            <Text style={forwordsStyles.headingText}>Add a Course</Text>
-          </View>
-          <Text style={forwordsStyles.mainText}>
-            Enter the course code given by your instructor.
-          </Text>
-          <TextInput
-            style={forwordsStyles.textInput}
-            alignItems="center"
-            placeholder="Course Code"
-            onChangeText={courseCode => this.setState({ courseCode })}
-            autoCorrect={false}
-            autoCapitalize="none"
-            placeholderTextColor="black"
-            returnKeyType="done"
-            keyboardType="number-pad"
-            onSubmitEditing={() => this.addCourseOnPress()}
-          />
-          <TouchableOpacity
-            style={forwordsStyles.primaryButton}
-            onPress={() => this.addCourseOnPress()}
+        <View style={forwordsStyles.container}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={forwordsStyles.flexContentContainer}
           >
-            <Text style={forwordsStyles.buttonText}>Add Course</Text>
-          </TouchableOpacity>
+            <Text style={forwordsStyles.mainText}>
+              Enter the course code given by your instructor.
+            </Text>
+            <TextInput
+              style={forwordsStyles.textInput}
+              alignItems="center"
+              placeholder="Course Code"
+              onChangeText={courseCode => this.setState({ courseCode })}
+              autoCorrect={false}
+              autoCapitalize="none"
+              placeholderTextColor="black"
+              returnKeyType="done"
+              keyboardType="number-pad"
+              onSubmitEditing={() => this.addCourseOnPress()}
+            />
+            <TouchableOpacity
+              style={forwordsStyles.primaryButton}
+              onPress={() => this.addCourseOnPress()}
+            >
+              <Text style={forwordsStyles.buttonText}>Add Course</Text>
+            </TouchableOpacity>
+          </ScrollView>
         </View>
       );
     } else if (role === "teacher") {
@@ -121,12 +131,8 @@ export default class AddCourseScreen extends Component {
         <View style={forwordsStyles.container}>
           <ScrollView
             showsVerticalScrollIndicator={false}
-            style={forwordsStyles.container}
-            contentContainerStyle={forwordsStyles.specialContainer}
+            contentContainerStyle={forwordsStyles.flexContentContainer}
           >
-            <View style={forwordsStyles.headingView}>
-              <Text style={forwordsStyles.headingText}>Create a Course</Text>
-            </View>
             <Text style={forwordsStyles.mainText}>
               Enter the details of the course you are creating.
             </Text>

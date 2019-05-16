@@ -1,17 +1,12 @@
 import React from "react";
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView
-} from "react-native";
-import { StackActions, NavigationActions } from 'react-navigation';
+import { Text, View, TouchableOpacity, ScrollView } from "react-native";
+import { StackActions, NavigationActions } from "react-navigation";
 import TimerMixin from "react-timer-mixin";
 import forwordsStyles from "../../../constants/forwordsStyles";
 
 export default class InstructionScreen extends React.Component {
   static navigationOptions = {
-    title: 'Instructions',
+    title: "Instructions"
   };
   constructor(props) {
     super(props);
@@ -41,7 +36,13 @@ export default class InstructionScreen extends React.Component {
     const gameID = this.props.navigation.state.params.gameID;
     const resetAction = StackActions.reset({
       index: 0,
-      actions: [NavigationActions.navigate({ routeName: "GamePlay", lesson: lesson, gameID: gameID})],
+      actions: [
+        NavigationActions.navigate({
+          routeName: "GamePlay",
+          lesson: lesson,
+          gameID: gameID
+        })
+      ]
     });
     this.props.navigation.dispatch(resetAction);
   }
@@ -52,8 +53,11 @@ export default class InstructionScreen extends React.Component {
     if (playerType == "solo") {
       return (
         <View style={forwordsStyles.container}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={forwordsStyles.instructionsContainer}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={forwordsStyles.flexContentContainer}
+          >
+            <View style={forwordsStyles.whiteContainer}>
               <View style={forwordsStyles.headingView}>
                 <Text style={forwordsStyles.headingText}>How To Play</Text>
               </View>
@@ -77,9 +81,12 @@ export default class InstructionScreen extends React.Component {
       );
     } else {
       return (
-        <View style={forwordsStyles.instructionsContainer}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={forwordsStyles.instructionsContainer}>
+        <View style={forwordsStyles.container}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={forwordsStyles.flexContentContainer}
+        >
+            <View style={forwordsStyles.whiteContainer}>
               <View style={forwordsStyles.headingView}>
                 <Text style={forwordsStyles.headingText}>How To Play</Text>
               </View>

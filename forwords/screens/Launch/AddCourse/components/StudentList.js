@@ -29,39 +29,39 @@ export default class StudentList extends Component {
     const { navigate, role } = this.props;
     const { students, isLoading } = this.state;
     let studentList;
-    if (isLoading && role === 'teacher') {
+    if (isLoading && role === "teacher") {
       return (
         <View>
-          <ActivityIndicator/>
+          <ActivityIndicator />
         </View>
       );
-    }
-    else if (!isLoading && role === "teacher") {
+    } else if (!isLoading && role === "teacher") {
       studentList = students.map(student => (
-        <TouchableOpacity
-          key={student.userID}
-          style={forwordsStyles.moreNarrowLongButton}
-          onPress={() => navigate("UserProfile", {userID: student.userID})}
-        >
+        <View key={student.userID} style={forwordsStyles.moreNarrowLongButton}>
           <Text style={forwordsStyles.buttonText}>
             {student.firstName + " " + student.lastName}
           </Text>
-        </TouchableOpacity>
-        ));
-        if (students.length > 0) {
-          return (
-            <View>
-              <Text style={forwordsStyles.mainText}>Students in this class:</Text>
-              {studentList}
-            </View>
-          );
-        } else {
-          return (
-            <View>
-              <Text style={forwordsStyles.mainText}>There are no students in this class yet. They can join by entering the Class Code!</Text>
-            </View>
-          );          
-        }
+        </View>
+      ));
+      if (students.length > 0) {
+        return (
+          <View style={forwordsStyles.specialContainer}>
+            <Text style={forwordsStyles.mainText}>
+              Students in this course:
+            </Text>
+            {studentList}
+          </View>
+        );
+      } else {
+        return (
+          <View style={forwordsStyles.specialContainer}>
+            <Text style={forwordsStyles.mainText}>
+              There are no students in this course yet. They can join by
+              entering the course code!
+            </Text>
+          </View>
+        );
+      }
     } else {
       return null;
     }

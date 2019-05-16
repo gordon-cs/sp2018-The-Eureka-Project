@@ -278,17 +278,29 @@ ws.on("connection", function connection(ws, req) {
       for (let i = 0; i < inputGame.players.length; i++) {
         if (input == inputGame.players[i].prompt.wordID) {
           isCorrect = true;
-          insertInput(input, inputEmail, inputGameID, true);
           gameMap.get(inputGameID).correctAnswers++;
+          insertInput(input, inputEmail, inputGameID, true);
+          // console.log(
+          //   "                             AFTER correctAnswers incremented:",
+          //   gameMap.get(inputGameID).correctAnswers
+          // );
+
           let newPrompt = getSinglePrompt(
             inputGame,
             inputGame.players[i].prompt
           );
           if (gameMap.get(inputGameID).correctAnswers % (gameMap.get(inputGameID).players.length * 4) == 0) {
             gameMap.get(inputGameID).roundNumber++;
+            // If the round has increased, send the news to everyone.
+            let newRoundMessage = JSON.stringify(["message5", {roundNumber: gameMap.get(inputGameID).roundNumber}]);
+            for (let i = 0; i < inputGame.players.length; i++) {
+              console.log("      ");
+                console.log("         >>>>>>>>>>Sent message", newRoundMessage);
+                console.log("      ");
+                gameMap.get(inputGameID).players[i].ws.send(newRoundMessage);
+            }
             gameMap.get(inputGameID).correctAnswers = 0;
           }
-          // I answered my own prompt
           if (ws === inputGame.players[i].ws) {
             // Send them their new prompt, and that it was correct
             let newPromptAndValidationMessage = JSON.stringify([
@@ -343,13 +355,29 @@ ws.on("connection", function connection(ws, req) {
         console.log("       sent message4");
       }
     }
-
+    /*
     if (message[0].request == "endGame") {
       const score = await getScore(player);
       var scoreMessage = JSON.stringify(["score", { roundNumber: gameMap.get(player.gameID).roundNumber}, { score: score }]); // Convert JSON to string inorder to send;
       console.log("         >>>>>>>>>>Sent message", scoreMessage);
       ws.send(scoreMessage);
 
+      gameMap.delete(game.gameID);
+      // Clear out player & game objects once the game is over
+      player = new Player(IP, ws, [], {}, 0);
+      game = new Game(0, 0, [], [], [], false, "pinyin", "Chinese", "NULL", 1, 0);
+    }
+  });
+});
+*/
+    if (message[0].request == "endGame") {
+      var gameID = checkGameIDOfWS(ws, gameMap);
+      for (let i = 0; i < gameMap.get(gameID).players.length; i++) {
+        const score = await getScore(gameMap.get(gameID).players[i]);
+        var scoreMessage = JSON.stringify(["score", { roundNumber: gameMap.get(player.gameID).roundNumber}, { score: score }]); // Convert JSON to string inorder to send;
+        gameMap.get(gameID).players[i].ws.send(scoreMessage);
+        console.log("         >>>>>>>>>>Sent message", scoreMessage);
+      }
       gameMap.delete(game.gameID);
       // Clear out player & game objects once the game is over
       player = new Player(IP, ws, [], {}, 0);
@@ -462,7 +490,6 @@ function getGameChoices(game) {
         ";",
       function(error, wordsInLesson) {
         if (error) throw error;
-
         var minID = wordsInLesson[0].wordID;
 
         var choiceWordsIDs = randomWordsPicker(

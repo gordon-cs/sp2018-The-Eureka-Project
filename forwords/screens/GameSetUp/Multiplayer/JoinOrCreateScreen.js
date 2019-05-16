@@ -83,18 +83,20 @@ export default class JoinOrCreateScreen extends Component {
   render() {
     return (
       <View style={forwordsStyles.container}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={forwordsStyles.flexContentContainer}
+        >
+
           <View style={forwordsStyles.headingView}>
             <Text style={forwordsStyles.headingText}>Multiplayer Mode</Text>
             <Image
               style={forwordsStyles.playerImage}
               source={require("../../../assets/images/people.png")}
             />
-          </View>
           <Text style={forwordsStyles.mainText}>
             Create your own group or join an existing one!
           </Text>
-          <View style={forwordsStyles.headingView}>
             <TouchableOpacity
               style={forwordsStyles.primaryButton}
               onPress={() => this.createOnPress()}
@@ -121,6 +123,7 @@ export default class JoinOrCreateScreen extends Component {
               <Text style={forwordsStyles.buttonText}>Join Game</Text>
             </TouchableOpacity>
           </View>
+
         </ScrollView>
       </View>
     );

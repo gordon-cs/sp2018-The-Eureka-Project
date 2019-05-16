@@ -7,10 +7,13 @@ export default StyleSheet.create({
     backgroundColor: "#fff",
   },
   specialContainer: {
-    flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  flexContentContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex:1
   },
   contentContainer: {
     alignItems: "center",
@@ -185,7 +188,7 @@ export default StyleSheet.create({
     height: 75,
     backgroundColor: "white"
   },
-  mainContainer: {
+  gamePlayContainer: {
     alignItems: "center",
     flex: 1,
     paddingTop: Platform.OS === "ios" ? 20 : 0,
@@ -200,7 +203,7 @@ export default StyleSheet.create({
     fontSize: 25,
     color: "#5b3b89"
   },
-  instructionsContainer: {
+  whiteContainer: {
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",
@@ -211,5 +214,36 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  individualChoiceContainer: {
+    justifyContent: "center",
+    flex: 1,
+    margin: 10,
+    width: 120,
+    height: 100,
+    borderRadius: 80
+  },
+  individualChoiceText: {
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "bold"
+  },
+  promptContainer: {
+    justifyContent: "center",
+    flex: 1,
+    margin: 10,
+    borderRadius: 80,
+    backgroundColor: "white"
+  },
+  promptText: {
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "bold"
+  },
+  promptImage: {
+    width: undefined,
+    height: undefined,
+    flex: 1,
+    resizeMode: "contain"
   },
 });

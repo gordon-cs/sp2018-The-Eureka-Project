@@ -12,7 +12,7 @@ import forwordsStyles from "../../constants/forwordsStyles";
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
-    title: 'Home'
+    header: null,
   };
 
   constructor(props) {
@@ -30,22 +30,13 @@ export default class HomeScreen extends React.Component {
     navigate("GameSetUp", { playerType: playerType });
   };
 
-  // onSignOutPress = () => {
-  //   const { navigate } = this.props.navigation;
-  //   // firebase.auth().signOut();
-  //   navigate("Login");
-  // };
-
   render() {
-
     const { navigate } = this.props.navigation;
-    const email = firebase.auth().currentUser.email;
     return (
       <View style={forwordsStyles.container}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          style={forwordsStyles.container}
-          contentContainerStyle={forwordsStyles.contentContainer}
+          contentContainerStyle={forwordsStyles.specialContainer}
         >
           <View style={forwordsStyles.headingView}>
             <TouchableOpacity
@@ -58,8 +49,6 @@ export default class HomeScreen extends React.Component {
                 source={require("../../assets/images/people.png")}
               />
             </TouchableOpacity>
-          </View>
-          <View style={forwordsStyles.headingView}>
             <TouchableOpacity
               style={forwordsStyles.headingView}
               onPress={() => this.onPressSinglePlayerMode()}
