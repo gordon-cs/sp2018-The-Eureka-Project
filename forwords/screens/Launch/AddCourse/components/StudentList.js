@@ -38,15 +38,14 @@ export default class StudentList extends Component {
     }
     else if (!isLoading && role === "teacher") {
       studentList = students.map(student => (
-        <TouchableOpacity
+        <View
           key={student.userID}
           style={forwordsStyles.moreNarrowLongButton}
-          onPress={() => navigate("UserProfile", {userID: student.userID})}
         >
           <Text style={forwordsStyles.buttonText}>
             {student.firstName + " " + student.lastName}
           </Text>
-        </TouchableOpacity>
+        </View>
         ));
         if (students.length > 0) {
           return (
