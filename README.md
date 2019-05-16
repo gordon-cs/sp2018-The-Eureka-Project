@@ -5,22 +5,12 @@ A link to our problem statement can be found here:
 https://docs.google.com/document/d/1UlvIg8OBKPYOV53w5qU_N7w8MA0mgIGG96oEihguxyA/edit?usp=sharing
 
 A link to our presentation about our problem statement can be found here:
-https://docs.google.com/presentation/d/1l_h5mRnEz1XtMrfsj9twyKiOJLdD2Y89V-LK6KheuGg/edit?usp=sharing
+(https://docs.google.com/presentation/d/1l_h5mRnEz1XtMrfsj9twyKiOJLdD2Y89V-LK6KheuGg/edit?usp=sharing "our problem statement")
 
 A link to our design doc:
 https://docs.google.com/document/d/1on4r7004uXUILdyGYq2l_dxN6sO-oGElQa6ba6-hbhg/edit?usp=sharing
 
-**End-To-End “Hello World” Definition:**
 
-Our Hello World Program will be as basic as clicking a button to say “hello” to the database, and then getting a response back from the DB that says “hello user!”
-
-The entities involved in this:
-* The UI has a button
-* The user clicks the button, which sends a get request to the API
-* The API then retrieves the message (“hello user”) from the DB and sends its back to the user (client)
-* The UI displays “hello user” to the user
-
-Thus, the UI, API, and DB all work together to make this happen.
 
 
 We need to have a VM in order for us to have admin privileges.
