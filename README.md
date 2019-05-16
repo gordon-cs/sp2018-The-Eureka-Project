@@ -10,8 +10,8 @@ An interactive language learning platform for students and educators alike to pr
  
 [Our design document.](https://docs.google.com/document/d/1on4r7004uXUILdyGYq2l_dxN6sO-oGElQa6ba6-hbhg/edit?usp=sharing
  "Our Design Document")
-
-
+ 
+[Our handoff documentation.](https://docs.google.com/document/d/1HaQvM31nRVRzrBnpHZOLYSJeNqbGD6u5RGOFxL_pERE/edit?usp=sharing "Our Handoff Doc")
 
 
 # Our Tech Stack
