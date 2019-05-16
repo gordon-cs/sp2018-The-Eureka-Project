@@ -32,15 +32,14 @@ For authentication, we will use [Firebase.](https://firebase.googleblog.com/2016
 
 # Tools/Libraries/Stuff
 ### 1. Node.js
-First, we must install the latest version of Node.js.
-  https://nodejs.org/en/
+First, we must install the latest version of [Node.js.](https://nodejs.org/en/)
 > sudo apt install nodejs
 
 To check that it was installed:
 > node -v
 
 ### 2. Yarn
-Next, we will install yarn (a package manager) (https://yarnpkg.com/en/docs/install#debian-stable)
+Next, we will [install yarn (a package manager).](https://yarnpkg.com/en/docs/install#debian-stable)
 
 (Make sure curl is installed first):
 > sudo apt install curl
@@ -80,10 +79,10 @@ To run the app:
 
 > expo start
 ### 4. Express
-Express is a web application framework for web/mobile applications (https://expressjs.com/en/starter/installing.html)
-https://thishosting.rocks/getting-started-with-express-js-server-setup/
+[Express](https://expressjs.com/en/starter/installing.html) is a web application framework for web/mobile applications. 
 
-**Getting Started**
+
+[**Getting Started**](https://thishosting.rocks/getting-started-with-express-js-server-setup/)
 
 > npm install express-generator -g
 
@@ -109,15 +108,14 @@ In the terminal, in the backwords directory, run the following command
 
 Now go to the web server and test your app by visiting `http://172.27.43.141:3000`
 
-Once Node is installed, we can build our first webserver with Node.js (https://nodejs.org/en/docs/guides/getting-started-guide/)
+Once Node is installed, we can build our [first web server with Node.js.](https://nodejs.org/en/docs/guides/getting-started-guide/)
 * After that, run your web server using `node app.js`, visit http://localhost:3000, and you will see a message 'Hello World'
 
-How does Node.js work?
-https://medium.freecodecamp.org/what-exactly-is-node-js-ae36e97449f5
+[How does Node.js work? Click here.](https://medium.freecodecamp.org/what-exactly-is-node-js-ae36e97449f5)
 
 
 ### 5. SQL
-> This was all written by Stephen Macomber, THANKS STEPHEN!
+This was all written by Stephen Macomber, thank you!
 
 To install MySQL:
 
@@ -141,7 +139,7 @@ How to make MySQL accessible without sudo privileges:
 
 P.S. This site (https://www.w3schools.com/sql/default.asp) is really useful for learning SQL commands. The handy sidebar on the left is your friend! :)
 
-P.S.2 This site (https://www.terlici.com/2015/08/13/mysql-node-express.html) shows codes on how to connect mysql with node and express
+P.S.2 This site (https://www.terlici.com/2015/08/13/mysql-node-express.html) shows codes on how to connect MySQL with Node and Express.
 
 
 To access MySQL:
@@ -165,9 +163,7 @@ ssh offcampus to @nabi.cs.gordon.edu and then ssh into anything on campus that h
 
 **SFTP**
 
-This is a helpful resource for sftp-ing:
-
-https://www.digitalocean.com/community/tutorials/how-to-use-sftp-to-securely-transfer-files-with-a-remote-server
+[This](https://www.digitalocean.com/community/tutorials/how-to-use-sftp-to-securely-transfer-files-with-a-remote-server) is a helpful resource for sftp-ing:
 
 If you want to sftp a file to the server, you can do so by navigating to the directory on the local machine of where the file is located. Then, you can execute "sftp eureka@172.27.43.141" on the command line. Then, 
 
@@ -177,9 +173,7 @@ Would upload that file to the VM.
 
 **MySQL**
 
-Creating a file with lots of SQL commands to execute? Use this awesome tool:
-
-https://sqlizer.io/#/
+Creating a file with lots of SQL commands to execute? Use [this](https://sqlizer.io/#/) awesome tool.
 
 If you create a file that has a lot of SQL commands to execute, this is the way you can run it on the VM:
 
