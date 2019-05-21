@@ -3,6 +3,8 @@
 # The-Eureka-Project
 An interactive language learning platform for students and educators alike to promote collaborative and fun education.
 
+To see screenshots of what the app looks like, see [this pull request.](https://github.com/gordon-cs/sp2018-The-Eureka-Project/pull/124)
+
 [Our problem statement.](https://docs.google.com/document/d/1UlvIg8OBKPYOV53w5qU_N7w8MA0mgIGG96oEihguxyA/edit?usp=sharing
  "Our Problem Statement")
  
